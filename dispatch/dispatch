@@ -1,0 +1,3 @@
+[
+  {zonnet, ["zonnet"], controller_zonnet, [ {template, "zonnet.tpl"} ]}
+]. 
