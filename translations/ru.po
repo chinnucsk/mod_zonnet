@@ -1,0 +1,30 @@
+msgid "COL2Test"
+msgstr "КОЛ2Тест"
+
+msgid "text"
+msgstr "текст"
+
+msgid "Account"
+msgstr "Учетная запись"
+
+msgid "Information"
+msgstr "Общая информация"
+
+msgid "Statistics"
+msgstr "Статистика"
+
+msgid "Make payment"
+msgstr "Оплатить"
+
+msgid "Account details"
+msgstr "Общая информация о клиенте"
+
+msgid "Company details"
+msgstr "Реквизиты предприятия"
+
+msgid "Current agreements"
+msgstr "Действующие договоры"
+
+msgid "Are you sure you want to exit the customer interface?"
+msgstr "Вы уверены, что желаете покинуть личный кабинет?"
+

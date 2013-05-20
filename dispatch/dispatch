@@ -1,3 +1,5 @@
 [
-  {zonnet, ["zonnet"], controller_zonnet, [ {template, "zonnet.tpl"} ]}
+  {zonnet, ["zonnet"], controller_zonnet, []},
+  {plainzonnet, ["plainzonnet"], controller_plainzonnet, []},
+  {zonnet_account_details, ["zonnet", "account_details"], controller_zonnet, [{template, "zonnet_account_details.tpl"}, {selected, "account_details"}]}
 ]. 
