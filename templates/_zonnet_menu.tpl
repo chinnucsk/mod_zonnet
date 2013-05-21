@@ -34,11 +34,6 @@
                         </li>
                         {% endif %}
                     {% endfor %}
-                    <li>
-                        <a href="#" id="{{ #logoff }}" title="{_ Log Off _}"><i class="icon-off icon-white"></i></a>
-                        {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the customer interface?"
-                                                   action={redirect dispatch=`logoff`}} %}
-                    </li>
                 </ul>
             </div>
 
@@ -47,11 +42,9 @@
                 <ul class="nav">
                     {% all include "_admin_headeritem.tpl" %}
                     <li>
-		        <form class="navbar-form form-search" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
-                            <input type="hidden" name="qsort" value="{{ q.qsort|escape }}" />
-                            <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
-		            <input class="input-medium search-query" type="text" name="qs" value="{{q.qs|escape}}" placeholder="Search..." />
-		        </form>
+                        <a href="#" id="{{ #logoff }}" title="{_ Log Off _}"><i class="icon-off icon-white"></i></a>
+                        {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the customer interface?"
+                                                   action={redirect dispatch=`logoff`}} %}
                     </li>
                 </ul>
 	    </div>

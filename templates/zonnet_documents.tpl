@@ -11,7 +11,7 @@
                 </p>
             </div>
             
-            <h2>{_ Account details _}</h2>
+            <h2>{_ Documents _}</h2>
             </br>
 
         </div>
@@ -19,15 +19,15 @@
         <div class="row">
             <div class="span6">
 
-                {# Company details #}
-                {% include "zonnet_widget_account_details.tpl" cat="text" headline=_"Company details" %}
+                {# Blank #}
+                {% include "zonnet_widget_blank.tpl" headline=_"Blank" %}
 
             </div>
 
             <div class="span6">
 
-                {# Current agreements #}
-                {% include "zonnet_widget_agreements.tpl" headline=_"Current agreements" %}
+                {# Blank #}
+                {% include "zonnet_widget_blank.tpl" headline=_"Blank" %}
 
             </div>
             

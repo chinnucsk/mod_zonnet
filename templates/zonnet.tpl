@@ -19,10 +19,15 @@
         <div class="row">
             <div class="span6">
                 {# Account details #}
-                {% include "zonnet_widget_dashboard_latest.tpl" cat="zonnet_account_details" headline=_"Account details"              col1=m.zonnet.item col2=_"COL2Test" %}
+                {% include "zonnet_widget_account_details.tpl" headline=_"Account details" dashboard %}
 
-                {# Latest modified persons #}
-                {% include "zonnet_widget_dashboard_latest.tpl" cat="person" headline=_"Latest modified persons" %}
+                {# Account status #}
+                {% include "zonnet_widget_dashboard_finance.tpl" headline=_"Account" %}
+
+                {% if m.zonnet.credit_able %}
+                {# Credit status #}
+                {% include "zonnet_widget_dashboard_credit.tpl" headline=_"Credit" %}
+                {% endif %}
             </div>
 
             <div class="span6">

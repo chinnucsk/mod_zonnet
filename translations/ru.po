@@ -1,3 +1,27 @@
+msgid "last ten"
+msgstr "последние 10"
+
+msgid "make payments"
+msgstr "перейти к оплате"
+
+msgid "Credit"
+msgstr "Кредит"
+
+msgid "Invoice"
+msgstr "Счет"
+
+msgid "Payment"
+msgstr "Платеж"
+
+msgid "Payments"
+msgstr "Платежи"
+
+msgid "Payments list"
+msgstr "Список платежей"
+
+msgid "Payments list ( last ten )"
+msgstr "Список платежей ( последние десять )"
+
 msgid "COL2Test"
 msgstr "КОЛ2Тест"
 

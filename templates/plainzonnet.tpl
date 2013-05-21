@@ -63,7 +63,41 @@
 {% print m.zonnet[{accounts_table fields="name" limit=3}] %}
 {{ m.zonnet[{accounts_table fields="name" limit=3}] }}
 <h5> End2 of m_zonnet results </h5>
-{% with m.zonnet[1] as result %}
-    {% print result %}
-{% endwith %}
+{% print m.zonnet.agreements_table %}
+{% for agreement, date, company in m.zonnet.agreements_table %}
+{{ agreement }} - {{ date }} - {{ company }}
+{% endfor%}
+
+{% tabs id="tabs" %}
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Nunc tincidunt</a></li>
+    <li><a href="#tabs-2">Proin dolor</a></li>
+    <li><a href="#tabs-3">Aenean lacinia</a></li>
+  </ul>
+  <div id="tabs-1">
+    <p>Proin elit arcu, rutrum commodo, vehicula tempus.</p>
+  </div>
+  <div id="tabs-2">
+    <p>Morbi tincidunt, dui sit amet facilisis feugiat.</p>
+  </div>
+  <div id="tabs-3">
+    <p>Mauris eleifend est et turpis.</p>
+  </div>
+</div>
+
+
+{% print m.zonnet.credit_allowed %}
+</br>
+
+{{ m.zonnet.credit_allowed }}
+
+</br>
+
+
+{% print m.zonnet.credit_info %}
+{% for agrm_id,amount,prom_date,prom_till,debt,pay_id in m.zonnet.credit_info %}
+{{ agrm_id }} - {{ amount }} - {{ prom_date[2] }} - {{ prom_till[2] }} - {{ debt }} - {{ pay_id }}
+{% endfor%}
+
 {% endblock %}
