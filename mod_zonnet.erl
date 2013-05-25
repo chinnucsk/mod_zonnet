@@ -148,7 +148,7 @@ event({postback, assist_pay, _TriggerId, _TargetId}, Context) ->
         z_render:growl_error(?__("Please input a number.", Context), Context)
   catch
     error:_ ->
-          z_render:growl_error(?__("Please input a number.", Context), Context)
+          z_render:growl_error(?__("Something went wrong. Please call to support.", Context), Context)
   end;
 event({postback, invoiceme, _TriggerId, _TargetId}, Context) ->
   try z_convert:to_integer(z_context:get_q("invoiceme",Context)) of
