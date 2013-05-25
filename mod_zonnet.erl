@@ -126,15 +126,21 @@ event({postback, assist_pay, _TriggerId, _TargetId}, Context) ->
   Assist_pay = z_context:get_q("assist_pay",Context),
   try is_numeric(Assist_pay) of
     true ->
-        Assist_URL = binary_to_list(m_config:get_value(mod_zonnet, assist_home_link, Context)),
-        Merchant_ID = binary_to_list(m_config:get_value(mod_zonnet, assist_shop_id, Context)),
-        Currency = binary_to_list(m_config:get_value(mod_zonnet, assist_shop_currency, Context)),
-        OrderNumber = string:to_lower(z_ids:id(32)),
         Agrm_id = get_main_agrm_id(Context),
         case is_numeric(Agrm_id) of
           true ->
-            Payment_URL = io_lib:format("~s?Merchant_ID=~s&OrderNumber=~s&OrderAmount=~s&OrderCurrency=~s&OrderComment=~s&Comment=~s&TestMode=0&Submit=Pay",[Assist_URL, Merchant_ID, OrderNumber, Assist_pay, Currency, Agrm_id, Agrm_id]),
-            z_render:wire({redirect, [{location, Payment_URL}]}, Context);
+            OrderNumber = string:to_lower(z_ids:id(32)),
+            AssistFolder = binary_to_list(m_config:get_value(mod_zonnet, assist_transaction_folder, Context)),
+            case file:write_file(AssistFolder ++ "/" ++ OrderNumber, "attempt = 0") of
+              ok ->
+                Assist_URL = binary_to_list(m_config:get_value(mod_zonnet, assist_home_link, Context)),
+                Merchant_ID = binary_to_list(m_config:get_value(mod_zonnet, assist_shop_id, Context)),
+                Currency = binary_to_list(m_config:get_value(mod_zonnet, assist_shop_currency, Context)),
+                Payment_URL = io_lib:format("~s?Merchant_ID=~s&OrderNumber=~s&OrderAmount=~s&OrderCurrency=~s&OrderComment=~s&Comment=~s&TestMode=0&Submit=Pay",[Assist_URL, Merchant_ID, OrderNumber, Assist_pay, Currency, Agrm_id, Agrm_id]),
+                z_render:wire({redirect, [{location, Payment_URL}]}, Context);
+              _ ->
+                z_render:growl_error(?__("Can't open file for transaction. Please call to support.", Context), Context)
+            end;
           false ->
             z_render:growl_error(?__("Please log in again.", Context), Context)
          end;
