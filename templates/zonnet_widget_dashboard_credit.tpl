@@ -2,7 +2,6 @@
 
 {% block widget_headline %}
     {{ headline }}
-    {% button class="btn btn-mini pull-right" action={redirect dispatch="zonnet_finance_details"} text=_"make payments"%}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
@@ -12,8 +11,8 @@
 {% for agrm_id,amount,prom_date,prom_till,debt,pay_id in m.zonnet.credit_info %}
     <thead>
         <tr>
-            <th width="35%"><h4>{{ pay_id }}</h4></th>
-            <th width="65%"> </th>
+            <th width="35%">Статус </th>
+            <th width="65%">{% if pay_id == 0 %}<h4> Активный </h4>{% elif  pay_id == -1 %}<h4> Просрочен </h4>{% else %}<h4> Неопределен </h4>{% endif %}</th>
         </tr>
     </thead>
     <tbody>
@@ -23,13 +22,23 @@
 {% empty %}
     <thead>
         <tr>
-            <th width="50%"><h4>Выполнить обещанный платеж</h4></th>
-            <th width="25%"> </th>
-            <th width="25%"> </th>
+            <th width="90%" colspan="2"><h4>Выполнить обещанный платеж</h4></th>
+            <th width="10%"> </th>
         </tr>
     </thead>
     <tbody>
-            <tr><td>Введите сумму от 1000 до 3000 руб.</td><td>Окошко</td><td>Кнопка</td></tr>
+            <tr>
+                {% wire type="submit" id="credit-form" postback="credit_form" delegate="mod_zonnet" %}
+                <form id="credit-form" method="post" action="postback">
+                <td>Выберите сумму</td>
+                <td>
+                       <input type="radio" name="creditme" value="1180" /> 1180 {_ rub. _}
+                       <input type="radio" name="creditme" value="2360" /> 2360 {_ rub. _}
+                       <input type="radio" name="creditme" value="3540" /> 3540 {_ rub. _}
+                </td>
+                <td>{% button class="btn btn-mini pull-right" text=_"proceed"%}</td>
+                </form>
+            </tr>
     </tbody>
 {% endfor%}
 </table>

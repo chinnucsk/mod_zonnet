@@ -13,8 +13,7 @@
 <table class="table do_adminLinkedTable">
     <thead>
         <tr>
-            <th width="35%">{{ m.zonnet[{accounts_table fields="name" limit=1}] }}</th>
-            <th width="65%"> </th>
+            <th width="35%" colspan="2">{{ m.zonnet[{accounts_table fields="name" limit=1}] }}</th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +21,7 @@
         <tr><td>ИНН / КПП</td><td>{{ m.zonnet[{accounts_table fields="inn" limit=1}] }} / 
                                   {{ m.zonnet[{accounts_table fields="kpp" limit=1}] }}</td></tr>
      {% endif %}
-        <tr><td>Контактное лицо</td><td>{{ m.zonnet[{accounts_table fields="kont_person" limit=1}] }}</td></tr>
+        <tr><td width="35%">Контактное лицо</td><td>{{ m.zonnet[{accounts_table fields="kont_person" limit=1}] }}</td></tr>
         <tr><td>E-mail</td><td>{{ m.zonnet[{accounts_table fields="email" limit=1}] }}</td></tr>
         <tr><td>Телефон</td><td>{{ m.zonnet[{accounts_table fields="phone" limit=1}] }}</td></tr>
      {% if not dashboard %}

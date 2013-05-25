@@ -8,12 +8,17 @@
 <table class="table do_adminLinkedTable">
     <thead>
         <tr>
-            <th width="50%"><h4>Выписать </h4></th>
-            <th width="50%"><h4>Счет</h4></th>
+            <th colspan="3"><h4>Выписать счет</h4></th>
         </tr>
     </thead>
     <tbody>
-        <tr><td>Текущий баланс</td><td>{{ m.zonnet.account_balance }} руб.</td></tr>
+        <tr>
+            <td width="50%">Введите сумму</td>
+            <td><input class="input input-small-zonnet" type="text" id="invoiceme" name="invoiceme" value="" /> {_ rub. _}
+                {% validate id="invoiceme" type={numericality minimum=0 maximum=100000} %}
+            </td>
+            <td>{% button class="btn btn-mini pull-right" action={postback postback="invoiceme" delegate="mod_zonnet" qarg="invoiceme"} text=_"proceed"%}</td>
+        </tr>
     </tbody>
 </table>
 {% endblock %}

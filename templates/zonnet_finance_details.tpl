@@ -23,10 +23,10 @@
                 {% include "zonnet_widget_finance.tpl" cat="text" headline=_"Account" %}
 
                 {# Make payment #}
-                {% include "zonnet_widget_make_payment.tpl" cat="text" headline=_"Payment" %}
+                {% include "zonnet_widget_make_payment.tpl" cat="text" headline=_"Online payment" %}
 
                 {# Make invoce #}
-                {% include "zonnet_widget_make_invoice.tpl" cat="text" headline=_"Invoice" %}
+                {% include "zonnet_widget_make_invoice.tpl" cat="text" headline=_"Wire transfer" %}
 
                 {# Make credit #}
                 {% if m.zonnet.credit_able %}

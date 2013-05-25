@@ -1,3 +1,39 @@
+msgid "invoice requested"
+msgstr "выставить счет."
+
+msgid "Please input integer number."
+msgstr "Пожалуйста введите целое число."
+
+msgid "Missed event happened."
+msgstr "Произошло неопознанное событие."
+
+msgid "Must be a number."
+msgstr "Введите число"
+
+msgid "payment requested"
+msgstr "платеж выполнен"
+
+msgid "credit requested"
+msgstr "обещанный платеж"
+
+msgid "Loan"
+msgstr "Кредит"
+
+msgid "Wire transfer"
+msgstr "Безналичный расчет"
+
+msgid "Online payment"
+msgstr "Платеж онлайн"
+
+msgid "rub"
+msgstr "руб."
+
+msgid "rub."
+msgstr "руб."
+
+msgid "proceed"
+msgstr "выполнить"
+
 msgid "last ten"
 msgstr "последние 10"
 

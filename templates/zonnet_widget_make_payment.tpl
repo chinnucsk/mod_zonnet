@@ -8,12 +8,17 @@
 <table class="table do_adminLinkedTable">
     <thead>
         <tr>
-            <th width="50%"><h4>Оплатить</h4></th>
-            <th width="50%"><h4>Ассист</h4></th>
+            <th colspan="3"><h4>Платежная система Ассист</h4></th>
         </tr>
     </thead>
     <tbody>
-        <tr><td>Текущий баланс</td><td>{{ m.zonnet.account_balance }} руб.</td></tr>
+        <tr>
+            <td width="50%">Введите сумму для оплаты</td>
+            <td><input class="input input-small-zonnet" type="text" id="assist_pay" name="assist_pay" value="" /> {_ rub. _}
+                {% validate id="assist_pay" type={numericality minimum=0 maximum=15000 not_a_number_message=_"Must be a number."} %}
+            </td>
+            <td>{% button class="btn btn-mini pull-right" action={postback postback="assist_pay" delegate="mod_zonnet" qarg="assist_pay"} text=_"proceed"%}</td>
+        </tr>
     </tbody>
 </table>
 {% endblock %}

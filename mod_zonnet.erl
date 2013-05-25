@@ -11,7 +11,9 @@
 -export([
     get_account_data/1,
     observe_zonnet_menu/3,
-    observe_foo/2
+    observe_foo/2,
+    event/2,
+    is_numeric/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -104,17 +106,72 @@ observe_zonnet_menu(zonnet_menu, Acc, Context) ->
                 parent=zonnet_account,
                 label=?__("Information", Context),
                 url={zonnet_account_details}},
-     #menu_item{id=account_pay_as_you_go,
+     #menu_item{id=finance_details,
                 parent=zonnet_account,
-                label=?__("Make payment", Context),
-                url={zonnet}},
+                label=?__("Payments", Context),
+                url={zonnet_finance_details}},
      #menu_item{id=account_statistics,
                 parent=zonnet_account,
                 label=?__("Statistics", Context),
-                url={zonnet}},
+                url={zonnet_statistics}},
      #menu_item{id=account_documents,
                 parent=zonnet_account,
                 label=?__("Documents", Context),
-                url={zonnet}}
+                url={zonnet_documents}}
 
     |Acc].
+
+
+event({postback, assist_pay, _TriggerId, _TargetId}, Context) ->
+  Assist_pay = z_context:get_q("assist_pay",Context),
+  try is_numeric(Assist_pay) of
+    true ->
+        Assist_URL = binary_to_list(m_config:get_value(mod_zonnet, assist_home_link, Context)),
+        Merchant_ID = binary_to_list(m_config:get_value(mod_zonnet, assist_shop_id, Context)),
+        Currency = binary_to_list(m_config:get_value(mod_zonnet, assist_shop_currency, Context)),
+        OrderNumber = string:to_lower(z_ids:id(32)),
+        Agrm_id = get_main_agrm_id(Context),
+        case is_numeric(Agrm_id) of
+          true ->
+            Payment_URL = io_lib:format("~s?Merchant_ID=~s&OrderNumber=~s&OrderAmount=~s&OrderCurrency=~s&OrderComment=~s&Comment=~s&TestMode=0&Submit=Pay",[Assist_URL, Merchant_ID, OrderNumber, Assist_pay, Currency, Agrm_id, Agrm_id]),
+            z_render:wire({redirect, [{location, Payment_URL}]}, Context);
+          false ->
+            z_render:growl_error(?__("Please log in again.", Context), Context)
+         end;
+    false ->
+        z_render:growl_error(?__("Please input a number.", Context), Context)
+  catch
+    error:_ ->
+          z_render:growl_error(?__("Please input a number.", Context), Context)
+  end;
+event({postback, invoiceme, _TriggerId, _TargetId}, Context) ->
+  try z_convert:to_integer(z_context:get_q("invoiceme",Context)) of
+      Invoice_amount ->
+          z_render:growl([z_convert:to_list(Invoice_amount),32,?__("invoice requested",Context)], Context)
+  catch
+      error:_ ->
+          z_render:growl_error(?__("Please input integer number.", Context), Context)
+  end;
+event({submit, credit_form, _TriggerId, _TargetId}, Context) ->
+  try z_convert:to_integer(z_context:get_q("creditme",Context)) of
+      Credit_amount ->
+          z_render:growl([z_convert:to_list(Credit_amount),32,?__("credit requested",Context)], Context)
+  catch
+      error:_ ->
+          z_render:growl_error(?__("Please input integer number.", Context), Context)
+  end;
+event(_A1, Context) ->
+  z_render:growl_error(?__("Missed event happened.",Context), Context).
+
+is_numeric(L) ->
+    Float = (catch erlang:list_to_float(L)),
+    Int = (catch erlang:list_to_integer(L)),
+    is_number(Float) orelse is_number(Int).
+
+get_main_agrm_id(Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            [[QueryResult]] = z_mydb:q(<<"SELECT agrm_id from agreements where uid  = (select uid from accounts where login = ? limit 1) and oper_id = 1">>,[Z_User], Context),
+            mochinum:digits(QueryResult)
+    end.

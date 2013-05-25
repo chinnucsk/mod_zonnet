@@ -16,7 +16,9 @@
                 "css/z.modal.css"
                 "css/jquery.loadmask.css"
         %}
-
+        {% lib "css/z.growl.css" %}
+        {% lib "css/zonnet.css"  %}
+        {% lib "js/modules/z.notice.js" %}
 
         {% include "_js_include_jquery.tpl" %}
         

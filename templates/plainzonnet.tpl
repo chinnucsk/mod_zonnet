@@ -100,4 +100,31 @@
 {{ agrm_id }} - {{ amount }} - {{ prom_date[2] }} - {{ prom_till[2] }} - {{ debt }} - {{ pay_id }}
 {% endfor%}
 
+
+<div class="btn-group pull-right block-add-block">
+    <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+        {_ + add block _}
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu nav-list nav">
+            <li class="nav-header">nav-header</li>
+                <li><a href="#" data-block-type="test1">test1</li></a>
+                <li><a href="#" data-block-type="test1">test12</li></a>
+                <li><a href="#" data-block-type="test2">test21</li></a>
+    </ul>
+</div>
+
+{% wire type="submit" id="credit" postback={mailing_page id=id on_success=on_success} action={dialog_close} delegate=delegate %}
+<form id="credit" method="post" action="postback">
+
+    <p><input type="radio" name="creditme" value="1180" />1180 {_ rub. _}
+       <input type="radio" name="creditme" value="2360" /> 2360 {_ rub. _}
+       <input type="radio" name="creditme" value="2360" /> 3540 {_ rub. _}
+    </p>
+
+    {% button class="btn btn-mini" text=_"Send mailing" %}
+
+</form>
+
+
 {% endblock %}
