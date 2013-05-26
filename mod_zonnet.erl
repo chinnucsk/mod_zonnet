@@ -159,12 +159,22 @@ event({postback, invoiceme, _TriggerId, _TargetId}, Context) ->
           z_render:growl_error(?__("Please input integer number.", Context), Context)
   end;
 event({submit, credit_form, _TriggerId, _TargetId}, Context) ->
-  try z_convert:to_integer(z_context:get_q("creditme",Context)) of
-      Credit_amount ->
-          z_render:growl([z_convert:to_list(Credit_amount),32,?__("credit requested",Context)], Context)
+  Credit_amount = z_context:get_q("creditme",Context),
+  try is_numeric(Credit_amount) of
+    true ->
+        Agrm_id = get_main_agrm_id(Context),
+        case is_numeric(Agrm_id) of
+          true ->
+            z_mydb:q_raw("insert into promise_payments (agrm_id, amount, prom_date, prom_till, debt) values( ?, ?, now(), DATE_ADD(NOW(), INTERVAL 5 DAY), ?)", [Agrm_id, Credit_amount, Credit_amount], Context),
+            z_render:growl([z_convert:to_list(Credit_amount),32,?__("credit applied",Context)], Context);
+          false ->
+            z_render:growl_error(?__("Please log in again.", Context), Context)
+        end;
+    false ->
+        z_render:growl_error(?__("Please input a number.", Context), Context)
   catch
       error:_ ->
-          z_render:growl_error(?__("Please input integer number.", Context), Context)
+          z_render:growl_error(?__("Something went wrong. Please call to support.", Context), Context)
   end;
 event(_A1, Context) ->
   z_render:growl_error(?__("Missed event happened.",Context), Context).
