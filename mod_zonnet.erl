@@ -1,9 +1,9 @@
-%% @author Kirill Sysoev <iam@onnet.su>
+%% @author Kirill Sysoev <kirill.sysoev@gmail.com>
 %% @date 2013-04-27%
 %% @doc OnNet communications/innovations customer support module. 
 
 -module(mod_zonnet).
--author("Kirill Sysoev <iam@onnet.su>").
+-author("Kirill Sysoev <kirill.sysoev@gmail.com>").
 -mod_title("Z OnNet").
 -mod_description("OnNet communications innovations customer support module.").
 -mod_prio(400).
@@ -12,8 +12,7 @@
     get_account_data/1,
     observe_zonnet_menu/3,
     observe_foo/2,
-    event/2,
-    is_numeric/1
+    event/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -124,10 +123,10 @@ observe_zonnet_menu(zonnet_menu, Acc, Context) ->
 
 event({postback, assist_pay, _TriggerId, _TargetId}, Context) ->
   Assist_pay = z_context:get_q("assist_pay",Context),
-  try is_numeric(Assist_pay) of
+  try zonnet_util:is_numeric(Assist_pay) of
     true ->
-        Agrm_id = get_main_agrm_id(Context),
-        case is_numeric(Agrm_id) of
+        Agrm_id = zonnet_util:get_main_agrm_id(Context),
+        case zonnet_util:is_numeric(Agrm_id) of
           true ->
             OrderNumber = string:to_lower(z_ids:id(32)),
             AssistFolder = binary_to_list(m_config:get_value(mod_zonnet, assist_transaction_folder, Context)),
@@ -150,6 +149,7 @@ event({postback, assist_pay, _TriggerId, _TargetId}, Context) ->
     error:_ ->
           z_render:growl_error(?__("Something went wrong. Please call to support.", Context), Context)
   end;
+
 event({postback, invoiceme, _TriggerId, _TargetId}, Context) ->
   try z_convert:to_integer(z_context:get_q("invoiceme",Context)) of
       Invoice_amount ->
@@ -158,36 +158,28 @@ event({postback, invoiceme, _TriggerId, _TargetId}, Context) ->
       error:_ ->
           z_render:growl_error(?__("Please input integer number.", Context), Context)
   end;
+
 event({submit, credit_form, _TriggerId, _TargetId}, Context) ->
+  true = zonnet_util:credit_allowed(Context),
   Credit_amount = z_context:get_q("creditme",Context),
-  try is_numeric(Credit_amount) of
+  try zonnet_util:is_numeric(Credit_amount) of
     true ->
-        Agrm_id = get_main_agrm_id(Context),
-        case is_numeric(Agrm_id) of
+        Agrm_id = zonnet_util:get_main_agrm_id(Context),
+        case zonnet_util:is_numeric(Agrm_id) of
           true ->
-            z_mydb:q_raw("insert into promise_payments (agrm_id, amount, prom_date, prom_till, debt) values( ?, ?, now(), DATE_ADD(NOW(), INTERVAL 5 DAY), ?)", [Agrm_id, Credit_amount, Credit_amount], Context),
+            {ok_packet,_,_,_,_,_,_} = z_mydb:q_raw("insert into promise_payments (agrm_id, amount, prom_date, prom_till, debt) values( ?, ?/1.18, now(), DATE_ADD(NOW(), INTERVAL 5 DAY), ?/1.18)", [Agrm_id, Credit_amount, Credit_amount], Context),
+            z_mydb:q_raw("update agreements set credit = ?/1.18 where agrm_id = ? and oper_id = 1 and archive = 0", [Credit_amount, Agrm_id], Context),
             z_render:growl([z_convert:to_list(Credit_amount),32,?__("credit applied",Context)], Context);
           false ->
             z_render:growl_error(?__("Please log in again.", Context), Context)
         end;
     false ->
-        z_render:growl_error(?__("Please input a number.", Context), Context)
+        z_render:growl_error(?__("Please choose value.", Context), Context)
   catch
       error:_ ->
           z_render:growl_error(?__("Something went wrong. Please call to support.", Context), Context)
   end;
+
 event(_A1, Context) ->
   z_render:growl_error(?__("Missed event happened.",Context), Context).
 
-is_numeric(L) ->
-    Float = (catch erlang:list_to_float(L)),
-    Int = (catch erlang:list_to_integer(L)),
-    is_number(Float) orelse is_number(Int).
-
-get_main_agrm_id(Context) ->
-    case m_identity:get_username(Context) of
-        undefined -> [];
-        Z_User ->
-            [[QueryResult]] = z_mydb:q(<<"SELECT agrm_id from agreements where uid  = (select uid from accounts where login = ? limit 1) and oper_id = 1">>,[Z_User], Context),
-            mochinum:digits(QueryResult)
-    end.

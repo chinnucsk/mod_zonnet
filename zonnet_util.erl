@@ -3,6 +3,8 @@
 
 %% interface functions
 -export([
+        is_numeric/1,
+        get_main_agrm_id/1,
         credit_allowed/1,
         credit_able/1,
         credit_info/1,
@@ -14,6 +16,19 @@
 ]).
 
 -include_lib("zotonic.hrl").
+
+is_numeric(L) ->
+    Float = (catch erlang:list_to_float(L)),
+    Int = (catch erlang:list_to_integer(L)),
+    is_number(Float) orelse is_number(Int).
+
+get_main_agrm_id(Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            [[QueryResult]] = z_mydb:q(<<"SELECT agrm_id from agreements where uid  = (select uid from accounts where login = ? limit 1) and oper_id = 1">>,[Z_User], Context),
+            mochinum:digits(QueryResult)
+    end.
 
 credit_allowed(Context) ->
     case m_identity:get_username(Context) of
