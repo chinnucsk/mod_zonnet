@@ -153,7 +153,7 @@ event({postback, assist_pay, _TriggerId, _TargetId}, Context) ->
 event({postback, invoiceme, _TriggerId, _TargetId}, Context) ->
   try z_convert:to_integer(z_context:get_q("invoiceme",Context)) of
       Invoice_amount ->
-          z_render:growl([z_convert:to_list(Invoice_amount),32,?__("invoice requested",Context)], Context)
+          z_render:growl_error([z_convert:to_list(Invoice_amount),32,?__("Option is under construction.",Context)], Context)
   catch
       error:_ ->
           z_render:growl_error(?__("Please input integer number.", Context), Context)
@@ -169,7 +169,8 @@ event({submit, credit_form, _TriggerId, _TargetId}, Context) ->
           true ->
             {ok_packet,_,_,_,_,_,_} = z_mydb:q_raw("insert into promise_payments (agrm_id, amount, prom_date, prom_till, debt) values( ?, ?/1.18, now(), DATE_ADD(NOW(), INTERVAL 5 DAY), ?/1.18)", [Agrm_id, Credit_amount, Credit_amount], Context),
             z_mydb:q_raw("update agreements set credit = ?/1.18 where agrm_id = ? and oper_id = 1 and archive = 0", [Credit_amount, Agrm_id], Context),
-            z_render:growl([z_convert:to_list(Credit_amount),32,?__("credit applied",Context)], Context);
+%%            z_render:growl([z_convert:to_list(Credit_amount),32,?__("credit applied",Context)], Context);
+            z_render:update("dashboard_credit_table", z_template:render("zonnet_widget_dashboard_credit.tpl", [{headline,?__("Credit",Context)}], Context), Context);
           false ->
             z_render:growl_error(?__("Please log in again.", Context), Context)
         end;

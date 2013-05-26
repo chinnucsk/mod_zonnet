@@ -1,4 +1,4 @@
-<div class="widget {% block widget_class %}{% endblock %}">
+<div {% if idname %}id={{ idname }}{% endif %} class="widget {% block widget_class %}{% endblock %}">
     <h3 class="widget-header">
 	{% block widget_headline %}{% endblock %}
     </h3>

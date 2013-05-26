@@ -1,3 +1,6 @@
+msgid "Option is under construction."
+msgstr "Опция на стадии разработки."
+
 msgid "invoice requested"
 msgstr "выставить счет."
 

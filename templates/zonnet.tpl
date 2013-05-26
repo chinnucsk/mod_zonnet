@@ -26,7 +26,7 @@
 
                 {% if m.zonnet.credit_able %}
                 {# Credit status #}
-                {% include "zonnet_widget_dashboard_credit.tpl" headline=_"Credit" %}
+                {% include "zonnet_widget_dashboard_credit.tpl" headline=_"Credit" idname="dashboard_credit_table" %}
                 {% endif %}
             </div>
 
