@@ -1,3 +1,9 @@
+msgid "Blocked"
+msgstr "Заблокирована"
+
+msgid "Active"
+msgstr "Активна"
+
 msgid "Option is under construction."
 msgstr "Опция на стадии разработки."
 

@@ -12,7 +12,8 @@
         account_balance/1,
         agreements_table/1,
         accounts_addr_table/2,
-        accounts_table/3
+        accounts_table/3,
+        acount_status/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -116,3 +117,18 @@ accounts_table(Fields, Limit, Context) ->
             QueryResult
     end.
 
+acount_status(Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            case z_mydb:q(<<"SELECT blocked FROM vgroups where uid = (select uid from accounts where login = ? limit 1) 
+                                                                              and archive = 0 and id = 1">>,[Z_User], Context) of
+                [[StatusID]] -> StatusID;
+                 _  -> 
+                    case z_mydb:q(<<"SELECT blocked FROM vgroups where uid = (select uid from accounts where login = ? limit 1) 
+                                                           and archive = 0 order by blocked desc limit 1">>,[Z_User], Context) of
+                       [[StatusID]] -> StatusID;
+                       _ -> []
+                    end
+            end
+    end.

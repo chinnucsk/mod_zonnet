@@ -9,7 +9,9 @@
     <thead>
         <tr>
             <th width="50%"><h4>Статус учетной записи</h4></th>
-            <th width="50%"><h4>Активна</h4></th>
+            <th width="50%">{% if m.zonnet.acount_status == 0 %}<h4> {_ Active _}</h4> 
+                            {% else %}<h4 class="zalarm"> {_ Blocked _} </h4>{% endif %}
+            </th>
         </tr>
     </thead>
     <tbody>

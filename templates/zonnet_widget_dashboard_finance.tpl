@@ -12,7 +12,9 @@
     <thead>
         <tr>
             <th width="35%"><h4>Статус учетной записи</h4></th>
-            <th width="65%">{{ col2 }}</th>
+            <th width="65%">{% if m.zonnet.acount_status == 0 %}<h4> {_ Active _}</h4> 
+                            {% else %}<h4 class="zalarm"> {_ Blocked _} </h4>{% endif %}
+            </th>
         </tr>
     </thead>
     <tbody>

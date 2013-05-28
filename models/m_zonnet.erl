@@ -30,6 +30,8 @@ m_find_value(credit_able, _M, Context) ->
     zonnet_util:credit_able(Context);
 m_find_value(credit_allowed, _M, Context) -> 
     zonnet_util:credit_allowed(Context);
+m_find_value(acount_status, _M, Context) -> 
+    zonnet_util:acount_status(Context);
 
 m_find_value(_V, _VV, _Context) -> 
     [_V,_VV,"m_zonnet_find_value_mismatch"].
