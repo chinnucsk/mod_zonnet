@@ -1,3 +1,27 @@
+msgid "IP Addresses"
+msgstr "IP адреса"
+
+msgid "Phone Numbers"
+msgstr "Номера ГТС"
+
+msgid "Tariff name"
+msgstr "Название тарифа"
+
+msgid "Fee name"
+msgstr "Название платежа"
+
+msgid "RUB, excl VAT"
+msgstr "Руб, без учета НДС"
+
+msgid "Monthly fees"
+msgstr "Ежемесячные начисления"
+
+msgid "Telephony"
+msgstr "Телефония"
+
+msgid "Internet"
+msgstr "Интернет"
+
 msgid "Blocked"
 msgstr "Заблокирована"
 

@@ -31,19 +31,18 @@
             </div>
 
             <div class="span6">
+                {# Account details #}
+                {% include "zonnet_widget_monthly_fees.tpl" headline=_"Monthly fees" %}
 
-                {# Latest modified locations #}
-                {% if m.rsc['location'].id and m.acl.view['location'] %}
-                {% include "zonnet_widget_dashboard_latest.tpl" cat="location" headline=_"Latest modified locations" last=1 %}
+                {% if m.zonnet[{is_service_provided type=4}] %}
+                {# Account status #}
+                {% include "zonnet_widget_telephony.tpl" headline=_"Telephony" %}
                 {% endif %}
 
-                {# Latest modified events #}
-                {% if m.rsc['event'].id and m.acl.view['event'] %}
-                {% include "zonnet_widget_dashboard_latest.tpl" cat="event" headline=_"Latest modified events" last=1 %}
+                {% if m.zonnet[{is_service_provided type=0}] %}
+                {# Credit status #}
+                {% include "zonnet_widget_internet.tpl" headline=_"Internet" %}
                 {% endif %}
-                
-                {# Latest modified media items #}
-                {% include "zonnet_widget_dashboard_latest.tpl" cat="media" headline=_"Latest modified media items" media=1 last=1 %}
             </div>
             
         </div>

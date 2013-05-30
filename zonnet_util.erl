@@ -13,7 +13,14 @@
         agreements_table/1,
         accounts_addr_table/2,
         accounts_table/3,
-        acount_status/1
+        acount_status/1,
+        is_service_provided/2,
+        monthly_fees/1,
+        user_type/1,
+        accounts_tariffs_by_type/2,
+        tariff_descr_by_tar_id/2,
+        numbers_by_vg_id/2,
+        ip_addresses_by_vg_id/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -132,3 +139,64 @@ acount_status(Context) ->
                     end
             end
     end.
+
+is_service_provided(Type, Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            case z_mydb:q("SELECT type from tarifs where tar_id in (SELECT tar_id FROM vgroups where agrm_id = 
+                                      (SELECT agrm_id FROM agreements where uid = (select uid from accounts where login = 
+                                                                ? limit 1) and oper_id = 1)) and type=?", [Z_User,Type], Context) of
+                [] -> 0;
+                _  -> 1
+            end
+    end.
+
+monthly_fees(Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            QueryResult = z_mydb:q("SELECT SUBSTRING(categories.descr,7), categories.above from categories,usbox_services,vgroups 
+                                     where categories.tar_id = vgroups.tar_id and usbox_services.vg_id = vgroups.vg_id and 
+                                     categories.cat_idx = usbox_services.cat_idx and vgroups.uid = (select uid from accounts 
+                                     where login = ? limit 1) and categories.common = 3  and usbox_services.timeto > NOW()",
+                                                                                                                  [Z_User], Context),
+            QueryResult
+    end.
+
+user_type(Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            [QueryResult] = z_mydb:q("select type from accounts where login = ? limit 1",[Z_User], Context),
+            QueryResult
+    end.
+
+accounts_tariffs_by_type(Type, Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            case z_mydb:q("select vg_id,tar_id from vgroups where uid = (select uid from accounts where login = ? limit 1) 
+                                                                                              and id = ?", [Z_User,Type], Context) of
+                [] -> [];
+                QueryResult  -> QueryResult
+            end
+    end.
+
+tariff_descr_by_tar_id(Tar_id, Context) ->
+     case z_mydb:q("select descr from tarifs where tar_id = ? limit 1", [Tar_id], Context) of
+          [] -> [];
+          QueryResult  -> QueryResult
+     end.
+
+numbers_by_vg_id(Vg_id, Context) ->
+     case z_mydb:q("SELECT if(substring(phone_number,8)='',CONCAT('(812) ', phone_number), if(substring(phone_number,11)='', CONCAT('(',MID(phone_number,1,3),') ', right(phone_number,7)),CONCAT('(',MID(phone_number,2,3),') ',RIGHT(phone_number,7)))) from tel_staff where vg_id = ?", [Vg_id], Context) of
+          [] -> [];
+          QueryResult  -> QueryResult
+     end.
+
+ip_addresses_by_vg_id(Vg_id, Context) ->
+     case z_mydb:q("SELECT concat(INET_NTOA(segment),' / ',INET_NTOA(mask)) FROM staff where vg_id = ?", [Vg_id], Context) of
+          [] -> [];
+          QueryResult  -> QueryResult
+     end.

@@ -32,6 +32,20 @@ m_find_value(credit_allowed, _M, Context) ->
     zonnet_util:credit_allowed(Context);
 m_find_value(acount_status, _M, Context) -> 
     zonnet_util:acount_status(Context);
+m_find_value({is_service_provided,[{type,Type}]}, _M, Context) -> 
+    zonnet_util:is_service_provided(Type, Context);
+m_find_value(monthly_fees, _M, Context) -> 
+    zonnet_util:monthly_fees(Context);
+m_find_value(user_type, _M, Context) -> 
+    zonnet_util:user_type(Context);
+m_find_value({accounts_tariffs_by_type,[{type,Type}]}, _M, Context) -> 
+    zonnet_util:accounts_tariffs_by_type(Type, Context);
+m_find_value({tariff_descr_by_tar_id,[{tar_id,Tar_id}]}, _M, Context) -> 
+    zonnet_util:tariff_descr_by_tar_id(Tar_id, Context);
+m_find_value({numbers_by_vg_id,[{vg_id,Vg_id}]}, _M, Context) -> 
+    zonnet_util:numbers_by_vg_id(Vg_id, Context);
+m_find_value({ip_addresses_by_vg_id,[{vg_id,Vg_id}]}, _M, Context) -> 
+    zonnet_util:ip_addresses_by_vg_id(Vg_id, Context);
 
 m_find_value(_V, _VV, _Context) -> 
     [_V,_VV,"m_zonnet_find_value_mismatch"].

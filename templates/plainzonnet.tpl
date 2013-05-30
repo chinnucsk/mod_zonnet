@@ -127,4 +127,11 @@
 </form>
 
 
+{% if m.zonnet[{is_service_provided type=0}] %} <p> TYpe = 0 </p> {% endif %} 
+{% if m.zonnet[{is_service_provided type=3}] %} <p> TYpe = 3 </p> {% endif %} 
+{% if m.zonnet[{is_service_provided type=4}] %} <p> TYpe = 4 </p> {% endif %} 
+{% if m.zonnet[{is_service_provided type=5}] %} <p> TYpe = 5 </p> {% endif %} 
+
+{% print m.zonnet.monthly_fees %}
+
 {% endblock %}

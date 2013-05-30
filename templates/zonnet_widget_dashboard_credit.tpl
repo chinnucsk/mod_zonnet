@@ -12,7 +12,7 @@
     <thead>
         <tr>
             <th width="35%">Статус </th>
-            <th width="65%">{% if pay_id == 0 %}<h4> Активный </h4>{% elif  pay_id == -1 %}<h4> Просрочен </h4>{% else %}<h4> Неопределен </h4>{% endif %}</th>
+            <th width="65%">{% if pay_id == 0 %}<h4 class="zwarning"> Активный </h4>{% elif  pay_id == -1 %}<h4 class="zalarm"> Просрочен </h4>{% else %}<h4> Неопределен </h4>{% endif %}</th>
         </tr>
     </thead>
     <tbody>
