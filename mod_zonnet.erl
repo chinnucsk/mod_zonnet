@@ -12,6 +12,7 @@
     get_account_data/1,
     observe_zonnet_menu/3,
     observe_foo/2,
+    observe_postback_notify/2,
     event/2
 ]).
 
@@ -85,6 +86,19 @@ get_account_data(Context) ->
                 LB_CompanyAddr, LB_MailAddr, LB_ACCBalance, LB_Agreements, LB_ACCPhone_numbers, 
                 LB_AccServices, LB_AccPayments, LB_ACCIPaddresses]
     end.
+
+%% Just a test of z_notify as an alternative to z_event - event({postback, intervaltype, _TriggerId, _TargetId}, Context) 
+%%
+%%
+observe_postback_notify({postback_notify, "intervaltype_notify",_,_}, Context) ->
+  try z_context:get_q("period",Context) of
+      Period ->
+          z_render:update("datepicker", z_template:render("zonnet_widget_statistics_datepicker.tpl", [{period,Period}], Context), Context)
+  catch
+      error:_ ->
+          z_render:growl_error(?__("Please input intervaltype.", Context), Context)
+  end.
+
 
 observe_foo({foo, []}, Context) -> 
     case m_identity:get_username(Context) of
@@ -179,6 +193,15 @@ event({submit, credit_form, _TriggerId, _TargetId}, Context) ->
   catch
       error:_ ->
           z_render:growl_error(?__("Something went wrong. Please call to support.", Context), Context)
+  end;
+
+event({postback, intervaltype_event, _TriggerId, _TargetId}, Context) ->
+  try z_context:get_q("period",Context) of
+      Period ->
+          z_render:update("datepicker", z_template:render("zonnet_widget_statistics_datepicker.tpl", [{period,Period}], Context), Context)
+  catch
+      error:_ ->
+          z_render:growl_error(?__("Please input intervaltype.", Context), Context)
   end;
 
 event(_A1, Context) ->

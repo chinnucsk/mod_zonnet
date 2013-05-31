@@ -1,0 +1,67 @@
+{% extends "zonnet_base.tpl" %}
+
+{% block title %}{_ Dashboard _}{% endblock %}
+
+{% block content %}
+        <div>
+            <div class="pull-right">
+                <p class="admin-chapeau">
+                    {_ Logged in as _}
+                    <a href="{% url admin_edit_rsc id=m.acl.user %}">{{ m.acl.user.title }}</a>.
+                </p>
+            </div>
+            
+            <h2>{_ Statistics _}</h2>
+            </br>
+
+        </div>
+
+        <div class="row">
+            <div class="span6">
+
+                {# Blank #}
+                {% include "zonnet_widget_statistics1.tpl" headline=_"statistics1" %}
+
+            </div>
+
+            <div class="span6">
+
+                {# Blank #}
+                {% include "zonnet_widget_blank.tpl" headline=_"Blank" %}
+
+            </div>
+            
+        </div>
+<p>
+<input id="selectMonth" type="text" style="width:80px" name="datetest" value=""/>
+
+{% javascript %}
+
+$("#selectMonth").datepicker( {
+    changeMonth: true,      //provide option to select Month
+    changeYear: true,       //provide option to select year
+    showOn: 'button',
+    showButtonPanel: true,  // button panel having today and done button
+    dateFormat: 'MM yy',    //set date format
+    onClose: function(dateText, inst) {
+        var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+        var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+        $(this).datepicker('setDate', new Date(year, month, 1));//here set the date when closing.
+            $(this).blur();//remove focus input box
+           
+    }
+});
+
+$("#selectMonth").focus(function () {
+    $(".ui-datepicker-calendar").hide();
+    $("#ui-datepicker-div").position({
+        my: "center top",
+        at: "center bottom",
+        of: $(this)
+    });
+});                
+
+
+{% endjavascript %}
+
+{% endblock %}

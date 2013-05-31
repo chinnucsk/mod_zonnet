@@ -1,5 +1,14 @@
 {% extends "base.tpl" %}
 
+        {% lib
+                "css/bootstrap-admin.css"
+                "css/zp-menuedit.css"
+                "css/zotonic-admin.css"
+                "css/z.modal.css"
+                "css/jquery.loadmask.css"
+        %}
+
+
 {% block title %}{_ Personal account _}{% endblock %}
 
 {% block content %}
@@ -103,7 +112,7 @@
 
 <div class="btn-group pull-right block-add-block">
     <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
-        {_ + add block _}
+        {_ + choose period type _}
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu nav-list nav">
@@ -117,7 +126,7 @@
 {% wire type="submit" id="credit" postback={mailing_page id=id on_success=on_success} action={dialog_close} delegate=delegate %}
 <form id="credit" method="post" action="postback">
 
-    <p><input type="radio" name="creditme" value="1180" />1180 {_ rub. _}
+    <p><input type="radio" name="creditme" value="1180" /> 1180 {_ rub. _}
        <input type="radio" name="creditme" value="2360" /> 2360 {_ rub. _}
        <input type="radio" name="creditme" value="2360" /> 3540 {_ rub. _}
     </p>
@@ -133,5 +142,7 @@
 {% if m.zonnet[{is_service_provided type=5}] %} <p> TYpe = 5 </p> {% endif %} 
 
 {% print m.zonnet.monthly_fees %}
+
+<input type="text" style="width:80px" name="dt:ymd:{{ is_end }}:{{ name }}" value="{{ date|date:'Y-m-d' }}" class="do_datepicker" />
 
 {% endblock %}

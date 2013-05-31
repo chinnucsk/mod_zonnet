@@ -27,9 +27,10 @@
             <div class="span6">
 
                 {# Blank #}
-                {% include "zonnet_widget_blank.tpl" headline=_"Blank" %}
+                {% include "zonnet_widget_statistics1.tpl" headline=_"Phone calls statistics" %}
 
             </div>
             
         </div>
+
 {% endblock %}

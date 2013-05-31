@@ -1,3 +1,27 @@
+msgid "Phone calls statistics"
+msgstr "Статистика телефонных вызовов"
+
+msgid "Select day"
+msgstr "Выберите день"
+
+msgid "Select month"
+msgstr "Выберите месяц"
+
+msgid "Select interval"
+msgstr "Выберите интервал"
+
+msgid "day"
+msgstr "день"
+
+msgid "month"
+msgstr "месяц"
+
+msgid "interval"
+msgstr "интервал"
+
+msgid "+ choose interval type"
+msgstr "+ выберите тип интервала"
+
 msgid "IP Addresses"
 msgstr "IP адреса"
 

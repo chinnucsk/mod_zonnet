@@ -8,19 +8,23 @@
         <meta name="description" content="" />
         <meta name="author" content="Arjan Scherpenisse" />
 
+        {% include "_js_include_jquery.tpl" %}
         {% lib
                 "css/bootstrap-admin.css"
-                "css/jquery-ui.datepicker.css"
                 "css/zp-menuedit.css"
                 "css/zotonic-admin.css"
                 "css/z.modal.css"
                 "css/jquery.loadmask.css"
         %}
         {% lib "css/z.growl.css" %}
-        {% lib "css/zonnet.css"  %}
         {% lib "js/modules/z.notice.js" %}
+        {% lib "css/zonnet.css"  %}
+        {% lib "css/redmond.datepick.css"  %}
+        {% lib "css/datepicker.css"  %}
+        {% lib "js/jquery.datepick.min.js"  %}
+        {% lib "js/jquery.datepick.ext.min.js"  %}
+        {% lib "js/bootstrap-datepicker.js"  %}
 
-        {% include "_js_include_jquery.tpl" %}
         
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
