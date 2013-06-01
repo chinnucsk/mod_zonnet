@@ -4,6 +4,7 @@
 %% interface functions
 -export([
         is_numeric/1,
+        get_uid/1,
         get_main_agrm_id/1,
         credit_allowed/1,
         credit_able/1,
@@ -20,7 +21,9 @@
         accounts_tariffs_by_type/2,
         tariff_descr_by_tar_id/2,
         numbers_by_vg_id/2,
-        ip_addresses_by_vg_id/2
+        ip_addresses_by_vg_id/2,
+        is_prepaid/1,
+        calc_curr_month_exp/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -29,6 +32,14 @@ is_numeric(L) ->
     Float = (catch erlang:list_to_float(L)),
     Int = (catch erlang:list_to_integer(L)),
     is_number(Float) orelse is_number(Int).
+
+get_uid(Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            [[QueryResult]] = z_mydb:q(<<"select uid from accounts where login = ? limit 1">>,[Z_User], Context),
+            mochinum:digits(QueryResult)
+    end.
 
 get_main_agrm_id(Context) ->
     case m_identity:get_username(Context) of
@@ -164,6 +175,7 @@ monthly_fees(Context) ->
             QueryResult
     end.
 
+%% If user acting as company or as an individual
 user_type(Context) ->
     case m_identity:get_username(Context) of
         undefined -> [];
@@ -200,3 +212,43 @@ ip_addresses_by_vg_id(Vg_id, Context) ->
           [] -> [];
           QueryResult  -> QueryResult
      end.
+
+%% check whether user has prepaid agreement
+is_prepaid(Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            case z_mydb:q("SELECT 1 FROM tarifs, vgroups where tarifs.tar_id = vgroups.tar_id and vgroups.uid = 
+                                          (select uid from accounts where login = ? limit 1) and tarifs.type = 5 
+                                                                               and tarifs.act_block > 0",[Z_User], Context) of
+                [QueryResult] -> QueryResult;
+                _ -> []
+            end
+    end.
+
+%% calculate current month expenditures FORMAT(COALESCE(sum(balance),0),2)
+calc_curr_month_exp(Context) ->
+    case get_uid(Context) of
+        [] -> ["0"];
+        Uid -> 
+          {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
+          Today = io_lib:format("~w~2..0w~2..0w",[Year, Month, Day]),
+          CurrMonth = io_lib:format("~w~2..0w",[Year, Month]),
+          case Day of
+           1 -> 
+             QueryString = io_lib:format("Select FORMAT(COALESCE( 
+                if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0) + 
+                if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),0),2) 
+                                              ",[Today,Uid,Today,Uid,Today,Uid,Today,Uid]);
+           _ ->
+             QueryString = io_lib:format("Select FORMAT(COALESCE(Sum(amount) + 
+                if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0) + 
+                if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),0),2) 
+                                                from report~s where uid = ~s",[Today,Uid,Today,Uid,Today,Uid,Today,Uid,CurrMonth,Uid])
+          end,
+          case z_mydb:q(QueryString, Context) of
+               [[undefined]] -> ["0"];
+               [QueryResult] -> QueryResult;
+               _ -> ["0"]
+          end
+    end.

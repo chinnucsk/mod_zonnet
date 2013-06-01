@@ -46,6 +46,10 @@ m_find_value({numbers_by_vg_id,[{vg_id,Vg_id}]}, _M, Context) ->
     zonnet_util:numbers_by_vg_id(Vg_id, Context);
 m_find_value({ip_addresses_by_vg_id,[{vg_id,Vg_id}]}, _M, Context) -> 
     zonnet_util:ip_addresses_by_vg_id(Vg_id, Context);
+m_find_value(is_prepaid, _M, Context) -> 
+    zonnet_util:is_prepaid(Context);
+m_find_value(calc_curr_month_exp, _M, Context) -> 
+    zonnet_util:calc_curr_month_exp(Context);
 
 m_find_value(_V, _VV, _Context) -> 
     [_V,_VV,"m_zonnet_find_value_mismatch"].
