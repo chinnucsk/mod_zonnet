@@ -1,0 +1,46 @@
+.input-mini-zonnet {
+  width: 60px;
+  height: 10px!important;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.input-small-zonnet {
+  width: 90px;
+  height: 10px!important;
+  text-align: center;
+  vertical-align: middle;
+  margin-bottom: 1px!important;
+}
+
+.trzonnet {
+  vertical-align: middle;
+}
+
+.zalarm {
+  color: #da4f49;
+}
+
+.zwarning {
+  color: #c09853;
+}
+
+.zprimary {
+  color: #0044cc;
+}
+
+.td-left {
+  text-align: left!important;
+}
+
+.td-center {
+  text-align: center!important;
+}
+
+.td-right {
+  text-align: right!important;
+}
+
+.zblock-add-block {
+  margin-top: 4px;
+}
