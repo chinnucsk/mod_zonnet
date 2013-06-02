@@ -93,7 +93,7 @@ get_account_data(Context) ->
 observe_postback_notify({postback_notify, "intervaltype_notify",_,_}, Context) ->
   try z_context:get_q("period",Context) of
       Period ->
-          z_render:update("datepicker", z_template:render("zonnet_widget_statistics_datepicker.tpl", [{period,Period}], Context), Context)
+          z_render:update("datepicker", z_template:render("_zonnet_widget_statistics_datepicker.tpl", [{period,Period}], Context), Context)
   catch
       error:_ ->
           z_render:growl_error(?__("Please input intervaltype.", Context), Context)
@@ -198,7 +198,7 @@ event({submit, credit_form, _TriggerId, _TargetId}, Context) ->
 event({postback, intervaltype_event, _TriggerId, _TargetId}, Context) ->
   try z_context:get_q("period",Context) of
       Period ->
-          z_render:update("datepicker", z_template:render("zonnet_widget_statistics_datepicker.tpl", [{period,Period}], Context), Context)
+          z_render:update("datepicker", z_template:render("_zonnet_widget_statistics_datepicker.tpl", [{period,Period}], Context), Context)
   catch
       error:_ ->
           z_render:growl_error(?__("Please input intervaltype.", Context), Context)

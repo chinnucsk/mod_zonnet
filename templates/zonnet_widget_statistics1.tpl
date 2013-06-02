@@ -20,7 +20,7 @@
 
 {% block widget_content %}
 <table id="datepicker" class="table do_adminLinkedTable">
-  {% include "zonnet_widget_statistics_datepicker.tpl" %}
+  {% include "_zonnet_widget_statistics_datepicker.tpl" %}
 </table>
 {% endblock %}
 

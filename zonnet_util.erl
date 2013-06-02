@@ -167,11 +167,16 @@ monthly_fees(Context) ->
     case m_identity:get_username(Context) of
         undefined -> [];
         Z_User ->
-            QueryResult = z_mydb:q("SELECT SUBSTRING(categories.descr,7), categories.above from categories,usbox_services,vgroups 
-                                     where categories.tar_id = vgroups.tar_id and usbox_services.vg_id = vgroups.vg_id and 
-                                     categories.cat_idx = usbox_services.cat_idx and vgroups.uid = (select uid from accounts 
-                                     where login = ? limit 1) and categories.common = 3  and usbox_services.timeto > NOW()",
-                                                                                                                  [Z_User], Context),
+
+            QueryResult = z_mydb:q("SELECT SUBSTRING(descr,8), ROUND(above,0), mul, above*mul as amount from usbox_services, categories  where usbox_services.cat_idx = categories.cat_idx and usbox_services.tar_id = categories.tar_id and vg_id in (SELECT vg_id FROM vgroups where agrm_id = (SELECT agrm_id FROM `agreements` where uid = (select uid from accounts where login = ? limit 1) and oper_id = 1)) and oper_id = 1",[Z_User], Context),
+
+
+
+%            QueryResult = z_mydb:q("SELECT SUBSTRING(categories.descr,7), categories.above from categories,usbox_services,vgroups 
+%                                     where categories.tar_id = vgroups.tar_id and usbox_services.vg_id = vgroups.vg_id and 
+%                                     categories.cat_idx = usbox_services.cat_idx and vgroups.uid = (select uid from accounts 
+%                                     where login = ? limit 1) and categories.common = 3  and usbox_services.timeto > NOW()",
+%                                                                                                                 [Z_User], Context),
             QueryResult
     end.
 
@@ -241,10 +246,14 @@ calc_curr_month_exp(Context) ->
                 if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),0),2) 
                                               ",[Today,Uid,Today,Uid,Today,Uid,Today,Uid]);
            _ ->
-             QueryString = io_lib:format("Select FORMAT(COALESCE(Sum(amount) + 
+             QueryString = io_lib:format("Select FORMAT(COALESCE( 
                 if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0) + 
                 if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),0),2) 
-                                                from report~s where uid = ~s",[Today,Uid,Today,Uid,Today,Uid,Today,Uid,CurrMonth,Uid])
+                                              ",[Today,Uid,Today,Uid,Today,Uid,Today,Uid])
+%            QueryString = io_lib:format("Select FORMAT(COALESCE(Sum(amount) + 
+%              if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0) + 
+%              if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),0),2) 
+%                                              from report~s where uid = ~s",[Today,Uid,Today,Uid,Today,Uid,Today,Uid,CurrMonth,Uid])
           end,
           case z_mydb:q(QueryString, Context) of
                [[undefined]] -> ["0"];

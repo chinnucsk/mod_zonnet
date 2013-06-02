@@ -1,3 +1,12 @@
+msgid "Price"
+msgstr "Цена"
+
+msgid "Quantity"
+msgstr "Кол-во"
+
+msgid "Cost"
+msgstr "Стоимость"
+
 msgid "Phone calls statistics"
 msgstr "Статистика телефонных вызовов"
 
@@ -33,6 +42,9 @@ msgstr "Название тарифа"
 
 msgid "Fee name"
 msgstr "Название платежа"
+
+msgid "Monthly fees, RUB (excl VAT)"
+msgstr "Ежемесячные начисления, руб (без учета НДС)"
 
 msgid "RUB, excl VAT"
 msgstr "Руб, без учета НДС"

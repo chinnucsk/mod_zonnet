@@ -19,11 +19,9 @@
         {% lib "css/z.growl.css" %}
         {% lib "js/modules/z.notice.js" %}
         {% lib "css/zonnet.css"  %}
-        {% lib "css/redmond.datepick.css"  %}
         {% lib "css/datepicker.css"  %}
-        {% lib "js/jquery.datepick.min.js"  %}
-        {% lib "js/jquery.datepick.ext.min.js"  %}
         {% lib "js/bootstrap-datepicker.js"  %}
+        {% lib "js/locales/bootstrap-datepicker.ru.js"  %}
 
         
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->

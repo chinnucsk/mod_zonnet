@@ -32,7 +32,7 @@
 
             <div class="span6">
                 {# Account details #}
-                {% include "zonnet_widget_monthly_fees.tpl" headline=_"Monthly fees" %}
+                {% include "zonnet_widget_monthly_fees.tpl" headline=_"Monthly fees, RUB (excl VAT)" %}
 
                 {% if m.zonnet[{is_service_provided type=4}] %}
                 {# Account status #}
@@ -46,4 +46,6 @@
             </div>
             
         </div>
+
+
 {% endblock %}
