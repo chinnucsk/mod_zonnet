@@ -167,6 +167,7 @@ event({postback, assist_pay, _TriggerId, _TargetId}, Context) ->
 event({postback, invoiceme, _TriggerId, _TargetId}, Context) ->
   try z_convert:to_integer(z_context:get_q("invoiceme",Context)) of
       Invoice_amount ->
+%          z_render:wire({alert, [{text,"This is a test Alert"}]}, Context)
           z_render:growl_error([z_convert:to_list(Invoice_amount),32,?__("Option is under construction.",Context)], Context)
   catch
       error:_ ->

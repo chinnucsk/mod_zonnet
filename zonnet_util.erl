@@ -23,7 +23,8 @@
         numbers_by_vg_id/2,
         ip_addresses_by_vg_id/2,
         is_prepaid/1,
-        calc_curr_month_exp/1
+        calc_curr_month_exp/1,
+        get_calls_list/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -238,7 +239,7 @@ calc_curr_month_exp(Context) ->
         Uid -> 
           {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
           Today = io_lib:format("~w~2..0w~2..0w",[Year, Month, Day]),
-          CurrMonth = io_lib:format("~w~2..0w",[Year, Month]),
+%          CurrMonth = io_lib:format("~w~2..0w",[Year, Month]),
           case Day of
            1 -> 
              QueryString = io_lib:format("Select FORMAT(COALESCE( 
@@ -260,4 +261,13 @@ calc_curr_month_exp(Context) ->
                [QueryResult] -> QueryResult;
                _ -> ["0"]
           end
+    end.
+
+%% check whether user has prepaid agreement
+get_calls_list(Context) ->
+    case get_uid(Context) of
+      [] -> [];
+      Uid -> 
+         z_mydb:q("select timefrom, numfrom, numto, format(duration_round/60, 0), direction, format(amount, 2) from tel00120130531 where uid =  ?",
+                                                                                                                 [Uid], Context)
     end.

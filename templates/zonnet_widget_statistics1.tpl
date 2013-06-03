@@ -8,7 +8,7 @@
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu nav-list nav">
-                {% wire name="intervaltype_event" action={postback postback="intervaltype_event" delegate="mod_zonnet"} %}
+                {% wire name="intervaltype_event" action={postback postback="intervaltype_event" delegate="mod_zonnet" qarg="startDayInput" qarg="endDayInput" qarg="monthInput"} %}
                 <li><a href="#" onclick="z_event('intervaltype_event', { period: 'day' });">{_ day _}</li></a>
                 <li><a href="#" onclick="z_notify('intervaltype_notify', { period: 'month' });" >{_ month _}</li></a>
                 <li><a href="#" onclick="z_event('intervaltype_event', { period: 'interval' });">{_ interval _}</li></a>

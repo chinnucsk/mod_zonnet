@@ -50,6 +50,8 @@ m_find_value(is_prepaid, _M, Context) ->
     zonnet_util:is_prepaid(Context);
 m_find_value(calc_curr_month_exp, _M, Context) -> 
     zonnet_util:calc_curr_month_exp(Context);
+m_find_value(get_calls_list, _M, Context) -> 
+    zonnet_util:get_calls_list(Context);
 
 m_find_value(_V, _VV, _Context) -> 
     [_V,_VV,"m_zonnet_find_value_mismatch"].
