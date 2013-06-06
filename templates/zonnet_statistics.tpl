@@ -19,11 +19,11 @@
         <div class="row">
             <div class="span6">
 
-                {# Blank #}
-                {% include "zonnet_widget_statistics1.tpl" headline=_"Phone calls statistics" %}
+                {# Filter #}
+                {% include "zonnet_widget_statistics_filter.tpl" headline=_"Phone calls statistics" %}
 
-                {# Blank #}
-                {% include "zonnet_widget_blank.tpl" headline=_"Blank" %}
+                {# Monthly fixed expenses #}
+                {% include "zonnet_widget_statistics_fixed_costs.tpl" headline=_"Fixed costs for selected period, RUB (excl VAT)" %}
 
             </div>
 
@@ -35,7 +35,5 @@
             </div>
             
         </div>
-
-{% debug %}
 
 {% endblock %}

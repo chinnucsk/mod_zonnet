@@ -38,8 +38,10 @@ get_uid(Context) ->
     case m_identity:get_username(Context) of
         undefined -> [];
         Z_User ->
-            [[QueryResult]] = z_mydb:q(<<"select uid from accounts where login = ? limit 1">>,[Z_User], Context),
-            mochinum:digits(QueryResult)
+            case z_mydb:q(<<"select uid from accounts where login = ? limit 1">>,[Z_User], Context) of
+                [[QueryResult]] -> mochinum:digits(QueryResult);
+                _ -> []
+            end
     end.
 
 get_main_agrm_id(Context) ->
@@ -132,8 +134,10 @@ accounts_table(Fields, Limit, Context) ->
         undefined -> [];
         Z_User ->
             QueryString = lists:flatten(io_lib:format("select ~s from accounts where login = \'~s\' limit ~p",[list_to_atom(Fields),Z_User,Limit])),
-            [QueryResult] = z_mydb:q(QueryString, Context),
-            QueryResult
+            case z_mydb:q(QueryString, Context) of
+                [QueryResult] -> QueryResult;
+                _ -> []
+            end
     end.
 
 acount_status(Context) ->
@@ -186,8 +190,10 @@ user_type(Context) ->
     case m_identity:get_username(Context) of
         undefined -> [];
         Z_User ->
-            [QueryResult] = z_mydb:q("select type from accounts where login = ? limit 1",[Z_User], Context),
-            QueryResult
+            case z_mydb:q("select type from accounts where login = ? limit 1",[Z_User], Context) of
+                [QueryResult] -> QueryResult;
+                _ -> []
+            end
     end.
 
 accounts_tariffs_by_type(Type, Context) ->
@@ -239,30 +245,14 @@ calc_curr_month_exp(Context) ->
         Uid -> 
           {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
           Today = io_lib:format("~w~2..0w~2..0w",[Year, Month, Day]),
-%          CurrMonth = io_lib:format("~w~2..0w",[Year, Month]),
-          case Day of
-           1 -> 
-             QueryString = io_lib:format("Select FORMAT(COALESCE( 
-                if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0) + 
-                if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),0),2) 
-                                              ",[Today,Uid,Today,Uid,Today,Uid,Today,Uid]);
-           _ ->
-             QueryString = io_lib:format("Select FORMAT(COALESCE( 
-                if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0) + 
-                if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),0),2) 
-                                              ",[Today,Uid,Today,Uid,Today,Uid,Today,Uid])
-%            QueryString = io_lib:format("Select FORMAT(COALESCE(Sum(amount) + 
-%              if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0) + 
-%              if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),0),2) 
-%                                              from report~s where uid = ~s",[Today,Uid,Today,Uid,Today,Uid,Today,Uid,CurrMonth,Uid])
-          end,
+          QueryString = io_lib:format("Select FORMAT(COALESCE(Round(if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0),2) + Round(if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),2) + Round(if((SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s)>0,(SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s),0),2) + (Select sum(amount) from usbox_charge where agrm_id = (SELECT agrm_id FROM agreements where uid = ~s and oper_id = 1) and Month(period) = Month(Now()) and Year(period) = Year(Now())),0),2)",[Today,Uid,Today,Uid,Today,Uid,Today,Uid,Uid,Uid,Uid]),
           case z_mydb:q(QueryString, Context) of
                [[undefined]] -> ["0"];
                [QueryResult] -> QueryResult;
                _ -> ["0"]
           end
     end.
-
+%% FORMAT(COALESCE(sum(balance),0),2)
 %% check whether user has prepaid agreement
 get_calls_list(Context) ->
     case get_uid(Context) of

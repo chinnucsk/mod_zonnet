@@ -22,6 +22,7 @@
         {% lib "css/datepicker.css"  %}
         {% lib "js/bootstrap-datepicker.js"  %}
         {% lib "js/locales/bootstrap-datepicker.ru.js"  %}
+        {% lib "js/jquery.tbs_dd.js"  %}
 
         
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->

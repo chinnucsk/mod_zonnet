@@ -13,6 +13,7 @@
     observe_zonnet_menu/3,
     observe_foo/2,
     observe_postback_notify/2,
+    observe_search_query/2,
     event/2
 ]).
 
@@ -87,8 +88,16 @@ get_account_data(Context) ->
                 LB_AccServices, LB_AccPayments, LB_ACCIPaddresses]
     end.
 
-%% Just a test of z_notify as an alternative to z_event - event({postback, intervaltype, _TriggerId, _TargetId}, Context) 
 %%
+%% test of calls list pagination
+%%
+observe_search_query({search_query, {callslist, _Args}, _OffsetLimit}, Context) ->
+%%    zonnet_util:get_calls_list({fql, Args}, OffsetLimit, Context);
+    zonnet_util:get_calls_list(Context);
+observe_search_query(_, _Context) ->
+    undefined.
+%%
+%% Just a test of z_notify as an alternative to z_event - event({postback, intervaltype, _TriggerId, _TargetId}, Context) 
 %%
 observe_postback_notify({postback_notify, "intervaltype_notify",_,_}, Context) ->
   try z_context:get_q("period",Context) of

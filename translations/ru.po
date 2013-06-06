@@ -1,5 +1,56 @@
+msgid "Fixed costs for selected period, RUB (excl VAT)"
+msgstr "Фиксированные затраты за выбранный период, руб (без учета НДС)"
+
+msgid "Local calls"
+msgstr "Местные вызовы"
+
+msgid "Long distance calls"
+msgstr "Мoбильные и мг/мн вызовы"
+
+msgid "refresh results"
+msgstr "обновить результаты"
+
+msgid "All"
+msgstr "Все"
+
+msgid "inbound"
+msgstr "входящие"
+
+msgid "outbound"
+msgstr "исходящие"
+
+msgid "choose calls direction"
+msgstr "направление вызовов"
+
+msgid "choose calls type"
+msgstr "тип вызовов"
+
+msgid "Till:"
+msgstr "по:"
+
+msgid "From:"
+msgstr "C:"
+
+msgid "Day:"
+msgstr "День:"
+
+msgid "Month:"
+msgstr "Месяц:"
+
+msgid "Day"
+msgstr "День"
+
+msgid "Month"
+msgstr "Месяц"
+
+msgid "Inbound calls"
+msgstr "Входящие вызовы"
+
 msgid "Inbound"
 msgstr "Входящий"
+
+msgid "Outbound calls"
+msgstr "Исходящие вызовы"
 
 msgid "Outbound"
 msgstr "Исходящий"
@@ -31,6 +82,9 @@ msgstr "Кол-во"
 msgid "Cost"
 msgstr "Стоимость"
 
+msgid "Sum"
+msgstr "Сумма"
+
 msgid "Phone calls statistics"
 msgstr "Статистика телефонных вызовов"
 
@@ -49,11 +103,14 @@ msgstr "день"
 msgid "month"
 msgstr "месяц"
 
+msgid "Interval"
+msgstr "Интервал"
+
 msgid "interval"
 msgstr "интервал"
 
-msgid "+ choose interval type"
-msgstr "+ выберите тип интервала"
+msgid "choose interval type"
+msgstr "выберите тип интервала"
 
 msgid "IP Addresses"
 msgstr "IP адреса"
@@ -63,6 +120,9 @@ msgstr "Номера ГТС"
 
 msgid "Tariff name"
 msgstr "Название тарифа"
+
+msgid "Service name"
+msgstr "Название услуги"
 
 msgid "Fee name"
 msgstr "Название платежа"
