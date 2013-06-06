@@ -125,8 +125,10 @@ accounts_addr_table(Type, Context) ->
         undefined -> [];
         Z_User ->
             QueryString = lists:flatten(io_lib:format("select address from accounts_addr where uid = (select uid from accounts where login = \'~s\' limit 1) and type = ~p limit 1",[Z_User,Type])),
-            [QueryResult] = z_mydb:q(QueryString, Context),
-            QueryResult
+            case z_mydb:q(QueryString, Context) of
+                [QueryResult] -> QueryResult;
+                _ -> []
+            end
     end.
 
 accounts_table(Fields, Limit, Context) ->
@@ -172,16 +174,7 @@ monthly_fees(Context) ->
     case m_identity:get_username(Context) of
         undefined -> [];
         Z_User ->
-
-            QueryResult = z_mydb:q("SELECT SUBSTRING(descr,8), ROUND(above,0), mul, above*mul as amount from usbox_services, categories  where usbox_services.cat_idx = categories.cat_idx and usbox_services.tar_id = categories.tar_id and vg_id in (SELECT vg_id FROM vgroups where agrm_id = (SELECT agrm_id FROM `agreements` where uid = (select uid from accounts where login = ? limit 1) and oper_id = 1)) and oper_id = 1",[Z_User], Context),
-
-
-
-%            QueryResult = z_mydb:q("SELECT SUBSTRING(categories.descr,7), categories.above from categories,usbox_services,vgroups 
-%                                     where categories.tar_id = vgroups.tar_id and usbox_services.vg_id = vgroups.vg_id and 
-%                                     categories.cat_idx = usbox_services.cat_idx and vgroups.uid = (select uid from accounts 
-%                                     where login = ? limit 1) and categories.common = 3  and usbox_services.timeto > NOW()",
-%                                                                                                                 [Z_User], Context),
+            QueryResult = z_mydb:q("SELECT SUBSTRING(categories.descr,7), ROUND(categories.above,0), mul, above*mul from categories,usbox_services,vgroups where categories.tar_id = vgroups.tar_id and usbox_services.vg_id = vgroups.vg_id and categories.cat_idx = usbox_services.cat_idx and vgroups.uid = (select uid from accounts where login = ? limit 1) and categories.common = 3 and usbox_services.timeto > NOW()",[Z_User], Context),
             QueryResult
     end.
 
