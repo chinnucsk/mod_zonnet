@@ -30,7 +30,7 @@
             <div class="span6">
 
                 {# Calls list #}
-                {% include "zonnet_widget_calls_list.tpl" headline=_"Phone calls statistics" idname="calls_list_widget" %}
+                {% include "zonnet_widget_calls_list.tpl" headline=_"Phone calls statistics" idname="calls_list_widget" direction="1" operator="1,6" %}
 
             </div>
             

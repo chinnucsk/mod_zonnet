@@ -91,7 +91,7 @@ get_account_data(Context) ->
 %%
 %% test of m_search and pagination
 %%
-observe_search_query({search_query, {callslist, [{from,StartDayInput},{month,MonthInput},{till,EndDayInput}]}, _OffsetLimit}, Context) ->
+observe_search_query({search_query, {callslist, [{callsdirection1,Direction},{callstype,CallsType},{from,StartDayInput},{month,MonthInput},{till,EndDayInput}]}, _OffsetLimit}, Context) ->
   if
      MonthInput =/= undefined ->
          [MonthM, YearM] = string:tokens(MonthInput,"/"),
@@ -110,7 +110,7 @@ observe_search_query({search_query, {callslist, [{from,StartDayInput},{month,Mon
 
 observe_search_query({search_query, {callslist, _Args}, _OffsetLimit}, Context) ->
     {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
-%%    file:write_file("/home/zotonic/iamstestnext",lists:flatten(io_lib:format("~p", [_Args]))),
+    file:write_file("/home/zotonic/iamstestnext",[lists:flatten(io_lib:format("~p", [_Args])),"\n\n"], [append]),
     zonnet_util:get_calls_list({from, Year, Month, Day},{till, Year, Month, Day},Context);
 
 observe_search_query(_, _Context) ->
@@ -238,25 +238,14 @@ event({postback, fixed_costs, _TriggerId, _TargetId}, Context) ->
     EndDayInput = z_context:get_q("endDayInput",Context),
     MonthInput = z_context:get_q("monthInput",Context),
     z_render:update("fixed_costs_widget", z_template:render("zonnet_widget_statistics_fixed_costs.tpl", [{headline,?__("Costs for selected period, RUB (excl VAT)", Context)}, {idname, "fixed_costs_widget"}, {startDayInput, StartDayInput}, {endDayInput, EndDayInput}, {monthInput, MonthInput}], Context), Context);
-%    case z_context:get_q("monthInput",Context) of
-%      undefined ->
-%          StartDayInput = z_context:get_q("startDayInput",Context),
-%          case z_context:get_q("endDayInput",Context) of
-%            undefined ->
-%                z_render:wire({alert, [{text,"This is a StartDayInput Alert"}]}, Context);
-%            EndDayInput ->
-%                z_render:wire({alert, [{text,"This is an EndDayInput Alert"}]}, Context)
-%          end;
-%      MonthInput -> 
-%          z_render:wire({alert, [{text,"This is a MonthInput Alert"}]}, Context)
-%    end;
 
 event({postback, calls_list, _TriggerId, _TargetId}, Context) ->
     StartDayInput = z_context:get_q("startDayInput",Context),
     EndDayInput = z_context:get_q("endDayInput",Context),
     MonthInput = z_context:get_q("monthInput",Context),
-%%          [EndDay,EndMonth,EndYear] = string:tokens(EndDayInput,"/"),
-          z_render:update("calls_list_widget", z_template:render("zonnet_widget_calls_list.tpl", [{headline,?__("Phone calls statistics", Context)}, {idname, "calls_list_widget"}, {startDayInput, StartDayInput}, {endDayInput, EndDayInput}, {monthInput, MonthInput}], Context), Context);
+    CallsType = z_context:get_q("callstype",Context),
+    CallsDirection = z_context:get_q("callsdirection",Context),
+    z_render:update("calls_list_widget", z_template:render("zonnet_widget_calls_list.tpl", [{headline,?__("Phone calls statistics", Context)}, {idname, "calls_list_widget"}, {startDayInput, StartDayInput}, {endDayInput, EndDayInput}, {monthInput, MonthInput}, {operator, CallsType}, {direction, CallsDirection}], Context), Context);
 
 event(_A1, Context) ->
   z_render:growl_error(?__("Missed event happened.",Context), Context).

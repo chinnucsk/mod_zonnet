@@ -20,7 +20,7 @@
         </tr>
     </thead>
     <tbody>
-            {%  with m.search[{callslist from=startDayInput month=monthInput till=endDayInput}] as result %}
+            {%  with m.search[{callslist from=startDayInput month=monthInput till=endDayInput callsdirection=direction callstype=operator}] as result %}
             {% for timefrom, numfrom, numto, duration, direction, amount in result %}
                 <tr>
                    <td>{{ timefrom[2] }}</td>
