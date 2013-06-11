@@ -46,8 +46,8 @@ var oTable = $('#calls_list_table').dataTable({
 
 "bFilter" : true,
 "aaSorting": [[ 0, "asc" ]],
-"aLengthMenu" : [[10, 25, 50, -1], [10, 25, 50, "Все"]],
-"iDisplayLength" : 8,
+"aLengthMenu" : [[15, 30, 100, -1], [15, 30, 100, "Все"]],
+"iDisplayLength" : 15,
 "oLanguage" : {
 	"sInfoThousands" : " ",
 	"sLengthMenu" : "_MENU_ строк на страницу",
