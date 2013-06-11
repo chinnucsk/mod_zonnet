@@ -23,14 +23,14 @@
                 {% include "zonnet_widget_statistics_filter.tpl" headline=_"Phone calls statistics" %}
 
                 {# Monthly fixed expenses #}
-                {% include "zonnet_widget_statistics_fixed_costs.tpl" headline=_"Fixed costs for selected period, RUB (excl VAT)" %}
+                {% include "zonnet_widget_statistics_fixed_costs.tpl" headline=_"Costs for current day, RUB (excl VAT)"  idname="fixed_costs_widget" %}
 
             </div>
 
             <div class="span6">
 
                 {# Calls list #}
-                {% include "zonnet_widget_calls_list.tpl" headline=_"Phone calls statistics" %}
+                {% include "zonnet_widget_calls_list.tpl" headline=_"Phone calls statistics" idname="calls_list_widget" %}
 
             </div>
             

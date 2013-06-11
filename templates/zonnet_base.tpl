@@ -22,9 +22,12 @@
         {% lib "css/datepicker.css"  %}
         {% lib "js/bootstrap-datepicker.js"  %}
         {% lib "js/locales/bootstrap-datepicker.ru.js"  %}
-        {% lib "js/jquery.tbs_dd.js"  %}
 
-        
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+        <!-- DataTables -->
+        <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>

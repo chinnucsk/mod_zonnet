@@ -50,8 +50,50 @@ m_find_value(is_prepaid, _M, Context) ->
     zonnet_util:is_prepaid(Context);
 m_find_value(calc_curr_month_exp, _M, Context) -> 
     zonnet_util:calc_curr_month_exp(Context);
+m_find_value(get_accounts_emails, _M, Context) -> 
+    zonnet_util:get_accounts_emails(Context);
 m_find_value(get_calls_list, _M, Context) -> 
-    zonnet_util:get_calls_list(Context);
+    {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
+    zonnet_util:get_calls_list({from, Year, Month, Day},{till, Year, Month, Day},Context);
+m_find_value(calc_fees_by_period, _M, Context) -> 
+    {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
+    zonnet_util:calc_fees_by_period({from, Year, Month, Day},{till, Year, Month, Day},Context);
+m_find_value({calc_fees_by_period,[{month,MonthInput},{from,StartDayInput},{till,EndDayInput}]}, _M, Context) -> 
+  if 
+     MonthInput =/= undefined -> 
+         [MonthM, YearM] = string:tokens(MonthInput,"/"),
+         zonnet_util:calc_fees_by_period({from, list_to_integer(YearM), list_to_integer(MonthM), 1},{till, list_to_integer(YearM), list_to_integer(MonthM), calendar:last_day_of_the_month(list_to_integer(YearM), list_to_integer(MonthM))},Context);
+     EndDayInput =/= undefined -> 
+         [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
+         [DayE, MonthE, YearE] = string:tokens(EndDayInput,"/"),
+         zonnet_util:calc_fees_by_period({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearE), list_to_integer(MonthE), list_to_integer(DayE)},Context);
+     StartDayInput =/= undefined -> 
+         [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
+         zonnet_util:calc_fees_by_period({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},Context);
+     true -> 
+      {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
+      zonnet_util:calc_fees_by_period({from, Year, Month, Day},{till, Year, Month, Day},Context)
+  end;
+
+m_find_value(calc_traffic_costs_by_period, _M, Context) -> 
+    {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
+    zonnet_util:calc_traffic_costs_by_period({from, Year, Month, Day},{till, Year, Month, Day},Context);
+m_find_value({calc_traffic_costs_by_period,[{month,MonthInput},{from,StartDayInput},{till,EndDayInput}]}, _M, Context) -> 
+  if 
+     MonthInput =/= undefined -> 
+         [MonthM, YearM] = string:tokens(MonthInput,"/"),
+         zonnet_util:calc_traffic_costs_by_period({from, list_to_integer(YearM), list_to_integer(MonthM), 1},{till, list_to_integer(YearM), list_to_integer(MonthM), calendar:last_day_of_the_month(list_to_integer(YearM), list_to_integer(MonthM))},Context);
+     EndDayInput =/= undefined -> 
+         [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
+         [DayE, MonthE, YearE] = string:tokens(EndDayInput,"/"),
+         zonnet_util:calc_traffic_costs_by_period({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearE), list_to_integer(MonthE), list_to_integer(DayE)},Context);
+     StartDayInput =/= undefined -> 
+         [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
+         zonnet_util:calc_traffic_costs_by_period({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},Context);
+     true -> 
+      {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
+      zonnet_util:calc_traffic_costs_by_period({from, Year, Month, Day},{till, Year, Month, Day},Context)
+  end;
 
 m_find_value(_V, _VV, _Context) -> 
     [_V,_VV,"m_zonnet_find_value_mismatch"].

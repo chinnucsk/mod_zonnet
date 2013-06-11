@@ -1,4 +1,4 @@
-{% extends "base.tpl" %}
+{% extends "zonnet_base.tpl" %}
 
         {% lib
                 "css/bootstrap-admin.css"
@@ -7,7 +7,6 @@
                 "css/z.modal.css"
                 "css/jquery.loadmask.css"
         %}
-
 
 {% block title %}{_ Personal account _}{% endblock %}
 
@@ -144,5 +143,10 @@
 {% print m.zonnet.monthly_fees %}
 
 <input type="text" style="width:80px" name="dt:ymd:{{ is_end }}:{{ name }}" value="{{ date|date:'Y-m-d' }}" class="do_datepicker" />
+
+{% print m.zonnet.get_accounts_emails %}
+
+
+{% for email in m.zonnet.get_accounts_emails %} {{ email }} {% endfor %}
 
 {% endblock %}

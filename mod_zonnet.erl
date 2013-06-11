@@ -89,11 +89,30 @@ get_account_data(Context) ->
     end.
 
 %%
-%% test of calls list pagination
+%% test of m_search and pagination
 %%
+observe_search_query({search_query, {callslist, [{from,StartDayInput},{month,MonthInput},{till,EndDayInput}]}, _OffsetLimit}, Context) ->
+  if
+     MonthInput =/= undefined ->
+         [MonthM, YearM] = string:tokens(MonthInput,"/"),
+         zonnet_util:get_calls_list({from, list_to_integer(YearM), list_to_integer(MonthM), 1},{till, list_to_integer(YearM), list_to_integer(MonthM), calendar:last_day_of_the_month(list_to_integer(YearM), list_to_integer(MonthM))},Context);
+     EndDayInput =/= undefined ->
+         [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
+         [DayE, MonthE, YearE] = string:tokens(EndDayInput,"/"),
+         zonnet_util:get_calls_list({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearE), list_to_integer(MonthE), list_to_integer(DayE)},Context);
+     StartDayInput =/= undefined ->
+         [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
+         zonnet_util:get_calls_list({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},Context);
+     true ->
+      {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
+      zonnet_util:get_calls_list({from, Year, Month, Day},{till, Year, Month, Day},Context)
+  end;
+
 observe_search_query({search_query, {callslist, _Args}, _OffsetLimit}, Context) ->
-%%    zonnet_util:get_calls_list({fql, Args}, OffsetLimit, Context);
-    zonnet_util:get_calls_list(Context);
+    {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
+%%    file:write_file("/home/zotonic/iamstestnext",lists:flatten(io_lib:format("~p", [_Args]))),
+    zonnet_util:get_calls_list({from, Year, Month, Day},{till, Year, Month, Day},Context);
+
 observe_search_query(_, _Context) ->
     undefined.
 %%
@@ -213,6 +232,31 @@ event({postback, intervaltype_event, _TriggerId, _TargetId}, Context) ->
       error:_ ->
           z_render:growl_error(?__("Please input intervaltype.", Context), Context)
   end;
+
+event({postback, fixed_costs, _TriggerId, _TargetId}, Context) ->
+    StartDayInput = z_context:get_q("startDayInput",Context),
+    EndDayInput = z_context:get_q("endDayInput",Context),
+    MonthInput = z_context:get_q("monthInput",Context),
+    z_render:update("fixed_costs_widget", z_template:render("zonnet_widget_statistics_fixed_costs.tpl", [{headline,?__("Costs for selected period, RUB (excl VAT)", Context)}, {idname, "fixed_costs_widget"}, {startDayInput, StartDayInput}, {endDayInput, EndDayInput}, {monthInput, MonthInput}], Context), Context);
+%    case z_context:get_q("monthInput",Context) of
+%      undefined ->
+%          StartDayInput = z_context:get_q("startDayInput",Context),
+%          case z_context:get_q("endDayInput",Context) of
+%            undefined ->
+%                z_render:wire({alert, [{text,"This is a StartDayInput Alert"}]}, Context);
+%            EndDayInput ->
+%                z_render:wire({alert, [{text,"This is an EndDayInput Alert"}]}, Context)
+%          end;
+%      MonthInput -> 
+%          z_render:wire({alert, [{text,"This is a MonthInput Alert"}]}, Context)
+%    end;
+
+event({postback, calls_list, _TriggerId, _TargetId}, Context) ->
+    StartDayInput = z_context:get_q("startDayInput",Context),
+    EndDayInput = z_context:get_q("endDayInput",Context),
+    MonthInput = z_context:get_q("monthInput",Context),
+%%          [EndDay,EndMonth,EndYear] = string:tokens(EndDayInput,"/"),
+          z_render:update("calls_list_widget", z_template:render("zonnet_widget_calls_list.tpl", [{headline,?__("Phone calls statistics", Context)}, {idname, "calls_list_widget"}, {startDayInput, StartDayInput}, {endDayInput, EndDayInput}, {monthInput, MonthInput}], Context), Context);
 
 event(_A1, Context) ->
   z_render:growl_error(?__("Missed event happened.",Context), Context).

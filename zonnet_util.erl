@@ -13,6 +13,7 @@
         account_balance/1,
         agreements_table/1,
         accounts_addr_table/2,
+        get_accounts_emails/1,
         accounts_table/3,
         acount_status/1,
         is_service_provided/2,
@@ -24,7 +25,11 @@
         ip_addresses_by_vg_id/2,
         is_prepaid/1,
         calc_curr_month_exp/1,
-        get_calls_list/1
+        calc_period_exp/3,
+        calc_traffic_costs_by_period/3,
+        calc_fees_by_period/3,
+        get_calls_list/1,
+        get_calls_list/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -131,6 +136,16 @@ accounts_addr_table(Type, Context) ->
             end
     end.
 
+get_accounts_emails(Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            case z_mydb:q("select email from accounts where login = ? limit 1", [Z_User], Context) of
+                [[QueryResult]] ->  binary:split(QueryResult, [<<",">>,<<";">>], [global]);
+                _ -> []
+            end
+    end.
+
 accounts_table(Fields, Limit, Context) ->
     case m_identity:get_username(Context) of
         undefined -> [];
@@ -225,7 +240,7 @@ is_prepaid(Context) ->
         Z_User ->
             case z_mydb:q("SELECT 1 FROM tarifs, vgroups where tarifs.tar_id = vgroups.tar_id and vgroups.uid = 
                                           (select uid from accounts where login = ? limit 1) and tarifs.type = 5 
-                                                                               and tarifs.act_block > 0",[Z_User], Context) of
+                                                  and tarifs.act_block > 0  and vgroups.blocked < 10 limit 1",[Z_User], Context) of
                 [QueryResult] -> QueryResult;
                 _ -> []
             end
@@ -245,12 +260,75 @@ calc_curr_month_exp(Context) ->
                _ -> ["0"]
           end
     end.
-%% FORMAT(COALESCE(sum(balance),0),2)
-%% check whether user has prepaid agreement
+%% 
+
+%% calculate expenses for particular period within month
+calc_period_exp({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthTill, DayTill}, Context) ->
+    case get_uid(Context) of
+        [] -> ["0"];
+        Uid -> 
+          Day = io_lib:format("~w~2..0w~2..0w",[YearFrom, MonthFrom, DayFrom]),
+          QueryString = io_lib:format("Select FORMAT(COALESCE(Round(if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0),2) + Round(if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),2) + Round(if((SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s)>0,(SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s),0),2) + (Select sum(amount) from usbox_charge where agrm_id = (SELECT agrm_id FROM agreements where uid = ~s and oper_id = 1) and Month(period) = Month(Now()) and Year(period) = Year(Now())),0),2)",[Day,Uid,Day,Uid,Day,Uid,Day,Uid,Uid,Uid,Uid]),
+          case z_mydb:q(QueryString, Context) of
+               [[undefined]] -> ["0"];
+               [QueryResult] -> QueryResult;
+               _ -> ["0"]
+          end
+    end.
+%% 
+
+%% calculate traffic expenses for particular period 
+calc_fees_by_period({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthTill, DayTill}, Context) ->
+    case get_uid(Context) of
+        [] -> ["0"];
+        Uid -> 
+          QueryString = io_lib:format("SELECT FORMAT(COALESCE(sum(amount),0),2) FROM usbox_charge where agrm_id = (SELECT agrm_id FROM agreements where uid = ~s and oper_id = 1) and period between \'~w-~2..0w-~2..0w\' and \'~w-~2..0w-~2..0w\'",[Uid, YearFrom, MonthFrom, DayFrom, YearTill, MonthTill, DayTill]),
+          file:write_file("/home/zotonic/iamSQLQueries", QueryString, [append]),
+          file:write_file("/home/zotonic/iamSQLQueries", "\n\n", [append]),
+          case z_mydb:q(QueryString, Context) of
+               [[undefined]] -> ["0"];
+               [QueryResult] -> QueryResult;
+               _ -> ["0"]
+          end
+    end.
+
+%% calculate traffic expenses for particular period 
+calc_traffic_costs_by_period({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthTill, DayTill}, Context) ->
+    case get_uid(Context) of
+        [] -> ["0"];
+        Uid -> 
+          {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
+          Today = io_lib:format("~w~2..0w~2..0w",[Year, Month, Day]),
+          LastDay = io_lib:format("~w~2..0w~2..0w",[YearTill, MonthTill, DayTill]),
+          case string:equal(Today,LastDay) of
+              true ->
+                  QueryString = io_lib:format("SELECT FORMAT(COALESCE((select ifnull(sum(amount),0) FROM  day where uid = ~s and timefrom between \'~w-~2..0w-~2..0w\' and \'~w-~2..0w-~2..0w\') + (SELECT ifnull(sum(amount),0) FROM  tel001~s where uid = ~s) + (SELECT ifnull(sum(amount),0) FROM  user002~s where uid = ~s),0),2)",[Uid, YearFrom, MonthFrom, DayFrom, YearTill, MonthTill, DayTill, Today, Uid, Today, Uid]);
+              _ -> 
+                  QueryString = io_lib:format("SELECT FORMAT(COALESCE(sum(amount),0),2) FROM  day where uid = ~s and timefrom between \'~w-~2..0w-~2..0w\' and \'~w-~2..0w-~2..0w\'",[Uid, YearFrom, MonthFrom, DayFrom, YearTill, MonthTill, DayTill])
+          end,
+          case z_mydb:q(QueryString, Context) of
+               [[undefined]] -> ["0"];
+               [QueryResult] -> QueryResult;
+               _ -> ["0"]
+          end
+    end.
+%% 
+%%
 get_calls_list(Context) ->
     case get_uid(Context) of
       [] -> [];
       Uid -> 
-         z_mydb:q("select timefrom, numfrom, numto, format(duration_round/60, 0), direction, format(amount, 2) from tel00120130531 where uid =  ?",
-                                                                                                                 [Uid], Context)
+         QueryString = io_lib:format("select timefrom, numfrom, numto, format(duration_round/60, 0), direction, format(amount, 2) from tel00120130604 where uid =  ~s",[Uid]),
+         z_mydb:q(QueryString, Context)
+    end.
+%% 
+%%
+get_calls_list({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthTill, DayTill},Context) ->
+    case get_uid(Context) of
+      [] -> [];
+      Uid -> 
+         QueryString = io_lib:format("select timefrom, numfrom, numto, format(duration_round/60, 0), direction, format(amount, 2) from tel001~w~2..0w~2..0w where uid =  ~s", [YearFrom, MonthFrom, DayFrom, Uid]),
+         file:write_file("/home/zotonic/iamSQLQueries2", QueryString, [append]),
+         file:write_file("/home/zotonic/iamSQLQueries2", "\n\n", [append]),
+         z_mydb:q(QueryString, Context)
     end.

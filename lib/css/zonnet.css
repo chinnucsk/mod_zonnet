@@ -1,3 +1,26 @@
+.dataTables_wrapper {
+  margin-top: 8px;
+}
+
+input[type="text"] {
+  padding: 0px;
+  margin-right: 14px!important;
+  margin-bottom: 2px!important;
+  width: 120px!important;
+  height: 20px!important;
+//  vertical-align: middle;
+}
+
+
+select[size="1"] {
+  border-radius: 3px;
+  padding: 0px;
+  margin-left: 14px!important;
+  margin-bottom: 2px!important;
+  width: 60px!important;
+  height: 20px!important;
+}
+
 .pagination-centered a {
 //  padding: 2px 4px!important;
   line-height: 21px!important;

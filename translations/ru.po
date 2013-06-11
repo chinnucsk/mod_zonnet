@@ -1,5 +1,8 @@
-msgid "Fixed costs for selected period, RUB (excl VAT)"
-msgstr "Фиксированные затраты за выбранный период, руб (без учета НДС)"
+msgid "Costs for current day, RUB (excl VAT)"
+msgstr "Начисления за сегодняшний день, руб (без учета НДС)"
+
+msgid "Costs for selected period, RUB (excl VAT)"
+msgstr "Начисления за выбранный период, руб (без учета НДС)"
 
 msgid "Local calls"
 msgstr "Местные вызовы"
@@ -9,6 +12,15 @@ msgstr "Мoбильные и мг/мн вызовы"
 
 msgid "refresh results"
 msgstr "обновить результаты"
+
+msgid "Fee type"
+msgstr "Вид затрат"
+
+msgid "Fixed fees"
+msgstr "Фиксированные платежи"
+
+msgid "Services usage"
+msgstr "Тарифицировано услуг"
 
 msgid "All"
 msgstr "Все"

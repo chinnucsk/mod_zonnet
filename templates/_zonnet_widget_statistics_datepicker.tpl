@@ -3,21 +3,34 @@
                 {% include "_zonnet_widget_interval_button.tpl" %}
                 {% javascript %}
                   $('#startDay').datepicker();
+                  $('#startDay').datepicker().on('changeDate', function(ev){
+                         var Beginning_of_Month_Day = new Date(ev.date.getFullYear(),ev.date.getMonth(),1);
+                         var End_of_Period_Day = new Date(ev.date.getFullYear(),ev.date.getMonth()+1,0);
+                         var Next_Month_Day = new Date(ev.date.getFullYear(),ev.date.getMonth()+1,1);
+                         var nowTemp = new Date();
+                         if ( nowTemp.valueOf() < End_of_Period_Day.valueOf() ){
+                             End_of_Period_Day = nowTemp;
+                             Next_Month_Day = nowTemp;
+                         }
+                         $('#endDay').datepicker('setDate', End_of_Period_Day);
+			 $('#endDay').datepicker('setStartDate', ev.date);
+                         $('#endDay').datepicker('setEndDate', Next_Month_Day);
+                  });
                   $('#endDay').datepicker();
                 {% endjavascript %}
             </td>
       <td class="td-center">
-         <div class="date" id="startDay" data-date="{{ now|sub_month|date: 'd/m/Y' }}" data-date-format="dd/mm/yyyy" 
+         <div class="date" id="startDay" data-date="{{ now|sub_day|date: 'd/m/Y' }}" data-date-format="dd/mm/yyyy" 
               data-date-autoclose="true" data-date-language={{ z_language }} data-date-start-date="-6m" 
               data-date-end-date="+0d">
                   {_ From: _}&nbsp;&nbsp;&nbsp;&nbsp;
                   <input id="startDayInput" type="text" class="input-small-zonnet" name="startDayInput" 
-                                                    value="{{ now|sub_month|date: 'd/m/Y' }}" readonly/>
+                                                    value="{{ now|sub_day|date: 'd/m/Y' }}" readonly/>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                </div>
             </td>
             <td class="td-center">
-               <div class="date" id="endDay" data-date="{{ now|sub_day|date: 'd/m/Y' }}" data-date-format="dd/mm/yyyy" data-date-autoclose="true" data-date-language={{ z_language }} data-date-start-date="-6m" data-date-end-date="-1d">{_ Till: _}&nbsp;&nbsp;&nbsp;&nbsp;
+               <div class="date" id="endDay" data-date-format="dd/mm/yyyy" data-date-autoclose="true" data-date-language={{ z_language }} data-date-start-date="-1d" data-date-end-date="-1d">{_ Till: _}&nbsp;&nbsp;&nbsp;&nbsp;
                   <input id="endDayInput" type="text" class="input-small-zonnet" name="endDayInput" value="{{ now|sub_day|date: 'd/m/Y' }}" readonly/>
                   <span class="add-on"><i class="icon-calendar"></i></span>
                </div>

@@ -24,7 +24,7 @@
      {% endif %}
         <tr><td width="35%">Контактное лицо</td><td>{{ m.zonnet[{accounts_table fields="kont_person" limit=1}] }}</td></tr>
      {% endif %}
-        <tr><td>E-mail</td><td>{{ m.zonnet[{accounts_table fields="email" limit=1}] }}</td></tr>
+        <tr><td>E-mail</td><td>{% for email in m.zonnet.get_accounts_emails %} {{ email }} {% endfor %}</td></tr>
         <tr><td>Телефон</td><td>{{ m.zonnet[{accounts_table fields="phone" limit=1}] }}</td></tr>
      {% if not dashboard %}
         <tr><td>Факс</td><td>{{ m.zonnet[{accounts_table fields="fax" limit=1}] }}</td></tr>

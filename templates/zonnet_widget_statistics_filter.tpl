@@ -2,7 +2,7 @@
 
 {% block widget_headline %}
     {{ headline }}
-    {% button class="btn btn-mini pull-right" action={redirect dispatch="#"} text=_"refresh results"%}
+    {% button class="btn btn-mini pull-right" action={postback postback="fixed_costs" delegate="mod_zonnet" qarg="startDayInput" qarg="endDayInput" qarg="monthInput"} action={postback postback="calls_list" delegate="mod_zonnet" qarg="startDayInput" qarg="endDayInput" qarg="monthInput"} text=_"refresh results"%}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
