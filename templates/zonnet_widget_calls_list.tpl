@@ -20,7 +20,7 @@
         </tr>
     </thead>
     <tbody>
-            {%  with m.search[{callslist from=startDayInput month=monthInput till=endDayInput callsdirection=direction callstype=operator}] as result %}
+            {%  with m.search[{callslist from=startDayInput month=monthInput till=endDayInput callsdirection=direction callstype=operator limit="3000"}] as result %}
             {% for timefrom, numfrom, numto, duration, direction, amount in result %}
                 <tr>
                    <td>{{ timefrom[2] }}</td>
@@ -38,6 +38,13 @@
             {% endfor %}
             {% endwith %}
     </tbody>
+    <tfoot>
+        <tr>
+			<th class="td-right" colspan="4">{_ Total (all pages): _}</th>
+			<th class="td-center"></th>
+			<th class="td-right"></th>
+        </tr>
+    </tfoot>
 </table>
 
 {% javascript %}
@@ -60,7 +67,39 @@ var oTable = $('#calls_list_table').dataTable({
 		"sPrevious" : "Назад",
 		"sNext" : "Вперед"
 	}
-}
+},
+
+
+
+ "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) {
+            /*
+             * Calculate the total market share for all browsers in this table (ie inc. outside
+             * the pagination)
+             */
+            var iTotalMinutes = 0;
+            var iTotalMoney = 0;
+            for ( var i=0 ; i<aaData.length ; i++ )
+            {
+                iTotalMinutes += aaData[i][4]*1;
+                iTotalMoney += aaData[i][5]*1;
+            }
+
+            /* Calculate the market share for browsers on this page */
+            var iPageMinutes = 0;
+            var iPageMoney = 0;
+            for ( var i=iStart ; i<iEnd ; i++ )
+            {
+                iPageMinutes += aaData[ aiDisplay[i] ][4]*1;
+                iPageMoney += aaData[ aiDisplay[i] ][5]*1;
+            }
+             
+            /* Modify the footer row to match what we want */
+            var nCells = nRow.getElementsByTagName('th');
+            nCells[1].innerHTML = parseInt(iTotalMinutes);
+            nCells[2].innerHTML = parseFloat(iTotalMoney).toFixed(2);
+        }
+
+
 });
 {% endjavascript %}
 

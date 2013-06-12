@@ -1,3 +1,12 @@
+msgid "Total (all pages):"
+msgstr "Итого (все страницы):"
+
+msgid "Total:"
+msgstr "Итого:"
+
+msgid "Last incoming calls of today"
+msgstr "Последние входящие вызовы за сегодня"
+
 msgid "Costs for current day, RUB (excl VAT)"
 msgstr "Начисления за сегодняшний день, руб (без учета НДС)"
 
@@ -96,6 +105,9 @@ msgstr "Стоимость"
 
 msgid "Sum"
 msgstr "Сумма"
+
+msgid "show statistics"
+msgstr "перейти к статистике"
 
 msgid "Phone calls statistics"
 msgstr "Статистика телефонных вызовов"

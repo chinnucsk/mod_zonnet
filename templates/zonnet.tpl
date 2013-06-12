@@ -43,6 +43,11 @@
                 {# Credit status #}
                 {% include "zonnet_widget_internet.tpl" headline=_"Internet" %}
                 {% endif %}
+
+                {% if m.zonnet.is_prepaid %}
+                {% include "zonnet_widget_dashboard_incoming_calls.tpl" headline=_"Last incoming calls of today" %}
+                {% endif %}
+
             </div>
             
         </div>
