@@ -327,7 +327,7 @@ get_calls_list({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthTill, 
     case get_uid(Context) of
       [] -> [];
       Uid -> 
-         QueryString = io_lib:format("select timefrom, numfrom, numto, format(duration_round/60, 0), direction, format(amount, 2) from tel001~w~2..0w~2..0w where uid =  ~s and direction in (~s) and oper_id in (~s) limit ~s", [YearFrom, MonthFrom, DayFrom, Uid, Direction, CallsType, MaxCalls]),
+         QueryString = io_lib:format("select timefrom, numfrom, numto, format(duration_round/60, 0), direction, format(amount, 2) from tel001~w~2..0w~2..0w where uid =  ~s and direction in (~s) and oper_id in (~s) order by timefrom desc limit ~s", [YearFrom, MonthFrom, DayFrom, Uid, Direction, CallsType, MaxCalls]),
          file:write_file("/home/zotonic/iamSQLQueries2", QueryString, [append]),
          file:write_file("/home/zotonic/iamSQLQueries2", "\n\n", [append]),
          z_mydb:q(QueryString, Context)
