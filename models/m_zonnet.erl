@@ -54,7 +54,7 @@ m_find_value(get_accounts_emails, _M, Context) ->
     zonnet_util:get_accounts_emails(Context);
 m_find_value(get_calls_list, _M, Context) -> 
     {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
-    zonnet_util:get_calls_list({from, Year, Month, Day},{till, Year, Month, Day},Context);
+    zonnet_util:get_calls_list_by_period({from, Year, Month, Day},{till, Year, Month, Day},{callsdirection,"0,1"},{callstype,"1,6"},{limit,"3000"},Context);
 m_find_value(calc_fees_by_period, _M, Context) -> 
     {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
     zonnet_util:calc_fees_by_period({from, Year, Month, Day},{till, Year, Month, Day},Context);

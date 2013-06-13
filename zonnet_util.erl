@@ -3,33 +3,38 @@
 
 %% interface functions
 -export([
-        is_numeric/1,
-        get_uid/1,
-        get_main_agrm_id/1,
-        credit_allowed/1,
-        credit_able/1,
-        credit_info/1,
-        account_payments/2,
-        account_balance/1,
-        agreements_table/1,
-        accounts_addr_table/2,
-        get_accounts_emails/1,
-        accounts_table/3,
-        acount_status/1,
-        is_service_provided/2,
-        monthly_fees/1,
-        user_type/1,
-        accounts_tariffs_by_type/2,
-        tariff_descr_by_tar_id/2,
-        numbers_by_vg_id/2,
-        ip_addresses_by_vg_id/2,
-        is_prepaid/1,
-        calc_curr_month_exp/1,
-        calc_period_exp/3,
-        calc_traffic_costs_by_period/3,
-        calc_fees_by_period/3,
-        get_calls_list/1,
-        get_calls_list/6
+        is_numeric/1
+        ,get_uid/1
+        ,get_main_agrm_id/1
+        ,credit_allowed/1
+        ,credit_able/1
+        ,credit_info/1
+        ,account_payments/2
+        ,account_balance/1
+        ,agreements_table/1
+        ,accounts_addr_table/2
+        ,get_accounts_emails/1
+        ,accounts_table/3
+        ,acount_status/1
+        ,is_service_provided/2
+        ,monthly_fees/1
+        ,user_type/1
+        ,accounts_tariffs_by_type/2
+        ,tariff_descr_by_tar_id/2
+        ,numbers_by_vg_id/2
+        ,ip_addresses_by_vg_id/2
+        ,is_prepaid/1
+        ,calc_curr_month_exp/1
+        ,calc_traffic_costs_by_period/3
+        ,calc_fees_by_period/3
+        ,get_calls_list_by_day/5
+        ,amount_of_days_in_period/2
+        ,next_day/1
+        ,count_day/2
+        ,day_to_string/1
+        ,collect_calls/7
+        ,collect_calls/8
+        ,get_calls_list_by_period/6
 ]).
 
 -include_lib("zotonic.hrl").
@@ -245,8 +250,10 @@ is_prepaid(Context) ->
                 _ -> []
             end
     end.
-
+%%
 %% calculate current month expenditures FORMAT(COALESCE(sum(balance),0),2)
+%% SQL query optimization needed
+%%
 calc_curr_month_exp(Context) ->
     case get_uid(Context) of
         [] -> ["0"];
@@ -254,21 +261,8 @@ calc_curr_month_exp(Context) ->
           {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
           Today = io_lib:format("~w~2..0w~2..0w",[Year, Month, Day]),
           QueryString = io_lib:format("Select FORMAT(COALESCE(Round(if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0),2) + Round(if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),2) + Round(if((SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s)>0,(SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s),0),2) + (Select sum(amount) from usbox_charge where agrm_id = (SELECT agrm_id FROM agreements where uid = ~s and oper_id = 1) and Month(period) = Month(Now()) and Year(period) = Year(Now())),0),2)",[Today,Uid,Today,Uid,Today,Uid,Today,Uid,Uid,Uid,Uid]),
-          case z_mydb:q(QueryString, Context) of
-               [[undefined]] -> ["0"];
-               [QueryResult] -> QueryResult;
-               _ -> ["0"]
-          end
-    end.
-%% 
-
-%% calculate expenses for particular period within month
-calc_period_exp({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthTill, DayTill}, Context) ->
-    case get_uid(Context) of
-        [] -> ["0"];
-        Uid -> 
-          Day = io_lib:format("~w~2..0w~2..0w",[YearFrom, MonthFrom, DayFrom]),
-          QueryString = io_lib:format("Select FORMAT(COALESCE(Round(if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0),2) + Round(if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),2) + Round(if((SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s)>0,(SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s),0),2) + (Select sum(amount) from usbox_charge where agrm_id = (SELECT agrm_id FROM agreements where uid = ~s and oper_id = 1) and Month(period) = Month(Now()) and Year(period) = Year(Now())),0),2)",[Day,Uid,Day,Uid,Day,Uid,Day,Uid,Uid,Uid,Uid]),
+          file:write_file("/home/zotonic/iamSQLQueries3", QueryString, [append]),
+          file:write_file("/home/zotonic/iamSQLQueries3", "\n\n", [append]),
           case z_mydb:q(QueryString, Context) of
                [[undefined]] -> ["0"];
                [QueryResult] -> QueryResult;
@@ -314,21 +308,49 @@ calc_traffic_costs_by_period({from, YearFrom, MonthFrom, DayFrom},{till, YearTil
     end.
 %% 
 %%
-get_calls_list(Context) ->
+get_calls_list_by_day({Year, Month, Day},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context) ->
     case get_uid(Context) of
       [] -> [];
       Uid -> 
-         QueryString = io_lib:format("select timefrom, numfrom, numto, format(duration_round/60, 0), direction, format(amount, 2) from tel00120130604 where uid =  ~s",[Uid]),
-         z_mydb:q(QueryString, Context)
-    end.
-%% 
-%%
-get_calls_list({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthTill, DayTill},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context) ->
-    case get_uid(Context) of
-      [] -> [];
-      Uid -> 
-         QueryString = io_lib:format("select timefrom, numfrom, numto, format(duration_round/60, 0), direction, format(amount, 2) from tel001~w~2..0w~2..0w where uid =  ~s and direction in (~s) and oper_id in (~s) order by timefrom desc limit ~s", [YearFrom, MonthFrom, DayFrom, Uid, Direction, CallsType, MaxCalls]),
+         QueryString = io_lib:format("select timefrom, numfrom, numto, format(duration_round/60, 0), direction, format(amount, 2) from tel001~w~2..0w~2..0w where uid =  ~s and direction in (~s) and oper_id in (~s) order by timefrom desc limit ~s", [Year, Month, Day, Uid, Direction, CallsType, MaxCalls]),
          file:write_file("/home/zotonic/iamSQLQueries2", QueryString, [append]),
          file:write_file("/home/zotonic/iamSQLQueries2", "\n\n", [append]),
          z_mydb:q(QueryString, Context)
     end.
+%
+%
+amount_of_days_in_period({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthTill, DayTill}) ->
+    case calendar:date_to_gregorian_days(YearTill, MonthTill, DayTill) - calendar:date_to_gregorian_days(YearFrom, MonthFrom, DayFrom) of 
+        N when N >= 0 -> N;
+        _ -> 0
+    end.
+%
+%
+next_day({Year,Month,Day}) ->
+    calendar:gregorian_days_to_date(calendar:date_to_gregorian_days({Year, Month, Day}) + 1).
+%
+%
+count_day({Year,Month,Day},N) ->
+    calendar:gregorian_days_to_date(calendar:date_to_gregorian_days({Year, Month, Day}) + N).
+%
+%
+day_to_string({Year,Month,Day}) ->
+    lists:flatten(io_lib:format("~w~2..0w~2..0w",[Year, Month, Day])).
+%
+%
+get_calls_list_by_period({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthTill, DayTill},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context) ->
+    DaysAmount = amount_of_days_in_period({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthTill, DayTill}),
+    collect_calls(startdate, {YearFrom, MonthFrom, DayFrom},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context, DaysAmount).
+%
+%
+collect_calls(startdate, {Year, Month, Day},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context,N) ->
+    collect_calls(startdate, {Year, Month, Day},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context, N, []).
+collect_calls(startdate, {Year, Month, Day},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context, N, Acc) ->
+    if 
+       N < 0 ->
+           Acc;
+       N >= 0 ->
+           AccNew = Acc ++ get_calls_list_by_day(count_day({Year, Month, Day},N),{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context),
+           collect_calls(startdate, {Year, Month, Day},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context, N-1, AccNew) 
+    end.
+

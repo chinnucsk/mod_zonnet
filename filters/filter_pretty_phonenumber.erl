@@ -5,7 +5,7 @@
 ]).
 
 pretty_phonenumber(Number, _Context) ->
-    RegExps = ["7812000000000000", "^\\d{7}$", "^[7,8]\\d{10}$", "^\\d{10}$", "^8\\d{7}$"],
+    RegExps = ["7812000000000000", "0000000000000", "^\\d{7}$", "^[7,8]\\d{10}$", "^\\d{10}$", "^8\\d{7}$"],
     multiregexp(RegExps,Number).
 
 pretty_phonenumber(Number, _Args, _Context) ->
@@ -16,6 +16,8 @@ multiregexp([],Number) ->
 multiregexp([RE|RegExps],Number) ->
     case re:run(Number,RE) of
     {match,[{0,16}]} ->
+        re:replace(Number,RE,"",[{return,list}]);
+    {match,[{0,13}]} ->
         re:replace(Number,RE,"",[{return,list}]);
     {match,[{0,11}]} ->
         [[], _, Code, ShortNumber] = re:split(Number,"(.)(...)(.......)",[{return,list},{parts,0}]),

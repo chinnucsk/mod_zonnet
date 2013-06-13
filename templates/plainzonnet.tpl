@@ -149,4 +149,7 @@
 
 {% for email in m.zonnet.get_accounts_emails %} {{ email }} {% endfor %}
 
+
+{{ [now|sub_month, now]|datediff:"D" }}
+
 {% endblock %}

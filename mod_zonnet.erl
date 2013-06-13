@@ -95,23 +95,23 @@ observe_search_query({search_query, {callslist, [{callsdirection,Direction},{cal
   if
      MonthInput =/= undefined ->
          [MonthM, YearM] = string:tokens(MonthInput,"/"),
-         zonnet_util:get_calls_list({from, list_to_integer(YearM), list_to_integer(MonthM), 1},{till, list_to_integer(YearM), list_to_integer(MonthM), calendar:last_day_of_the_month(list_to_integer(YearM), list_to_integer(MonthM))},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context);
+         zonnet_util:get_calls_list_by_period({from, list_to_integer(YearM), list_to_integer(MonthM), 1},{till, list_to_integer(YearM), list_to_integer(MonthM), calendar:last_day_of_the_month(list_to_integer(YearM), list_to_integer(MonthM))},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context);
      EndDayInput =/= undefined ->
          [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
          [DayE, MonthE, YearE] = string:tokens(EndDayInput,"/"),
-         zonnet_util:get_calls_list({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearE), list_to_integer(MonthE), list_to_integer(DayE)},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context);
+         zonnet_util:get_calls_list_by_period({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearE), list_to_integer(MonthE), list_to_integer(DayE)},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context);
      StartDayInput =/= undefined ->
          [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
-         zonnet_util:get_calls_list({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context);
+         zonnet_util:get_calls_list_by_period({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context);
      true ->
       {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
-      zonnet_util:get_calls_list({from, Year, Month, Day},{till, Year, Month, Day},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context)
+      zonnet_util:get_calls_list_by_period({from, Year, Month, Day},{till, Year, Month, Day},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context)
   end;
 
 observe_search_query({search_query, {callslist, _Args}, _OffsetLimit}, Context) ->
     {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
     file:write_file("/home/zotonic/iamstestnext",[lists:flatten(io_lib:format("~p", [_Args])),"\n\n"], [append]),
-    zonnet_util:get_calls_list({from, Year, Month, Day},{till, Year, Month, Day},{callsdirection,"0,1"},{callstype,"1,6"},{limit,"3000"},Context);
+    zonnet_util:get_calls_list_by_period({from, Year, Month, Day},{till, Year, Month, Day},{callsdirection,"0,1"},{callstype,"1,6"},{limit,"3000"},Context);
 
 observe_search_query(_, _Context) ->
     undefined.
