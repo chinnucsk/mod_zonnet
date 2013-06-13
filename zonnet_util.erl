@@ -252,7 +252,6 @@ is_prepaid(Context) ->
     end.
 %%
 %% calculate current month expenditures FORMAT(COALESCE(sum(balance),0),2)
-%% SQL query optimization needed
 %%
 calc_curr_month_exp(Context) ->
     case get_uid(Context) of
@@ -260,7 +259,7 @@ calc_curr_month_exp(Context) ->
         Uid -> 
           {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
           Today = io_lib:format("~w~2..0w~2..0w",[Year, Month, Day]),
-          QueryString = io_lib:format("Select FORMAT(COALESCE(Round(if((SELECT sum(amount) FROM  tel001~s where uid = ~s)>0,(SELECT sum(amount) FROM  tel001~s where uid = ~s),0),2) + Round(if((SELECT sum(amount) FROM  user002~s where uid = ~s)>0,(SELECT sum(amount) FROM  user002~s where uid = ~s),0),2) + Round(if((SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s)>0,(SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s),0),2) + (Select sum(amount) from usbox_charge where agrm_id = (SELECT agrm_id FROM agreements where uid = ~s and oper_id = 1) and Month(period) = Month(Now()) and Year(period) = Year(Now())),0),2)",[Today,Uid,Today,Uid,Today,Uid,Today,Uid,Uid,Uid,Uid]),
+          QueryString = io_lib:format("Select FORMAT(COALESCE(ifnull((SELECT sum(amount) FROM  tel001~s where uid = ~s),0) + ifnull((SELECT sum(amount) FROM  user002~s where uid = ~s),0) + ifnull((SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s),0) + (Select sum(amount) from usbox_charge where agrm_id = (SELECT agrm_id FROM agreements where uid = ~s and oper_id = 1) and Month(period) = Month(Now()) and Year(period) = Year(Now())),0),2)",[Today,Uid,Today,Uid,Uid,Uid]),
           file:write_file("/home/zotonic/iamSQLQueries3", QueryString, [append]),
           file:write_file("/home/zotonic/iamSQLQueries3", "\n\n", [append]),
           case z_mydb:q(QueryString, Context) of
