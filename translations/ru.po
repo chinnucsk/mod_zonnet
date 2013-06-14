@@ -1,5 +1,26 @@
+msgid "Invoices"
+msgstr "Счета"
+
+msgid "VAT Invoices"
+msgstr "Счет-фактуры"
+
 msgid "Total (all pages):"
 msgstr "Итого (все страницы):"
+
+msgid "Counterparty"
+msgstr "Контрагент"
+
+msgid "Acts"
+msgstr "Акты"
+
+msgid "VAT"
+msgstr "НДС"
+
+msgid "#"
+msgstr "№"
+
+msgid "Total"
+msgstr "Итого"
 
 msgid "Total:"
 msgstr "Итого:"

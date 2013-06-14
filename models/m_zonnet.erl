@@ -14,47 +14,79 @@
 
 m_find_value({accounts_table,[{fields,Fields},{limit,Limit}]}, _M, Context) -> 
     zonnet_util:accounts_table(Fields, Limit, Context);
+
 m_find_value({accounts_addr_table,[{type,Type}]}, _M, Context) -> 
     zonnet_util:accounts_addr_table(Type, Context);
+
 m_find_value(agreements_table, _M, Context) -> 
     zonnet_util:agreements_table(Context);
+
 m_find_value(account_balance, _M, Context) -> 
     zonnet_util:account_balance(Context);
+
 m_find_value(account_payments, _M, Context) -> 
     zonnet_util:account_payments(1000, Context);
 m_find_value({account_payments,[{limit,Limit}]}, _M, Context) -> 
     zonnet_util:account_payments(Limit, Context);
+
 m_find_value(credit_info, _M, Context) -> 
     zonnet_util:credit_info(Context);
+
 m_find_value(credit_able, _M, Context) -> 
     zonnet_util:credit_able(Context);
+
 m_find_value(credit_allowed, _M, Context) -> 
     zonnet_util:credit_allowed(Context);
+
 m_find_value(acount_status, _M, Context) -> 
     zonnet_util:acount_status(Context);
+
 m_find_value({is_service_provided,[{type,Type}]}, _M, Context) -> 
     zonnet_util:is_service_provided(Type, Context);
+
 m_find_value(monthly_fees, _M, Context) -> 
     zonnet_util:monthly_fees(Context);
+
 m_find_value(user_type, _M, Context) -> 
     zonnet_util:user_type(Context);
+
 m_find_value({accounts_tariffs_by_type,[{type,Type}]}, _M, Context) -> 
     zonnet_util:accounts_tariffs_by_type(Type, Context);
+
 m_find_value({tariff_descr_by_tar_id,[{tar_id,Tar_id}]}, _M, Context) -> 
     zonnet_util:tariff_descr_by_tar_id(Tar_id, Context);
+
 m_find_value({numbers_by_vg_id,[{vg_id,Vg_id}]}, _M, Context) -> 
     zonnet_util:numbers_by_vg_id(Vg_id, Context);
+
 m_find_value({ip_addresses_by_vg_id,[{vg_id,Vg_id}]}, _M, Context) -> 
     zonnet_util:ip_addresses_by_vg_id(Vg_id, Context);
+
 m_find_value(is_prepaid, _M, Context) -> 
     zonnet_util:is_prepaid(Context);
+
 m_find_value(calc_curr_month_exp, _M, Context) -> 
     zonnet_util:calc_curr_month_exp(Context);
+
 m_find_value(get_accounts_emails, _M, Context) -> 
     zonnet_util:get_accounts_emails(Context);
+
 m_find_value(get_calls_list, _M, Context) -> 
     {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
     zonnet_util:get_calls_list_by_period({from, Year, Month, Day},{till, Year, Month, Day},{callsdirection,"0,1"},{callstype,"1,6"},{limit,"3000"},Context);
+
+m_find_value({get_docs_list,[{docsids, DocsIds},{month, MonthInput}]}, _M, Context) -> 
+  if
+     MonthInput =/= undefined ->
+         [Month, Year] = string:tokens(MonthInput,"/"),
+         zonnet_util:get_docs_list({date, Year, Month},{docsids, DocsIds}, Context);
+     true ->
+        ok
+  end; 
+m_find_value(get_docs_list, _M, Context) -> 
+    {{Year, Month, _}, {_, _, _}} = erlang:localtime(),
+    zonnet_util:get_docs_list({date, integer_to_list(Year), integer_to_list(Month-1)},{docsids, "1,2,3,34,35"}, Context);
+
 m_find_value(calc_fees_by_period, _M, Context) -> 
     {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
     zonnet_util:calc_fees_by_period({from, Year, Month, Day},{till, Year, Month, Day},Context);

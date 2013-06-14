@@ -22,12 +22,18 @@
                 {# Blank #}
                 {% include "zonnet_widget_blank.tpl" headline=_"Blank" %}
 
+                {# Invoices #}
+                {% include "zonnet_widget_invoices.tpl" headline=_"Invoices" %}
+
             </div>
 
             <div class="span6">
 
-                {# Blank #}
-                {% include "zonnet_widget_blank.tpl" headline=_"Blank" %}
+                {# Crazy Russian Document - SchetFacturaZ #}
+                {% include "zonnet_widget_vatinvoices.tpl" headline=_"VAT Invoices" %}
+
+                {# Acts #}
+                {% include "zonnet_widget_acts.tpl" headline=_"Acts" %}
 
             </div>
             

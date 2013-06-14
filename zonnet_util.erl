@@ -35,6 +35,7 @@
         ,collect_calls/7
         ,collect_calls/8
         ,get_calls_list_by_period/6
+        ,get_docs_list/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -353,3 +354,12 @@ collect_calls(startdate, {Year, Month, Day},{callsdirection,Direction},{callstyp
            collect_calls(startdate, {Year, Month, Day},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context, N-1, AccNew) 
     end.
 
+get_docs_list({date, Year, Month},{docsids, DocsIds}, Context) ->
+    case get_uid(Context) of
+        [] -> ["0"];
+        Uid -> 
+            QueryString = io_lib:format("SELECT accounts.name, orders.order_id, orders.order_num, orders.order_date, orders.curr_summ, round(orders.tax_summ,2), round(orders.curr_summ + round(orders.tax_summ,2),2)  FROM orders, accounts where accounts.uid=orders.oper_id and Year(period) = ~s and Month(period) = ~s and agrm_id in (Select agrm_id from agreements where uid = ~s) and doc_id in (~s)", [Year, Month, Uid, DocsIds]),
+          file:write_file("/home/zotonic/iamSQLQueries4", QueryString, [append]),
+          file:write_file("/home/zotonic/iamSQLQueries4", "\n\n", [append]),
+            z_mydb:q(QueryString, Context)
+    end.

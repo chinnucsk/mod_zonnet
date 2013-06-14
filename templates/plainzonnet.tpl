@@ -152,4 +152,62 @@
 
 {{ [now|sub_month, now]|datediff:"D" }}
 
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>oper_id</th>
+            <th>order_num</th>
+            <th>order_date</th>
+            <th>curr_summ</th>
+            <th>tax_summ</th>
+            <th>total_summ</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for oper_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet.get_docs_list %}
+        <tr>
+            <td>{{ oper_id }}</td>
+            <td>{{ order_num }}</td>
+            <td>{{ order_date[2]|date:'Y-m-d' }}</td>
+            <td>{{ curr_summ }}</td>
+            <td>{{ tax_summ }}</td>
+            <td>{{ total_summ }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+<br />
+<br />
+<br />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>oper_id</th>
+            <th>order_num</th>
+            <th>order_date</th>
+            <th>curr_summ</th>
+            <th>tax_summ</th>
+            <th>total_summ</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for oper_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet[{get_docs_list docsids="3" month="05/2013" }] %}
+        <tr>
+            <td>{{ oper_id }}</td>
+            <td>{{ order_num }}</td>
+            <td>{{ order_date[2]|date:'Y-m-d' }}</td>
+            <td>{{ curr_summ }}</td>
+            <td>{{ tax_summ }}</td>
+            <td>{{ total_summ }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+
+
+
 {% endblock %}
