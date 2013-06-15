@@ -1,3 +1,9 @@
+msgid "Period"
+msgstr "Период"
+
+msgid "Choose month"
+msgstr "Выберите месяц"
+
 msgid "Invoices"
 msgstr "Счета"
 

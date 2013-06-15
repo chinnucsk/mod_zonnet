@@ -19,23 +19,24 @@
         <div class="row">
             <div class="span6">
 
-                {# Blank #}
-                {% include "zonnet_widget_blank.tpl" headline=_"Blank" %}
+                {# Period Datepicker #}
+                {% include "zonnet_widget_documents_datepicker.tpl" headline=_"Period" %}
 
                 {# Invoices #}
-                {% include "zonnet_widget_invoices.tpl" headline=_"Invoices" %}
+                {% include "zonnet_widget_invoices.tpl" headline=_"Invoices" idname="invoices_widget" %}
 
             </div>
 
             <div class="span6">
 
                 {# Crazy Russian Document - SchetFacturaZ #}
-                {% include "zonnet_widget_vatinvoices.tpl" headline=_"VAT Invoices" %}
+                {% include "zonnet_widget_vatinvoices.tpl" headline=_"VAT Invoices" idname="vatinvoices_widget" %}
 
                 {# Acts #}
-                {% include "zonnet_widget_acts.tpl" headline=_"Acts" %}
+                {% include "zonnet_widget_acts.tpl" headline=_"Acts" idname="acts_widget" %}
 
             </div>
             
         </div>
+
 {% endblock %}

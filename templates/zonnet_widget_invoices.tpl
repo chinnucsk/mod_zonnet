@@ -16,14 +16,23 @@
         </tr>
     </thead>
     <tbody>
-      {% for oper_name, order_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet[{get_docs_list docsids="1,34,35" month="05/2013" }] %}
+    {% if m.zonnet.is_prepaid %}
+      {% for oper_name, order_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet[{get_docs_list docsids="34,35" month=selectedmonth }] %}
         <tr>
             <td>{{ order_num }}</td>
             <td>{{ order_date[2]|date:'Y-m-d' }}</td>
             <td>{{ oper_name }}</td>
         </tr>
       {% endfor %}
-
+    {% else %}
+      {% for oper_name, order_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet[{get_docs_list docsids="1" month=selectedmonth }] %}
+        <tr>
+            <td>{{ order_num }}</td>
+            <td>{{ order_date[2]|date:'Y-m-d' }}</td>
+            <td>{{ oper_name }}</td>
+        </tr>
+      {% endfor %}
+    {% endif %}
     </tbody>
 </table>
 {% endblock %}

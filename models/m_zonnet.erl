@@ -81,7 +81,20 @@ m_find_value({get_docs_list,[{docsids, DocsIds},{month, MonthInput}]}, _M, Conte
          [Month, Year] = string:tokens(MonthInput,"/"),
          zonnet_util:get_docs_list({date, Year, Month},{docsids, DocsIds}, Context);
      true ->
-        ok
+         case zonnet_util:is_prepaid(Context) of 
+            [] -> 
+                 {{Year, Month, _}, {_, _, _}} = erlang:localtime(),
+                 zonnet_util:get_docs_list({date, integer_to_list(Year), integer_to_list(Month-1)},{docsids, DocsIds}, Context);
+            _  ->
+                 case re:run(DocsIds,"3[4,5]") of
+                     nomatch ->
+                       {{Year, Month, _}, {_, _, _}} = z_datetime:prev_month(erlang:localtime()),
+                       zonnet_util:get_docs_list({date, integer_to_list(Year), integer_to_list(Month)},{docsids, DocsIds}, Context);
+                     _ ->
+                       {{Year, Month, _}, {_, _, _}} = erlang:localtime(),
+                       zonnet_util:get_docs_list({date, integer_to_list(Year), integer_to_list(Month)},{docsids, DocsIds}, Context)
+                 end
+         end
   end; 
 m_find_value(get_docs_list, _M, Context) -> 
     {{Year, Month, _}, {_, _, _}} = erlang:localtime(),
