@@ -74,12 +74,7 @@ content_types_provided(ReqData, Context) ->
 forbidden(ReqData, Context) ->
     case z_context:get(id, Context) of
         undefined ->
-            case z_context:get(root, Context) of
-                [{module, Module}] ->
-                    {Module:file_forbidden(z_context:get(fullpath, Context), Context), ReqData, Context};
-                _ ->
-                    {false, ReqData, Context}
-            end;
+            {true, ReqData, Context};
         RscId when is_integer(RscId) ->
             case zonnet_util:get_fullpath_by_order_id(RscId,Context) of
                  [] ->
