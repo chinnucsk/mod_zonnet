@@ -22,30 +22,30 @@
     {% if m.zonnet.is_prepaid %}
       {% for oper_name, order_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet[{get_docs_list docsids="34" month=selectedmonth }] %}
         <tr>
-            <td>{{ order_num }}</td>
-            <td>{{ order_date[2]|date:'Y-m-d' }}</td>
-            <td>{{ oper_name }}</td>
-            <td>{{ (tax_summ/18*100+tax_summ)|zonnet_round - tax_summ }}</td>
-            <td>{{ tax_summ }}</td>
-            <td>{{ (tax_summ/18*100+tax_summ)|zonnet_round }}</td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ order_num }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ order_date[2]|date:'Y-m-d' }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ oper_name }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ (tax_summ/18*100+tax_summ)|zonnet_round - tax_summ }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ tax_summ }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ (tax_summ/18*100+tax_summ)|zonnet_round }}</a></td>
         </tr>
       {% endfor %}
       {% for oper_name, order_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet[{get_docs_list docsids="35" month=selectedmonth }] %}
         <tr>
-            <td>{{ order_num }}</td>
-            <td>{{ order_date[2]|date:'Y-m-d' }}</td>
-            <td>{{ oper_name }}</td>
-            <td>{{ (tax_summ/18*100)|zonnet_round }}</td>
-            <td>{{ tax_summ }}</td>
-            <td>{{ (tax_summ/18*100)|zonnet_round+tax_summ }}</td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ order_num }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ order_date[2]|date:'Y-m-d' }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ oper_name }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ (tax_summ/18*100)|zonnet_round }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ tax_summ }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ (tax_summ/18*100)|zonnet_round+tax_summ }}</a></td>
         </tr>
       {% endfor %}
     {% else %}
       {% for oper_name, order_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet[{get_docs_list docsids="1" month=selectedmonth }] %}
         <tr>
-            <td>{{ order_num }}</td>
-            <td>{{ order_date[2]|date:'Y-m-d' }}</td>
-            <td>{{ oper_name }}</td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ order_num }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ order_date[2]|date:'Y-m-d' }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ oper_name }}</a></td>
         </tr>
       {% endfor %}
     {% endif %}

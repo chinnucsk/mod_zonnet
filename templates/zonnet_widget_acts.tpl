@@ -20,11 +20,11 @@
     <tbody>
       {% for oper_name, order_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet[{get_docs_list docsids="2" month=selectedmonth }] %}
         <tr>
-            <td>{{ oper_name }}</td>
-            <td>{{ order_date[2]|date:'Y-m-d' }}</td>
-            <td>{{ curr_summ }}</td>
-            <td>{{ tax_summ }}</td>
-            <td>{{ total_summ }}</td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ oper_name }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ order_date[2]|date:'Y-m-d' }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ curr_summ }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ tax_summ }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ total_summ }}</a></td>
         </tr>
       {% endfor %}
 
