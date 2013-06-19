@@ -36,6 +36,7 @@
         ,collect_calls/8
         ,get_calls_list_by_period/6
         ,get_docs_list/3
+        ,get_fullpath_by_order_id/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -362,4 +363,17 @@ get_docs_list({date, Year, Month},{docsids, DocsIds}, Context) ->
           file:write_file("/home/zotonic/iamSQLQueries4", QueryString, [append]),
           file:write_file("/home/zotonic/iamSQLQueries4", "\n\n", [append]),
             z_mydb:q(QueryString, Context)
+    end.
+
+get_fullpath_by_order_id(Order_Id, Context) ->
+    case get_uid(Context) of
+        [] -> [];
+        Uid -> 
+            QueryString = io_lib:format("SELECT replace(file_name,'./','/usr/local/billing/') FROM orders where order_id = ~p and agrm_id in (Select agrm_id from agreements where uid = ~s) limit 1", [Order_Id, Uid]),
+          file:write_file("/home/zotonic/iamSQLQueries5", QueryString, [append]),
+          file:write_file("/home/zotonic/iamSQLQueries5", "\n\n", [append]),
+          case z_mydb:q(QueryString, Context) of
+              [] -> [];
+              [QueryResult] -> QueryResult
+          end
     end.

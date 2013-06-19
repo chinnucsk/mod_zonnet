@@ -4,5 +4,7 @@
   {zonnet_account_details, ["zonnet", "account_details"], controller_zonnet, [{template, "zonnet_account_details.tpl"}, {selected, "account_details"}]},
   {zonnet_finance_details, ["zonnet", "finance_details"], controller_zonnet, [{template, "zonnet_finance_details.tpl"}, {selected, "finance_details"}]},
   {zonnet_statistics, ["zonnet", "statistics"], controller_zonnet, [{template, "zonnet_statistics.tpl"}, {selected, "statistics"}]},
-  {zonnet_documents, ["zonnet", "documents"], controller_zonnet, [{template, "zonnet_documents.tpl"}, {selected, "documents"}]}
+  {zonnet_documents, ["zonnet", "documents"], controller_zonnet, [{template, "zonnet_documents.tpl"}, {selected, "documents"}]},
+  {zonnet_getlbdocs, ["getlbdocs","id",id], controller_getlbdocs, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
+  {gettest, ["gettest","id",id], controller_gettest, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]}
 ]. 

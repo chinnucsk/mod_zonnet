@@ -33,7 +33,7 @@
                 {% include "zonnet_widget_vatinvoices.tpl" headline=_"VAT Invoices" idname="vatinvoices_widget" %}
 
                 {# Acts #}
-                {% include "zonnet_widget_acts.tpl" headline=_"Acts" idname="acts_widget" %}
+                {% include "zonnet_widget_acts.tpl" headline=_"Acts" idname="acts_widget" idname="acts_widget" %}
 
             </div>
             

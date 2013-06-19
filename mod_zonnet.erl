@@ -247,6 +247,18 @@ event({postback, calls_list, _TriggerId, _TargetId}, Context) ->
     CallsDirection = z_context:get_q("callsdirection",Context),
     z_render:update("calls_list_widget", z_template:render("zonnet_widget_calls_list.tpl", [{headline,?__("Phone calls statistics", Context)}, {idname, "calls_list_widget"}, {startDayInput, StartDayInput}, {endDayInput, EndDayInput}, {monthInput, MonthInput}, {operator, CallsType}, {direction, CallsDirection}], Context), Context);
 
+event({postback, refresh_invoices, _TriggerId, _TargetId}, Context) ->
+    DocsMonthInput = z_context:get_q("docsmonthInput",Context),
+    z_render:update("invoices_widget", z_template:render("zonnet_widget_invoices.tpl", [{headline,?__("Invoices", Context)}, {idname, "invoices_widget"}, {selectedmonth, DocsMonthInput}], Context), Context);
+
+event({postback, refresh_vatinvoices, _TriggerId, _TargetId}, Context) ->
+    DocsMonthInput = z_context:get_q("docsmonthInput",Context),
+    z_render:update("vatinvoices_widget", z_template:render("zonnet_widget_vatinvoices.tpl", [{headline,?__("VAT Invoices", Context)}, {idname, "vatinvoices_widget"}, {selectedmonth, DocsMonthInput}], Context), Context);
+
+event({postback, refresh_acts, _TriggerId, _TargetId}, Context) ->
+    DocsMonthInput = z_context:get_q("docsmonthInput",Context),
+    z_render:update("acts_widget", z_template:render("zonnet_widget_acts.tpl", [{headline,?__("Acts", Context)}, {idname, "acts_widget"}, {selectedmonth, DocsMonthInput}], Context), Context);
+
 event(_A1, Context) ->
   z_render:growl_error(?__("Missed event happened.",Context), Context).
 

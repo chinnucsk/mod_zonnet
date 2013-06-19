@@ -18,7 +18,7 @@
         </tr>
     </thead>
     <tbody>
-      {% for oper_name, order_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet[{get_docs_list docsids="2" month="05/2013" }] %}
+      {% for oper_name, order_id, order_num, order_date, curr_summ, tax_summ, total_summ in m.zonnet[{get_docs_list docsids="2" month=selectedmonth }] %}
         <tr>
             <td>{{ oper_name }}</td>
             <td>{{ order_date[2]|date:'Y-m-d' }}</td>
