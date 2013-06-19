@@ -72,16 +72,16 @@ content_types_provided(ReqData, Context) ->
 
 %% @doc Simple access control for rsc based files
 forbidden(ReqData, Context) ->
-    case z_context:get(id, Context) of
-        undefined ->
-            {true, ReqData, Context};
-        RscId when is_integer(RscId) ->
+    case string:to_integer(z_context:get_q("id", Context)) of
+        {RscId,_} when is_integer(RscId) ->
             case zonnet_util:get_fullpath_by_order_id(RscId,Context) of
                  [] ->
                      {true, ReqData, Context};
                  _ ->
                      {false, ReqData, Context}
-            end
+            end;
+        _ ->
+            {true, ReqData, Context}
     end.
 
 
