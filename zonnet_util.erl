@@ -5,6 +5,8 @@
 -export([
         is_numeric/1
         ,get_uid/1
+        ,get_next_doc_number/2
+        ,get_last_order_id/2
         ,get_main_agrm_id/1
         ,credit_allowed/1
         ,credit_able/1
@@ -51,6 +53,22 @@ get_uid(Context) ->
         undefined -> [];
         Z_User ->
             case z_mydb:q(<<"select uid from accounts where login = ? limit 1">>,[Z_User], Context) of
+                [[QueryResult]] -> mochinum:digits(QueryResult);
+                _ -> []
+            end
+    end.
+
+get_next_doc_number(Doc_Id, Context) ->
+    case z_mydb:q(<<"select max(cast(order_num as unsigned))+1 as order_num from orders where doc_id = ?">>,[Doc_Id], Context) of
+        [[QueryResult]] -> mochinum:digits(QueryResult);
+        _ -> []
+    end.
+
+get_last_order_id(Doc_Id, Context) ->
+    case get_uid(Context) of
+        [] -> [];
+        Uid ->
+            case z_mydb:q(<<"select max(order_id) as order_num from orders where doc_id = ? and agrm_id in (Select agrm_id from agreements where uid = ?)">>,[Doc_Id, Uid], Context) of
                 [[QueryResult]] -> mochinum:digits(QueryResult);
                 _ -> []
             end

@@ -192,11 +192,14 @@ event({postback, assist_pay, _TriggerId, _TargetId}, Context) ->
           z_render:growl_error(?__("Something went wrong. Please call to support.", Context), Context)
   end;
 
+event({postback, invoiceme_progress, _TriggerId, _TargetId}, Context) ->
+  z_convert:to_integer(z_context:get_q("invoiceme",Context)),
+  z_render:update("make_invoice_table", z_template:render("zonnet_table_progress_invoice.tpl",[],Context), Context);
+
 event({postback, invoiceme, _TriggerId, _TargetId}, Context) ->
   try z_convert:to_integer(z_context:get_q("invoiceme",Context)) of
-      Invoice_amount ->
-%          z_render:wire({alert, [{text,"This is a test Alert"}]}, Context)
-          z_render:growl_error([z_convert:to_list(Invoice_amount),32,?__("Option is under construction.",Context)], Context)
+      InvoiceAmount ->
+         zonnet_http:create_invoice(InvoiceAmount, Context) 
   catch
       error:_ ->
           z_render:growl_error(?__("Please input integer number.", Context), Context)

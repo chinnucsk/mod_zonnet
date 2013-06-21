@@ -26,7 +26,7 @@
                 {% include "zonnet_widget_make_payment.tpl" cat="text" headline=_"Online payment" %}
 
                 {# Make invoce #}
-                {% include "zonnet_widget_make_invoice.tpl" cat="text" headline=_"Wire transfer" %}
+                {% include "zonnet_widget_make_invoice.tpl" cat="text" headline=_"Wire transfer" idname="make_invoice_widget" %}
 
                 {# Make credit #}
                 {% if m.zonnet.credit_able %}

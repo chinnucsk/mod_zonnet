@@ -164,7 +164,7 @@ ensure_file_info(Context) ->
                                       [] ->
                                          {undefined, Context};
                                       [LBPath] ->
-                                          {LBPath, Context}
+                                         {LBPath, Context}
                                  end;
                              _ ->
                                  {undefined, Context}
@@ -174,12 +174,22 @@ ensure_file_info(Context) ->
                               undefined -> z_context:set(mime, z_media_identify:guess_mime(Path), ContextPath);
                               _Mime -> ContextPath
                           end,
-            case filelib:is_regular(Path) of 
-                true ->
-                    {true, z_context:set([ {path, Path}, {fullpath, Path} ], ContextMime)};
-                _ -> 
-                    {false, ContextMime}
-            end.
+%
+%   While generating invoice at payments page "filelib:is_regular" periodically gives "false" while 
+%                                                    file really exists and Path string semms to be correct.
+%
+%            case filelib:is_regular(Path) of 
+%                true ->
+%                    file:write_file("/home/zotonic/baddownloadtest", "regular_file true\n\n", [append]),
+%                    {true, z_context:set([ {path, Path}, {fullpath, Path} ], ContextMime)};
+%                _ -> 
+%                    file:write_file("/home/zotonic/baddownloadtest", "regular_file false\n\n", [append]),
+%                    {false, ContextMime}
+%            end.
+%
+% Passing all Paths as existing till finding out  right silution
+%
+                    {true, z_context:set([ {path, Path}, {fullpath, Path} ], ContextMime)}.
 
 
 %% @spec is_text(Mime) -> bool()
