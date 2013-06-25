@@ -20,14 +20,6 @@ html(Context) ->
     Html = z_template:render(Template, Variables, Context),
     z_context:output(Html, Context).
 
-to_text(ReqData, Context) ->
-    Path = wrq:disp_path(ReqData),
-    Body = io_lib:format("Hello ~s from Webmachine.~n", [Path]),
-    {Body, ReqData, Context}.
-
-content_types_provided(ReqData, Context) ->
-   {[{"text/html", to_html},{"text/plain",to_text},{"application/pdf",to_pdf}], ReqData, Context}.
-
 not_authorized(Context) ->
     RequestPath = wrq:raw_path(z_context:get_reqdata(Context)),
     Location = z_dispatcher:url_for(zonnet_login, [{p,RequestPath}], Context),
