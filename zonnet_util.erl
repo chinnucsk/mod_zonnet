@@ -27,6 +27,7 @@
         ,ip_addresses_by_vg_id/2
         ,is_prepaid/1
         ,is_valid_account/1
+        ,is_valid_account/2
         ,calc_curr_month_exp/1
         ,calc_traffic_costs_by_period/3
         ,calc_fees_by_period/3
@@ -276,7 +277,17 @@ is_prepaid(Context) ->
 %% check whether account is valid
 is_valid_account(Context) ->
     case m_identity:get_username(Context) of
-        undefined -> [];
+        undefined -> false;
+        Z_User ->
+            case z_mydb:q("select 1 from vgroups where uid = (select uid from accounts where login = ? limit 1) and blocked < 10 limit 1",[Z_User], Context) of
+                [[1]] -> true;
+                _ -> false
+            end
+    end.
+%%
+is_valid_account(UserId, Context) ->
+    case m_identity:get_username(UserId, Context) of
+        undefined -> false;
         Z_User ->
             case z_mydb:q("select 1 from vgroups where uid = (select uid from accounts where login = ? limit 1) and blocked < 10 limit 1",[Z_User], Context) of
                 [[1]] -> true;

@@ -10,7 +10,7 @@
 -include_lib("controller_html_helper.hrl").
 
 is_authorized(ReqData, Context) ->
-    z_acl:wm_is_authorized(use, z_context:get(acl_module, Context, mod_zonnet), logon, ReqData, Context).
+    z_acl:wm_is_authorized(use, z_context:get(acl_module, Context, mod_zonnet), zonnet_login, ReqData, Context).
 
 html(Context) ->
     Template = z_context:get(template, Context, "zonnet.tpl"),

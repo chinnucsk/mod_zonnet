@@ -1,21 +1,9 @@
-%% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-05-07
-%% @doc Log on an user. Set optional "rememberme" cookie.
-
-%% Copyright 2010 Marc Worrell
 %%
-%% Licensed under the Apache License, Version 2.0 (the "License");
-%% you may not use this file except in compliance with the License.
-%% You may obtain a copy of the License at
+%% Talen from mod_authentication/controllers/controller_logon.erl
 %% 
-%%     http://www.apache.org/licenses/LICENSE-2.0
+%% In get_rememberme_cookie, auth_z:logon/2 and auth_z:confitm/2 
+%% function is_enabled/2 is changed to local zonnet_util:is_valid_account/2 
 %% 
-%% Unless required by applicable law or agreed to in writing, software
-%% distributed under the License is distributed on an "AS IS" BASIS,
-%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-%% See the License for the specific language governing permissions and
-%% limitations under the License.
 
 -module(controller_zonnet_login).
 -author("Marc Worrell <marc@worrell.nl>").
@@ -32,7 +20,6 @@
 -define(LOGON_REMEMBERME_COOKIE, "z_logon").
 -define(LOGON_REMEMBERME_DAYS, 3650).
 
-
 init(DispatchArgs) -> {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
@@ -45,7 +32,6 @@ charsets_provided(ReqData, Context) ->
 
 content_types_provided(ReqData, Context) ->
     {[{"text/html", provide_content}], ReqData, Context}.
-
 
 
 resource_exists(ReqData, Context) ->
@@ -61,7 +47,7 @@ resource_exists(ReqData, Context) ->
             case get_rememberme_cookie(Context2) of
                 {ok, UserId} ->
                     Context3 = z_context:set(user_id, UserId, Context2),
-                    case z_auth:logon(UserId, Context3) of
+                    case logon(UserId, Context3) of
                         {ok, ContextUser} -> ?WM_REPLY(false, ContextUser);
                         {error, _Reason} -> ?WM_REPLY(true, Context3)
                     end;
@@ -73,6 +59,32 @@ resource_exists(ReqData, Context) ->
 
 previously_existed(ReqData, Context) ->
     {true, ReqData, Context}.
+
+logon(UserId, Context) ->
+    case zonnet_util:is_valid_account(UserId, Context) of
+        true ->
+            Context1 = z_acl:logon(UserId, Context),
+            {ok, Context2} = z_session_manager:rename_session(Context1),
+            z_context:set_session(auth_user_id, UserId, Context2),
+            z_context:set_session(auth_timestamp, calendar:universal_time(), Context2),
+            Context3 = z_notifier:foldl(auth_logon, Context2, Context2),
+            z_notifier:notify(auth_logon_done, Context3),
+            {ok, Context3};
+        false ->
+            {error, user_not_enabled}
+    end.
+
+
+confirm(UserId, Context) ->
+    case zonnet_util:is_valid_account(UserId, Context) of
+        true ->
+            Context1 = z_context:set_session(auth_confirm_timestamp, z_utils:now(), Context),
+            Context2 = z_notifier:foldl(auth_confirm, Context1, Context1),
+            z_notifier:notify(auth_confirm_done, Context2),
+            {ok, Context2};
+        false ->
+            {error, user_not_enabled}
+    end.
 
 %% @doc Temporary redirect if we have an automatic log on due to a rememberme cookie or if
 %% the user was already logged on and we don't have a redirect page.
@@ -191,7 +203,7 @@ event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context
                   | z_context:get_q_all(Context)],
     case z_notifier:first(#logon_submit{query_args=LogonArgs}, Context) of
         {ok, UserId} when is_integer(UserId) ->
-            z_auth:confirm(UserId, Context),
+            confirm(UserId, Context),
             z_render:wire(proplists:get_all_values(on_success, Args), Context);
         {error, _Reason} ->
             z_render:wire({show, [{target, "logon_confirm_error"}]}, Context);
@@ -233,7 +245,7 @@ logon_stage(Stage, Args, Context) ->
     
 
 logon_user(UserId, Context) ->
-    case z_auth:logon(UserId, Context) of
+    case logon(UserId, Context) of
 		{ok, ContextUser} ->
 		    ContextRemember = case z_context:get_q("rememberme", ContextUser, []) of
 		        [] -> ContextUser;
@@ -274,7 +286,7 @@ get_rememberme_cookie(Context) ->
                     {error, expired} -> 
                         undefined;
                     {ok, UserId} when is_integer(UserId) ->
-						case z_auth:is_enabled(UserId, Context) of
+						case zonnet_util:is_valid_account(UserId, Context) of
 							true -> {ok, UserId};
 							false -> undefined
 						end
