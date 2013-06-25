@@ -180,10 +180,8 @@ ensure_file_info(Context) ->
 %
 %            case filelib:is_regular(Path) of 
 %                true ->
-%                    file:write_file("/home/zotonic/baddownloadtest", "regular_file true\n\n", [append]),
 %                    {true, z_context:set([ {path, Path}, {fullpath, Path} ], ContextMime)};
 %                _ -> 
-%                    file:write_file("/home/zotonic/baddownloadtest", "regular_file false\n\n", [append]),
 %                    {false, ContextMime}
 %            end.
 %

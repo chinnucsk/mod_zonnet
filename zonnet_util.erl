@@ -26,6 +26,7 @@
         ,numbers_by_vg_id/2
         ,ip_addresses_by_vg_id/2
         ,is_prepaid/1
+        ,is_valid_account/1
         ,calc_curr_month_exp/1
         ,calc_traffic_costs_by_period/3
         ,calc_fees_by_period/3
@@ -271,6 +272,18 @@ is_prepaid(Context) ->
             end
     end.
 %%
+
+%% check whether account is valid
+is_valid_account(Context) ->
+    case m_identity:get_username(Context) of
+        undefined -> [];
+        Z_User ->
+            case z_mydb:q("select 1 from vgroups where uid = (select uid from accounts where login = ? limit 1) and blocked < 10 limit 1",[Z_User], Context) of
+                [[1]] -> true;
+                _ -> false
+            end
+    end.
+%%
 %% calculate current month expenditures FORMAT(COALESCE(sum(balance),0),2)
 %%
 calc_curr_month_exp(Context) ->
@@ -280,8 +293,6 @@ calc_curr_month_exp(Context) ->
           {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
           Today = io_lib:format("~w~2..0w~2..0w",[Year, Month, Day]),
           QueryString = io_lib:format("Select FORMAT(COALESCE(ifnull((SELECT sum(amount) FROM  tel001~s where uid = ~s),0) + ifnull((SELECT sum(amount) FROM  user002~s where uid = ~s),0) + ifnull((SELECT sum(amount) FROM  day where Month(timefrom) = Month(Now()) and Year(timefrom) = Year(Now()) and uid = ~s),0) + (Select sum(amount) from usbox_charge where agrm_id = (SELECT agrm_id FROM agreements where uid = ~s and oper_id = 1) and Month(period) = Month(Now()) and Year(period) = Year(Now())),0),2)",[Today,Uid,Today,Uid,Uid,Uid]),
-          file:write_file("/home/zotonic/iamSQLQueries3", QueryString, [append]),
-          file:write_file("/home/zotonic/iamSQLQueries3", "\n\n", [append]),
           case z_mydb:q(QueryString, Context) of
                [[undefined]] -> ["0"];
                [QueryResult] -> QueryResult;
@@ -296,8 +307,6 @@ calc_fees_by_period({from, YearFrom, MonthFrom, DayFrom},{till, YearTill, MonthT
         [] -> ["0"];
         Uid -> 
           QueryString = io_lib:format("SELECT FORMAT(COALESCE(sum(amount),0),2) FROM usbox_charge where agrm_id = (SELECT agrm_id FROM agreements where uid = ~s and oper_id = 1) and period between \'~w-~2..0w-~2..0w\' and \'~w-~2..0w-~2..0w\'",[Uid, YearFrom, MonthFrom, DayFrom, YearTill, MonthTill, DayTill]),
-          file:write_file("/home/zotonic/iamSQLQueries", QueryString, [append]),
-          file:write_file("/home/zotonic/iamSQLQueries", "\n\n", [append]),
           case z_mydb:q(QueryString, Context) of
                [[undefined]] -> ["0"];
                [QueryResult] -> QueryResult;
@@ -332,8 +341,6 @@ get_calls_list_by_day({Year, Month, Day},{callsdirection,Direction},{callstype,C
       [] -> [];
       Uid -> 
          QueryString = io_lib:format("select timefrom, numfrom, numto, format(duration_round/60, 0), direction, format(amount, 2) from tel001~w~2..0w~2..0w where uid =  ~s and direction in (~s) and oper_id in (~s) order by timefrom desc limit ~s", [Year, Month, Day, Uid, Direction, CallsType, MaxCalls]),
-         file:write_file("/home/zotonic/iamSQLQueries2", QueryString, [append]),
-         file:write_file("/home/zotonic/iamSQLQueries2", "\n\n", [append]),
          z_mydb:q(QueryString, Context)
     end.
 %
@@ -378,8 +385,6 @@ get_docs_list({date, Year, Month},{docsids, DocsIds}, Context) ->
         [] -> ["0"];
         Uid -> 
             QueryString = io_lib:format("SELECT accounts.name, orders.order_id, orders.order_num, orders.order_date, orders.curr_summ, round(orders.tax_summ,2), round(orders.curr_summ + round(orders.tax_summ,2),2)  FROM orders, accounts where accounts.uid=orders.oper_id and Year(period) = ~s and Month(period) = ~s and agrm_id in (Select agrm_id from agreements where uid = ~s) and doc_id in (~s)", [Year, Month, Uid, DocsIds]),
-          file:write_file("/home/zotonic/iamSQLQueries4", QueryString, [append]),
-          file:write_file("/home/zotonic/iamSQLQueries4", "\n\n", [append]),
             z_mydb:q(QueryString, Context)
     end.
 
@@ -388,8 +393,6 @@ get_fullpath_by_order_id(Order_Id, Context) ->
         [] -> [];
         Uid -> 
             QueryString = io_lib:format("SELECT replace(file_name,'./','/usr/local/billing/') FROM orders where order_id = ~p and agrm_id in (Select agrm_id from agreements where uid = ~s) limit 1", [Order_Id, Uid]),
-          file:write_file("/home/zotonic/iamSQLQueries5", QueryString, [append]),
-          file:write_file("/home/zotonic/iamSQLQueries5", "\n\n", [append]),
           case z_mydb:q(QueryString, Context) of
               [] -> [];
               [QueryResult] -> QueryResult

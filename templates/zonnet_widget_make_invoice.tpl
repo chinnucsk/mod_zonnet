@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         <tr>
-            <td width="50%">Введите сумму</td>
+            <td width="50%">Введите сумму без учета НДС</td>
             <td><input class="input input-small-zonnet" type="text" id="invoiceme" name="invoiceme" value="" /> {_ rub. _}
                 {% validate id="invoiceme" type={numericality minimum=0 maximum=100000} %}
             </td>
