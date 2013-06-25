@@ -10,19 +10,14 @@
 
 -export([
     observe_zonnet_menu/3,
-    observe_foo/2,
     observe_postback_notify/2,
     observe_search_query/2,
     event/2
 ]).
 
 -include_lib("zotonic.hrl").
-%%-include_lib("include/zotonic_notifications.hrl").
 -include_lib("include/zonnet_menu.hrl").
 
-
-%%
-%% test of m_search and pagination
 %%
 observe_search_query({search_query, {callslist, [{callsdirection,Direction},{callstype,CallsType},{from,StartDayInput},{limit,MaxCalls},{month,MonthInput},{till,EndDayInput}]}, _OffsetLimit}, Context) ->
   if
@@ -48,7 +43,7 @@ observe_search_query({search_query, {callslist, _Args}, _OffsetLimit}, Context) 
 observe_search_query(_, _Context) ->
     undefined.
 %%
-%% Just a test of z_notify as an alternative to z_event - event({postback, intervaltype, _TriggerId, _TargetId}, Context) 
+%% z_notify as an alternative to z_event - event({postback, intervaltype, _TriggerId, _TargetId}, Context) 
 %%
 observe_postback_notify({postback_notify, "intervaltype_notify",_,_}, Context) ->
   try z_context:get_q("period",Context) of
@@ -58,15 +53,6 @@ observe_postback_notify({postback_notify, "intervaltype_notify",_,_}, Context) -
       error:_ ->
           z_render:growl_error(?__("Please input intervaltype.", Context), Context)
   end.
-
-
-observe_foo({foo, []}, Context) -> 
-    case m_identity:get_username(Context) of
-        undefined -> [];
-        Z_User -> 
-            QueryResult = z_mydb:q(<<"select name from accounts where login = ?">>, [Z_User], Context),
-            QueryResult
-    end.
 
 observe_zonnet_menu(zonnet_menu, Acc, Context) ->
     [

@@ -1,0 +1,73 @@
+-module(controller_zonnet).
+-author("Test").
+
+-export([
+         is_authorized/2,
+         to_text/2,
+         content_types_provided/2
+]).
+
+-define(LOGON_REMEMBERME_COOKIE, "z_logon").
+
+-include_lib("controller_html_helper.hrl").
+
+is_authorized(ReqData, Context) ->
+    zonnet_is_authorised(ReqData, Context, fun not_authorized/1).
+
+html(Context) ->
+    Variables = mod_zonnet:get_account_data(Context),
+    Template = z_context:get(template, Context, "zonnet.tpl"),
+    Html = z_template:render(Template, Variables, Context),
+    z_context:output(Html, Context).
+
+to_text(ReqData, Context) ->
+    Path = wrq:disp_path(ReqData),
+    Body = io_lib:format("Hello ~s from Webmachine.~n", [Path]),
+    {Body, ReqData, Context}.
+
+content_types_provided(ReqData, Context) ->
+   {[{"text/html", to_html},{"text/plain",to_text},{"application/pdf",to_pdf}], ReqData, Context}.
+
+not_authorized(Context) ->
+    RequestPath = wrq:raw_path(z_context:get_reqdata(Context)),
+    Location = z_dispatcher:url_for(zonnet_login, [{p,RequestPath}], Context),
+    ContextLocation = z_context:set_resp_header("Location", Location, Context),
+    ?WM_REPLY({halt, 302}, ContextLocation).
+
+zonnet_is_authorised(ReqData, Context, Fun) ->
+    ContextEnsured = z_context:ensure_all(?WM_REQ(ReqData, Context)),
+    case z_auth:is_auth(ContextEnsured) of
+        true ->
+           {true, ReqData, ContextEnsured};
+        false ->
+            case get_rememberme_cookie(ContextEnsured) of
+                {ok, UserId} ->
+                    Context3 = z_context:set(user_id, UserId, ContextEnsured),
+                    case z_auth:logon(UserId, Context3) of
+                        {ok, ContextUser} ->  {true, ReqData, ContextUser};
+                        {error, _Reason} -> Fun(ContextEnsured)
+                    end;
+                undefined ->
+                    Fun(ContextEnsured) 
+            end
+    end.
+
+get_rememberme_cookie(Context) ->
+    Rq = z_context:get_reqdata(Context),
+    case wrq:get_cookie_value(?LOGON_REMEMBERME_COOKIE, Rq) of
+        undefined ->
+            undefined;
+        Value ->
+            try
+                Value1 = mochiweb_util:unquote(Value),
+                case z_utils:decode_value_expire(Value1, Context) of
+                    {error, expired} ->
+                        undefined;
+                    {ok, UserId} when is_integer(UserId) ->
+                                                         {ok, UserId}
+                end
+            catch
+                _:_ -> undefined
+            end
+    end.
+
