@@ -9,16 +9,15 @@
 -mod_prio(400).
 
 -export([
-    observe_zonnet_menu/3,
-    observe_postback_notify/2,
-    observe_search_query/2,
-    event/2
+     observe_zonnet_menu/3
+    ,observe_postback_notify/2
+    ,observe_search_query/2
+    ,event/2
 ]).
 
 -include_lib("zotonic.hrl").
 -include_lib("include/zonnet_menu.hrl").
 
-%%
 observe_search_query({search_query, {callslist, [{callsdirection,Direction},{callstype,CallsType},{from,StartDayInput},{limit,MaxCalls},{month,MonthInput},{till,EndDayInput}]}, _OffsetLimit}, Context) ->
   if
      MonthInput =/= undefined ->

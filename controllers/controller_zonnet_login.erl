@@ -201,7 +201,7 @@ event(#submit{message=[], form="password_reminder"}, Context) ->
 event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context) ->
     LogonArgs = [{"username", binary_to_list(m_identity:get_username(Context))}
                   | z_context:get_q_all(Context)],
-    case z_notifier:first(#logon_submit{query_args=LogonArgs}, Context) of
+    case zonnet_auth:zonnet_login_submit(#logon_submit{query_args=LogonArgs}, Context) of
         {ok, UserId} when is_integer(UserId) ->
             confirm(UserId, Context),
             z_render:wire(proplists:get_all_values(on_success, Args), Context);
@@ -214,7 +214,7 @@ event(#submit{message={logon_confirm, Args}, form="logon_confirm_form"}, Context
 
 event(#submit{message=[]}, Context) ->
     Args = z_context:get_q_all(Context),
-    case z_notifier:first(#logon_submit{query_args=Args}, Context) of
+    case zonnet_auth:zonnet_login_submit(#logon_submit{query_args=Args}, Context) of
         {ok, UserId} when is_integer(UserId) -> 
             logon_user(UserId, Context);
         {error, _Reason} -> 
