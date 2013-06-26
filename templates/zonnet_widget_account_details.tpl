@@ -28,9 +28,9 @@
         <tr><td>Телефон</td><td>{{ m.zonnet[{accounts_table fields="phone" limit=1}] }}</td></tr>
      {% if not dashboard %}
         <tr><td>Факс</td><td>{{ m.zonnet[{accounts_table fields="fax" limit=1}] }}</td></tr>
-        <tr><td>Юридический адрес</td><td>{{ m.zonnet[{accounts_addr_table type=0}] }}</td></tr>
-        <tr><td>Почтовый адрес</td><td>{{ m.zonnet[{accounts_addr_table type=1}] }}</td></tr>
-        <tr><td>Адрес доставки счета</td><td>{{ m.zonnet[{accounts_addr_table type=2}] }}</td></tr>
+        <tr><td>Юридический адрес</td><td>{{ m.zonnet[{format_address addrtype=0}] }}</td></tr>
+        <tr><td>Почтовый адрес</td><td>{{ m.zonnet[{format_address addrtype=1}] }}</td></tr>
+        <tr><td>Адрес доставки счета</td><td>{{ m.zonnet[{format_address addrtype=2}] }}</td></tr>
      {% if m.zonnet.user_type == 1 %}
         <tr><td>Директор</td><td>{{ m.zonnet[{accounts_table fields="gen_dir_u" limit=1}] }}</td></tr>
         <tr><td>Главный бухгалтер</td><td>{{ m.zonnet[{accounts_table fields="gl_buhg_u" limit=1}] }}</td></tr>

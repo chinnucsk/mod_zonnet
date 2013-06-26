@@ -11,6 +11,8 @@
         {% include "_js_include_jquery.tpl" %}
         {% lib
                 "css/bootstrap-admin.css"
+                "css/bootstrap-admin-responsive.css"
+
                 "css/zp-menuedit.css"
                 "css/zotonic-admin.css"
                 "css/z.modal.css"

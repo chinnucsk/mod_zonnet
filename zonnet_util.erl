@@ -41,6 +41,9 @@
         ,get_calls_list_by_period/6
         ,get_docs_list/3
         ,get_fullpath_by_order_id/2
+        ,get_address_ids_by_type/2
+        ,format_address/2
+        ,get_address_element/4
 ]).
 
 -include_lib("zotonic.hrl").
@@ -409,3 +412,82 @@ get_fullpath_by_order_id(Order_Id, Context) ->
               [QueryResult] -> QueryResult
           end
     end.
+
+get_address_ids_by_type(AddrType,Context) ->
+    case get_uid(Context) of
+        [] -> [];
+        Uid ->
+            case z_mydb:q("select aa.country, aa.region, aa.area, aa.city, aa.settl, aa.street, aa.building, aa.flat, aa.entrance, aa.floor  from agreements ag, accounts a left join accounts_addr aa on a.uid=aa.uid where ag.agrm_id=(SELECT agrm_id FROM agreements where uid = ? and oper_id = 1) and a.uid=ag.uid and aa.type=?",[Uid, AddrType], Context) of
+                [QueryResult] -> QueryResult;
+                _ -> []
+            end
+    end.
+
+format_address(AddrType,Context) ->
+    case get_address_ids_by_type(AddrType, Context) of
+        [] -> [];
+        [CountryId, RegionId, AreaId, CityId, SettlId, StreetId, BuildingId, FlatId, EntranceId, FloorId] ->
+           Country = get_address_element("name", "country", CountryId, Context),
+           Region = get_address_element("short", "region", RegionId, Context) ++ " " ++ get_address_element("name", "region", RegionId, Context),
+           if RegionId == 80; RegionId == 86; RegionId == 0; RegionId == undefined ->
+                Address1 = list_to_binary([Country]);
+              true ->
+                Address1 = list_to_binary([Country, ", ", Region])
+           end,
+           if AreaId == 0; AreaId == undefined ->
+                Address2 = Address1;
+              true ->
+                Address2 = list_to_binary([Address1, ", ", get_address_element("short", "area", AreaId, Context), " ",get_address_element("name", "area", AreaId, Context)])
+           end,
+           if CityId == 0; CityId == undefined ->
+                Address3 = Address2;
+              true ->
+                Address3 = list_to_binary([Address2, ", ", get_address_element("short", "city", CityId, Context), " ",get_address_element("name", "city", CityId, Context)])
+           end,
+           if SettlId == 0; SettlId == undefined ->
+                Address4 = Address3;
+              true ->
+                Address4 = list_to_binary([Address3, ", ", get_address_element("short", "settl", SettlId, Context), " ",get_address_element("name", "settl", SettlId, Context)])
+           end,
+           if StreetId == 0; StreetId == undefined ->
+                Address5 = Address4;
+              true ->
+                Address5 = list_to_binary([Address4, ", ", get_address_element("short", "street", StreetId, Context), " ",get_address_element("name", "street", StreetId, Context)])
+           end,
+           if BuildingId == 0; BuildingId == undefined ->
+                Address6 = Address5;
+              true ->
+                Address6 = list_to_binary([Address5, ", ", get_address_element("short", "building", BuildingId, Context), " ",get_address_element("name", "building", BuildingId, Context)])
+           end,
+           if FlatId == 0; FlatId == undefined ->
+                Address7 = Address6;
+              true ->
+                Address7 = list_to_binary([Address6, ", ", get_address_element("short", "flat", FlatId, Context), " ",get_address_element("name", "flat", FlatId, Context)])
+           end,
+           if EntranceId == 0; EntranceId == undefined ->
+                Address8 = Address7;
+              true ->
+                Address8 = list_to_binary([Address7, ", ", get_address_element("short", "entrance", EntranceId, Context), " ",get_address_element("name", "entrance", EntranceId, Context)])
+           end,
+           if FloorId == 0; FloorId == undefined ->
+                Address9 = Address8;
+              true ->
+                Address9 = list_to_binary([Address8, ", ", get_address_element("short", "floor", FloorId, Context), " ",get_address_element("name", "floor", FloorId, Context)])
+           end,
+           if BuildingId /= 0, BuildingId /= undefined ->
+                Address10 = list_to_binary([get_address_element("idx", "building", BuildingId, Context), ", ", Address9]);
+              StreetId /= 0, StreetId /= undefined ->
+                Address10 = list_to_binary([get_address_element("idx", "street", StreetId, Context), ", ", Address9]);
+              true ->
+                Address10 = Address9
+           end,
+           Address10
+    end.
+
+get_address_element(Field, ElementName, RecordId, Context) ->
+    QueryString = io_lib:format("select cast\(~s\ as char) from address_~s where record_id = ~p", [Field, ElementName, RecordId]),
+    case z_mydb:q(QueryString, Context) of
+        [] -> [];
+        [QueryResult] -> QueryResult
+    end.
+

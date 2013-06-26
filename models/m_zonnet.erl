@@ -140,6 +140,9 @@ m_find_value({calc_traffic_costs_by_period,[{month,MonthInput},{from,StartDayInp
       zonnet_util:calc_traffic_costs_by_period({from, Year, Month, Day},{till, Year, Month, Day},Context)
   end;
 
+m_find_value({format_address,[{addrtype, AddrType}]}, _M, Context) -> 
+    zonnet_util:format_address(AddrType, Context);
+
 m_find_value(_V, _VV, _Context) -> 
     [_V,_VV,"m_zonnet_find_value_mismatch"].
 
