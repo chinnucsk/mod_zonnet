@@ -1,12 +1,22 @@
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-inverse navbar-fixed-top">
 
     <div class="navbar-inner">
-        <div class="container">
-	    
-            <a class="brand" href="/" title="{_ visit site _}"><img alt="zotonic logo" src="/lib/images/admin_zotonic.png" width="106" height="20"></a>
+        <div class="container-fluid">
 
-            <div class="nav-collapse">
-                <ul class="nav">
+        
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/zonnet" title="{_ visit site _}"><img alt="OnNet logo" src="/media/inline/2013/6/28/logo.gif"></a>
+
+            <div class="nav-collapse collapse">
+
+            <div class="span2 zonnet_call"><a class="white_link" href="tel:+78123634500">(812) 363-45-00</a></div>
+            <div class="span1 zonnet_call"><a class="white_link" href="mailto:info@onnet.su">info@onnet.su</a></div>
+
+                <ul class="nav pull-right">
                     {% for id, item in m.zonnet_menu %}
                         {% if item.items %}
                         <li class="dropdown" id="nav-{{ id }}">
@@ -16,7 +26,7 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                {% for id, item in item.items %}
+                            {% for id, item in item.items %}
                                 {% if item.separator %}
                                 <li class="divider"></li>
                                 {% else %}
@@ -25,7 +35,7 @@
                                     {{ item.label|escape }}</a>
                                 </li>
                                 {% endif %}
-                                {% endfor %}
+                            {% endfor %}
                             </ul>
                         </li>
                         {% else %}
@@ -34,21 +44,18 @@
                         </li>
                         {% endif %}
                     {% endfor %}
-                </ul>
-            </div>
-
-	    {% block search %}
-	    <div class="pull-right">
-                <ul class="nav">
-                    {% all include "_admin_headeritem.tpl" %}
+                    <li>
+                        {% all include "_admin_headeritem.tpl" %}
+                    </li>
                     <li>
                         <a href="#" id="{{ #logoff }}" title="{_ Log Off _}"><i class="icon-off icon-white"></i></a>
-                        {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the customer interface?"
+                        {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the admin interface?"
                                                    action={redirect dispatch=`logoff`}} %}
                     </li>
+
                 </ul>
-	    </div>
-	    {% endblock %}
+
+            </div>
             
         </div>
     </div>

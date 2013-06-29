@@ -7,10 +7,9 @@
             <div class="pull-right">
                 <p class="admin-chapeau">
                     {_ Logged in as _}
-                    <a href="{% url admin_edit_rsc id=m.acl.user %}">{{ m.acl.user.title }}</a>.
+                    <a href="/zonnet/account_details">{{ m.acl.user.title }}</a>.
                 </p>
             </div>
-            
             <h2>{_ Dashboard _}</h2>
             </br>
 

@@ -1,3 +1,49 @@
+.white_link:link {
+  color: white;
+}
+
+.white_link:visited {
+  color: white;
+}
+
+.zonnet_call {
+  text-align: center;
+  margin-top: 7px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.navbar .nav > li > a {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.navbar-inner {
+  background-color: #FF8100!important;
+  background: url(/media/inline/2013/6/28/headbk.gif) #fff right top repeat-x;
+}
+
+//body {
+//  padding-top: 80px;
+//}
+
+.navbar .brand {
+  padding-top: 0!important;
+  margin-bottom: 0!important;
+}
+
+.navbar .nav {
+// float: right;
+margin-top: 70px;
+}
+.navbar-fixed-top .container {
+  top: 0;
+//  height: 115!important;
+//  background-color: #FF8100!important;
+}
 
 .dataTables_wrapper {
   margin-top: 8px;
