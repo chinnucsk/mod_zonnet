@@ -9,12 +9,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="/zonnet" title="{_ visit site _}"><img alt="OnNet logo" src="/media/inline/2013/6/28/logo.gif"></a>
+            <a class="brand hidden-phone" href="/zonnet" title="{_ visit site _}"><img alt="OnNet logo" src="/media/inline/2013/6/28/logo.gif"></a>
+            <a class="brand visible-phone" href="/zonnet" title="{_ visit site _}"><img alt="OnNet logo" src="/media/inline/2013/6/28/logo_white_bordered_50.png"></a>
 
             <div class="nav-collapse collapse">
 
-            <div class="span2 zonnet_call"><a class="white_link" href="tel:+78123634500">(812) 363-45-00</a></div>
-            <div class="span1 zonnet_call"><a class="white_link" href="mailto:info@onnet.su">info@onnet.su</a></div>
+            <div class="span2 offset2 zonnet_call"><a class="white_link" href="tel:+78123634500">(812) 363-45-00</a></div>
+            <div class="span2 zonnet_call"><a class="white_link" href="mailto:info@onnet.su">info@onnet.su</a></div>
 
                 <ul class="nav pull-right">
                     {% for id, item in m.zonnet_menu %}
@@ -49,7 +50,7 @@
                     </li>
                     <li>
                         <a href="#" id="{{ #logoff }}" title="{_ Log Off _}"><i class="icon-off icon-white"></i></a>
-                        {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the admin interface?"
+                        {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the customer interface?"
                                                    action={redirect dispatch=`logoff`}} %}
                     </li>
 

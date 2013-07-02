@@ -1,3 +1,27 @@
+@media screen and (max-width: 999px) {
+
+  .modal {
+    width: 50%!important;
+    top: 90%;
+    left: 50%;
+  }
+
+}
+
+@media screen and (min-width: 1000px) {
+
+  .modal {
+    width: 70%!important;
+    top: 70%;
+    left: 45%;
+  }
+
+}
+
+.white_link {
+  color: white!important;
+}
+
 .white_link:link {
   color: white;
 }
@@ -35,21 +59,21 @@
   margin-bottom: 0!important;
 }
 
-.navbar .nav {
-// float: right;
-margin-top: 70px;
-}
+  .navbar .nav {
+    padding-top: 50px;
+  }
+
 .navbar-fixed-top .container {
   top: 0;
-//  height: 115!important;
-//  background-color: #FF8100!important;
+  heighth: 80px;
 }
 
 .dataTables_wrapper {
   margin-top: 8px;
 }
 
-input[type="text"] {
+input[type="text"], 
+input[type="password"] {
   padding: 0px;
   margin-right: 14px!important;
   margin-bottom: 2px!important;

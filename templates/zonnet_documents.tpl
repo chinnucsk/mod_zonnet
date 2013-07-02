@@ -22,12 +22,17 @@
                 {# Period Datepicker #}
                 {% include "zonnet_widget_documents_datepicker.tpl" headline=_"Period" %}
 
-                {# Invoices #}
-                {% include "zonnet_widget_invoices.tpl" headline=_"Invoices" idname="invoices_widget" %}
+                <div class="hidden-phone">
+                    <br /><br />
+                    <p id="elcactoimg"><img src="/media/inline/2013/6/29/3.gif" alt="" /></p>
+                </div>
 
             </div>
 
             <div class="span6">
+
+                {# Invoices #}
+                {% include "zonnet_widget_invoices.tpl" headline=_"Invoices" idname="invoices_widget" %}
 
                 {# Crazy Russian Document - SchetFacturaZ #}
                 {% include "zonnet_widget_vatinvoices.tpl" headline=_"VAT Invoices" idname="vatinvoices_widget" %}

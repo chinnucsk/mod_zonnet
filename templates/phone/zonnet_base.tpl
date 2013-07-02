@@ -46,12 +46,6 @@
         {% include "_zonnet_menu.tpl" %}
         {% endblock %}
 
-        <div class="hidden-phone">
-            <br />
-            <br />
-            <br />
-            <br />
-        </div>
         <div class="container">
 	    {% block content %}{% endblock %}
 	</div>

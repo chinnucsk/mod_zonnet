@@ -1,4 +1,4 @@
-{% extends "base.tpl" %}
+{% extends "login_base.tpl" %}
 
 {% block html_head_extra %}
 {% lib "css/logon.css" %}

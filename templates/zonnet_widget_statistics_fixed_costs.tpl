@@ -2,6 +2,7 @@
 
 {% block widget_headline %}
     {{ headline }}
+    {% button class="btn btn-mini pull-right" action={redirect dispatch="zonnet"} text=_"dashboard"%}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

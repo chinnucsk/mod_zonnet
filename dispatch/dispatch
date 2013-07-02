@@ -5,5 +5,6 @@
   {zonnet_finance_details, ["zonnet", "finance_details"], controller_zonnet, [{template, "zonnet_finance_details.tpl"}, {selected, "finance_details"}]},
   {zonnet_statistics, ["zonnet", "statistics"], controller_zonnet, [{template, "zonnet_statistics.tpl"}, {selected, "statistics"}]},
   {zonnet_documents, ["zonnet", "documents"], controller_zonnet, [{template, "zonnet_documents.tpl"}, {selected, "documents"}]},
-  {zonnet_getlbdocs, ["getlbdocs","id",id], controller_getlbdocs, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]}
+  {zonnet_getlbdocs, ["getlbdocs","id",id], controller_getlbdocs, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
+  {favicon, ["favicon.ico"], controller_file_readonly, [{path,"images/favicon.ico"},{root,[lib]},{use_cache,false},{content_disposition,inline},{ssl,any}]}
 ]. 

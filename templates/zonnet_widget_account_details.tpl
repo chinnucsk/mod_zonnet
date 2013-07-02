@@ -3,7 +3,9 @@
 {% block widget_headline %}
     {{ headline }}
     {% if dashboard %}
-    {% button class="btn btn-mini pull-right" action={redirect dispatch="zonnet_account_details"} text=_"show all"%}
+    {% button class="btn btn-mini pull-right" action={redirect dispatch="zonnet_account_details"} text=_"all information"%}
+    {% else %}
+    {% button class="btn btn-mini pull-right" action={redirect dispatch="zonnet"} text=_"dashboard"%}
     {% endif %}
 {% endblock %}
 

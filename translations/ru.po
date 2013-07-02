@@ -1,5 +1,14 @@
+msgid "view documents"
+msgstr "перейти к документам"
+
+msgid "dashboard"
+msgstr "панель"
+
 msgid "Period"
 msgstr "Период"
+
+msgid "all information"
+msgstr "вся информация"
 
 msgid "Choose month"
 msgstr "Выберите месяц"

@@ -1,7 +1,7 @@
 <iframe src="/lib/images/spinner.gif" id="logonTarget" name="logonTarget" style="display:none"></iframe>
 <form id="logon_form" method="post" action="postback" class="z_logon_form" target="logonTarget">
     {% if not hide_title %}
-    <h1 class="logon_header">{_ Log on to _} <span>{{ m.config.site.title.value|default:"Zotonic" }}</span>.</h1>
+       <p id="onnetimg" align="middle"><img src="/media/inline/2013/6/29/logo.png" alt="" /></p>
     {% endif %}
     
     <input type="hidden" name="page" value="{{ page|escape }}" />
@@ -10,21 +10,21 @@
     <div class="control-group">
         <label for="username" class="control-label">{_ Username _}</label>
         <div class="controls">
-	    <input type="text" id="username" name="username" value="" class="span4" autofocus="autofocus" autocapitalize="off" autocomplete="on" />
+	    <input type="text" id="username" name="username" value=""  autofocus="autofocus" autocapitalize="off" autocomplete="on" tabindex=1/>
             {% validate id="username" type={presence} %}
         </div>
     </div>
 
     <div class="control-group">
         <label for="password" class="control-label">{_ Password _}</label>
+	        <button class="btn btn-primary btn-large pull-right" style="margin-right: 10px" type="submit">{_ Log on _}</button>
         <div class="controls">
-	    <input type="password" id="password" class="span4" name="password" value="" autocomplete="on" />
+	    <input type="password" id="password" name="password" value="" autocomplete="on" tabindex=2/>
         </div>
     </div>
 
     <div class="control-group">
         <div class="controls">
-	        <button class="btn btn-primary btn-large pull-right" style="margin-right: 10px" type="submit">{_ Log on _}</button>
 	        <label class="checkbox" title="{_ Stay logged on unless I log off. _}">
             	<input type="checkbox" name="rememberme" value="1" />
                 {_ Remember me _}
