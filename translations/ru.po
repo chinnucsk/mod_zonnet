@@ -1,3 +1,45 @@
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Current month expenses"
+msgstr "Расход за текущий месяц"
+
+msgid "Current balance"
+msgstr "Текущий баланс"
+
+msgid "Account status"
+msgstr "Статус учетной записи"
+
+msgid "entries"
+msgstr "записей"
+
+msgid "Showing 0 entries"
+msgstr "Просмотр 0 записей"
+
+msgid "of"
+msgstr "из"
+
+msgid "to"
+msgstr "по"
+
+msgid "Filter"
+msgstr "Фильтр"
+
+msgid "Showing"
+msgstr "Просмотр с"
+
+msgid "Nothing found, sorry"
+msgstr "Ничего не найдено - извините"
+
+msgid "lines per page"
+msgstr "строк на страницу"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Forward"
+msgstr "Вперед"
+
 msgid "Phone"
 msgstr "Телефон"
 

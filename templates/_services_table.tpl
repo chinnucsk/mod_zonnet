@@ -3,7 +3,7 @@
     <thead>
         <tr>
             <th>Название</th>
-            <th>Стоимость, руб</th>
+            <th>Стоимость, {_ rub. _}</th>
         </tr>
     </thead>
     <tbody>

@@ -19,12 +19,12 @@
     </thead>
     <tbody>
         {% if m.zonnet.is_prepaid %}
-            <tr><td>{_ Current balance _}</td><td>{{ m.zonnet.account_balance }} руб.</td></tr>
+            <tr><td>{_ Current balance _}</td><td>{{ m.zonnet.account_balance }} {_ rub. _}</td></tr>
         {% else %}
-            <tr><td>Расход за текущий месяц</td><td>{{ m.zonnet.calc_curr_month_exp }} руб.</td></tr>
+            <tr><td>{_ Current month expenses _}</td><td>{{ m.zonnet.calc_curr_month_exp }} {_ rub. _}</td></tr>
         {% endif %}  
         {% for amount, date, comment in m.zonnet[{account_payments limit=1}] %}
-            <tr><td>Последний платеж</td><td>{{ date }} - {{ amount }} руб. - {{ comment }}</td></tr>
+            <tr><td>Последний платеж</td><td>{{ date }} - {{ amount }} {_ rub. _} - {{ comment }}</td></tr>
         {% endfor %}
     </tbody>
 </table>

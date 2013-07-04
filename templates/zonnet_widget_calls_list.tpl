@@ -57,15 +57,15 @@ var oTable = $('#calls_list_table').dataTable({
 "iDisplayLength" : 10,
 "oLanguage" : {
 	"sInfoThousands" : " ",
-	"sLengthMenu" : "_MENU_ строк на страницу",
-	"sSearch" : "Фильтр:",
-	"sZeroRecords" : "Ничего не найдено - извините",
-	"sInfo" : "Просмотр с _START_ по _END_ из _TOTAL_ записей",
-	"sInfoEmpty" : "Просмотр 0 записей",
+	"sLengthMenu" : "_MENU_ {_ lines per page _}",
+	"sSearch" : "{_ Filter _}:",
+	"sZeroRecords" : "{_ Nothing found, sorry _}",
+	"sInfo" : "{_ Showing _} _START_ {_ to _} _END_ {_ of _} _TOTAL_ {_ entries _}",
+	"sInfoEmpty" : "{_ Showing 0 entries _}",
 	"sInfoFiltered" : "(Отфильтровано из _MAX_ записей)",
 	"oPaginate" : {
-		"sPrevious" : "Назад",
-		"sNext" : "Вперед"
+		"sPrevious" : "{_ Back _}",
+		"sNext" : "{_ Forward _}"
 	}
 },
 

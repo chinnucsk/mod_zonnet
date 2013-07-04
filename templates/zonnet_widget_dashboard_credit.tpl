@@ -16,8 +16,8 @@
         </tr>
     </thead>
     <tbody>
-            <tr><td>Обещанный платеж</td><td>{{ amount }} руб.</td></tr>
-            <tr><td>Срок погашения</td><td>{{ prom_till[2] }} руб.</td></tr>
+            <tr><td>Обещанный платеж</td><td>{{ amount }} {_ rub. _}</td></tr>
+            <tr><td>Срок погашения</td><td>{{ prom_till[2] }} {_ rub. _}</td></tr>
     </tbody>
 {% empty %}
     <thead>

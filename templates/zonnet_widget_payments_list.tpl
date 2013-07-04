@@ -15,19 +15,19 @@
 <table class="table do_adminLinkedTable">
     <thead>
         <tr>
-            <th width="30%">Дата</th>
-            <th width="30%">Сумма</th>
-            <th width="40%">Коментарий</th>
+            <th width="30%">{_ Date _}</th>
+            <th width="30%">{_ Sum _}</th>
+            <th width="40%">{_ Comment _}</th>
         </tr>
     </thead>
     <tbody>
         {% if lines %}
             {% for amount, date, comment in m.zonnet[{account_payments limit=lines}] %}
-                <tr><td>{{ date }}</td><td>{{ amount }} руб.</td><td>{{ comment }}</td></tr>
+                <tr><td>{{ date }}</td><td>{{ amount }} {_ rub. _}</td><td>{{ comment }}</td></tr>
             {% endfor %}
         {% else %}
             {% for amount, date, comment in m.zonnet.account_payments %}
-                <tr><td>{{ date }}</td><td>{{ amount }} руб.</td><td>{{ comment }}</td></tr>
+                <tr><td>{{ date }}</td><td>{{ amount }} {_ rub. _}</td><td>{{ comment }}</td></tr>
             {% endfor %}
         {% endif %}
     </tbody>
