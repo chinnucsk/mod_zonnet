@@ -9,8 +9,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand hidden-phone" href="/zonnet" title="{_ visit site _}"><img alt="OnNet logo" src="/media/inline/2013/6/28/logo.gif"></a>
-            <a class="brand visible-phone" href="/zonnet" title="{_ visit site _}"><img alt="OnNet logo" src="/media/inline/2013/6/28/logo_white_bordered_50.png"></a>
+            <a class="brand hidden-phone" href="/zonnet" title="{_ visit site _}"><img alt="OnNet logo" src="/lib/images/logo.gif"></a>
+            <a class="brand visible-phone" href="/zonnet" title="{_ visit site _}"><img alt="OnNet logo" src="/lib/images/logo_white_bordered_50.png"></a>
 
             <div class="nav-collapse collapse">
 

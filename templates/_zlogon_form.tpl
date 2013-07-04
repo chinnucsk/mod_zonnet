@@ -1,7 +1,7 @@
 <iframe src="/lib/images/spinner.gif" id="logonTarget" name="logonTarget" style="display:none"></iframe>
 <form id="logon_form" method="post" action="postback" class="z_logon_form" target="logonTarget">
     {% if not hide_title %}
-       <p id="onnetimg" align="middle"><img src="/media/inline/2013/6/29/logo.png" alt="" /></p>
+       <p id="onnetimg" align="middle"><img src="/lib/images/onnet_logo1.png" alt="" /></p>
     {% endif %}
     
     <input type="hidden" name="page" value="{{ page|escape }}" />

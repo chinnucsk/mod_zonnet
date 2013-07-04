@@ -1,3 +1,15 @@
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "Current balance"
+msgstr "Текущий баланс"
+
+msgid "Account status"
+msgstr "Статус учетной записи"
+
+msgid "Contact person"
+msgstr "Контактное лицо"
+
 msgid "view documents"
 msgstr "перейти к документам"
 

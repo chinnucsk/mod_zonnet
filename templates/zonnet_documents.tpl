@@ -24,7 +24,7 @@
 
                 <div class="hidden-phone">
                     <br /><br />
-                    <p id="elcactoimg"><img src="/media/inline/2013/6/29/3.gif" alt="" /></p>
+                    <p id="elcactoimg"><img src="/lin/images/3.gif" alt="" /></p>
                 </div>
 
             </div>

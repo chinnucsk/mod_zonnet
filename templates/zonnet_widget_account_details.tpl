@@ -24,10 +24,10 @@
         <tr><td>ИНН / КПП</td><td>{{ m.zonnet[{accounts_table fields="inn" limit=1}] }} / 
                                   {{ m.zonnet[{accounts_table fields="kpp" limit=1}] }}</td></tr>
      {% endif %}
-        <tr><td width="35%">Контактное лицо</td><td>{{ m.zonnet[{accounts_table fields="kont_person" limit=1}] }}</td></tr>
+        <tr><td width="35%">{_ Contact person _}</td><td>{{ m.zonnet[{accounts_table fields="kont_person" limit=1}] }}</td></tr>
      {% endif %}
         <tr><td>E-mail</td><td>{% for email in m.zonnet.get_accounts_emails %} {{ email }} {% endfor %}</td></tr>
-        <tr><td>Телефон</td><td>{{ m.zonnet[{accounts_table fields="phone" limit=1}] }}</td></tr>
+        <tr><td>{_ Phone _}</td><td>{{ m.zonnet[{accounts_table fields="phone" limit=1}] }}</td></tr>
      {% if not dashboard %}
         <tr><td>Факс</td><td>{{ m.zonnet[{accounts_table fields="fax" limit=1}] }}</td></tr>
         <tr><td>Юридический адрес</td><td>{{ m.zonnet[{format_address addrtype=0}] }}</td></tr>
