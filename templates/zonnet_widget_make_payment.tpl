@@ -8,12 +8,12 @@
 <table class="table do_adminLinkedTable">
     <thead>
         <tr>
-            <th colspan="3"><h4>Платежная система Ассист</h4></th>
+            <th colspan="3"><h4>{_ ASSIST - Electronic Payment System _}</h4></th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td width="50%">Введите сумму для оплаты</td>
+            <td width="50%">{_ Enter an amount to pay _}</td>
             <td><input class="input input-small-zonnet" type="text" id="assist_pay" name="assist_pay" value="" /> {_ rub. _}
                 {% validate id="assist_pay" type={numericality minimum=0 maximum=15000 not_a_number_message=_"Must be a number."} %}
             </td>

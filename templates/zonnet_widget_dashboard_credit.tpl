@@ -12,7 +12,7 @@
     <thead>
         <tr>
             <th width="35%">Статус </th>
-            <th width="65%">{% if pay_id == 0 %}<h4 class="zwarning"> Активный </h4>{% elif  pay_id == -1 %}<h4 class="zalarm"> Просрочен </h4>{% else %}<h4> Неопределен </h4>{% endif %}</th>
+            <th width="65%">{% if pay_id == 0 %}<h4 class="zwarning"> {_ Active _} </h4>{% elif  pay_id == -1 %}<h4 class="zalarm"> {_ Expired _} </h4>{% else %}<h4> {_ Undefined _} </h4>{% endif %}</th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +22,7 @@
 {% empty %}
     <thead>
         <tr>
-            <th width="90%" colspan="2"><h4>Выполнить обещанный платеж</h4></th>
+            <th width="90%" colspan="2"><h4>{_ Apply for credit _}</h4></th>
             <th width="10%"> </th>
         </tr>
     </thead>
@@ -30,7 +30,7 @@
             <tr>
                 {% wire type="submit" id="credit-form" postback="credit_form" delegate="mod_zonnet" %}
                 <form id="credit-form" method="post" action="postback">
-                <td>Выберите сумму</td>
+                <td>{_ Choose amount _}</td>
                 <td>
                        <input type="radio" name="creditme" value="1180" /> 1180 {_ rub. _}
                        <input type="radio" name="creditme" value="2360" /> 2360 {_ rub. _}

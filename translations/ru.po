@@ -1,3 +1,60 @@
+msgid "Expired"
+msgstr "Просрочен"
+
+msgid "Contract date"
+msgstr "Дата заключения"
+
+msgid "Contract number"
+msgstr "Номер договора"
+
+msgid "Chief accountant"
+msgstr "Главный бухгалтер"
+
+msgid "Director"
+msgstr "Директор"
+
+msgid "Postal Address"
+msgstr "Почтовый адрес"
+
+msgid "Billing Address"
+msgstr "Адрес доставки счета"
+
+msgid "Registered Office Address"
+msgstr "Юридический адрес"
+
+msgid "Fax"
+msgstr "Факс"
+
+msgid "INN / KPP"
+msgstr "ИНН / КПП"
+
+msgid "Enter the amount, excluding VAT"
+msgstr "Введите сумму без учета НДС"
+
+msgid "Previous payment"
+msgstr "Предыдущий платеж"
+
+msgid "Choose amount"
+msgstr "Выберите сумму"
+
+msgid "Apply for credit"
+msgstr "Выполнить обещанный платеж"
+
+msgid "ASSIST - Electronic Payment System"
+msgstr "Платежная система Ассист"
+
+msgid "Enter an amount to pay"
+msgstr "Введите сумму для оплаты"
+
+msgid "Issue an invoice"
+msgstr "Выписать счет"
+
+msgid "Undefined"
+msgstr "Неопределён"
+
+msgid "Active"
+msgstr "Активный"
+
 msgid "Comment"
 msgstr "Комментарий"
 

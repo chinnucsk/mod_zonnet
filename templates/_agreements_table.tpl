@@ -2,9 +2,9 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Контрагент</th>
-            <th>Номер договора</th>
-            <th>Дата заключения</th>
+            <th>{_ Counterparty _}</th>
+            <th>{_ Contract number _}</th>
+            <th>{_ Contract date _}</th>
         </tr>
     </thead>
     <tbody>

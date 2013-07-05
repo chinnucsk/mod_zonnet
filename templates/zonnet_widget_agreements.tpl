@@ -10,9 +10,9 @@
 <table class="table do_adminLinkedTable">
     <thead>
         <tr>
-            <th width="45%">Контрагент</th>
-            <th width="25%">Номер договора</th>
-            <th width="30%">Дата заключения</th>
+            <th width="45%">{_ Counterparty _}</th>
+            <th width="25%">{_ Contract number _}</th>
+            <th width="30%">{_ Contract date _}</th>
         </tr>
     </thead>
     <tbody>

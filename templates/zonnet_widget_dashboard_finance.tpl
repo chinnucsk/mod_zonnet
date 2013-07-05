@@ -24,7 +24,7 @@
             <tr><td>{_ Current month expenses _}</td><td>{{ m.zonnet.calc_curr_month_exp }} {_ rub. _}</td></tr>
         {% endif %}  
         {% for amount, date, comment in m.zonnet[{account_payments limit=1}] %}
-            <tr><td>Последний платеж</td><td>{{ date }} - {{ amount }} {_ rub. _} - {{ comment }}</td></tr>
+            <tr><td>{_ Previous payment _}</td><td>{{ date }} - {{ amount }} {_ rub. _} - {{ comment }}</td></tr>
         {% endfor %}
     </tbody>
 </table>

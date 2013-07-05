@@ -21,7 +21,7 @@
     <tbody>
      {% if m.zonnet.user_type == 1 %}
      {% if not dashboard %}
-        <tr><td>ИНН / КПП</td><td>{{ m.zonnet[{accounts_table fields="inn" limit=1}] }} / 
+        <tr><td>{_ INN / KPP _}</td><td>{{ m.zonnet[{accounts_table fields="inn" limit=1}] }} / 
                                   {{ m.zonnet[{accounts_table fields="kpp" limit=1}] }}</td></tr>
      {% endif %}
         <tr><td width="35%">{_ Contact person _}</td><td>{{ m.zonnet[{accounts_table fields="kont_person" limit=1}] }}</td></tr>
@@ -29,13 +29,13 @@
         <tr><td>E-mail</td><td>{% for email in m.zonnet.get_accounts_emails %} {{ email }} {% endfor %}</td></tr>
         <tr><td>{_ Phone _}</td><td>{{ m.zonnet[{accounts_table fields="phone" limit=1}] }}</td></tr>
      {% if not dashboard %}
-        <tr><td>Факс</td><td>{{ m.zonnet[{accounts_table fields="fax" limit=1}] }}</td></tr>
-        <tr><td>Юридический адрес</td><td>{{ m.zonnet[{format_address addrtype=0}] }}</td></tr>
-        <tr><td>Почтовый адрес</td><td>{{ m.zonnet[{format_address addrtype=1}] }}</td></tr>
-        <tr><td>Адрес доставки счета</td><td>{{ m.zonnet[{format_address addrtype=2}] }}</td></tr>
+        <tr><td>{_ Fax _}</td><td>{{ m.zonnet[{accounts_table fields="fax" limit=1}] }}</td></tr>
+        <tr><td>{_ Registered Office Address _}</td><td>{{ m.zonnet[{format_address addrtype=0}] }}</td></tr>
+        <tr><td>{_ Postal Address _}</td><td>{{ m.zonnet[{format_address addrtype=1}] }}</td></tr>
+        <tr><td>{_ Billing Address _}</td><td>{{ m.zonnet[{format_address addrtype=2}] }}</td></tr>
      {% if m.zonnet.user_type == 1 %}
-        <tr><td>Директор</td><td>{{ m.zonnet[{accounts_table fields="gen_dir_u" limit=1}] }}</td></tr>
-        <tr><td>Главный бухгалтер</td><td>{{ m.zonnet[{accounts_table fields="gl_buhg_u" limit=1}] }}</td></tr>
+        <tr><td>{_ Director _}</td><td>{{ m.zonnet[{accounts_table fields="gen_dir_u" limit=1}] }}</td></tr>
+        <tr><td>{_ Chief accountant _}</td><td>{{ m.zonnet[{accounts_table fields="gl_buhg_u" limit=1}] }}</td></tr>
      {% endif %}
      {% endif %}
     </tbody>
