@@ -12,7 +12,7 @@
     <thead>
         <tr>
             <th width="60%"><h4>{_ Tariff name _}</h4></th>
-            <th width="40%">{_ Phone Numbers _}</th>
+            <th width="40%">{_ Phone numbers _}</th>
         </tr>
     </thead>
     <tbody>

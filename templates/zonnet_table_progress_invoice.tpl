@@ -1,6 +1,6 @@
     <thead>
         <tr>
-            <th><h4>Подождите пожалуйста ...</h4></th>
+            <th><h4>{_ Please wait _} ...</h4></th>
         </tr>
     </thead>
     <tbody>

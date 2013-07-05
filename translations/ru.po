@@ -1,6 +1,24 @@
 msgid "Expired"
 msgstr "Просрочен"
 
+msgid "Filtered from"
+msgstr "Отфильтровано из"
+
+msgid "Allocated IP Addresses"
+msgstr "Выделенные IP адреса"
+
+msgid "Please wait"
+msgstr "Подождите пожалуйста"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Credit amount"
+msgstr "Обещанный платеж"
+
+msgid "Maturity date"
+msgstr "Срок погашения"
+
 msgid "Contract date"
 msgstr "Дата заключения"
 
@@ -286,7 +304,7 @@ msgstr "выберите тип интервала"
 msgid "IP Addresses"
 msgstr "IP адреса"
 
-msgid "Phone Numbers"
+msgid "Phone numbers"
 msgstr "Номера ГТС"
 
 msgid "Tariff name"

@@ -62,7 +62,7 @@ var oTable = $('#calls_list_table').dataTable({
 	"sZeroRecords" : "{_ Nothing found, sorry _}",
 	"sInfo" : "{_ Showing _} _START_ {_ to _} _END_ {_ of _} _TOTAL_ {_ entries _}",
 	"sInfoEmpty" : "{_ Showing 0 entries _}",
-	"sInfoFiltered" : "(Отфильтровано из _MAX_ записей)",
+	"sInfoFiltered" : "({_ Filtered from _} _MAX_ {_ entries _})",
 	"oPaginate" : {
 		"sPrevious" : "{_ Back _}",
 		"sNext" : "{_ Forward _}"

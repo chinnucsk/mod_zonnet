@@ -1,4 +1,4 @@
-<p>Номера ГТС:</p>
+<p>{_ Phone numbers _}:</p>
 
 {% for phome_number in phone_numbers %}
   {{ phome_number }} </br>

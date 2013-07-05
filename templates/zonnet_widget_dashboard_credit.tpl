@@ -11,13 +11,13 @@
 {% for agrm_id,amount,prom_date,prom_till,debt,pay_id in m.zonnet.credit_info %}
     <thead>
         <tr>
-            <th width="35%">Статус </th>
+            <th width="35%">{_ Status _}</th>
             <th width="65%">{% if pay_id == 0 %}<h4 class="zwarning"> {_ Active _} </h4>{% elif  pay_id == -1 %}<h4 class="zalarm"> {_ Expired _} </h4>{% else %}<h4> {_ Undefined _} </h4>{% endif %}</th>
         </tr>
     </thead>
     <tbody>
-            <tr><td>Обещанный платеж</td><td>{{ amount }} {_ rub. _}</td></tr>
-            <tr><td>Срок погашения</td><td>{{ prom_till[2] }} {_ rub. _}</td></tr>
+            <tr><td>{_ Credit amount _}</td><td>{{ amount }} {_ rub. _}</td></tr>
+            <tr><td>{_ Maturity date _}</td><td>{{ prom_till[2] }} {_ rub. _}</td></tr>
     </tbody>
 {% empty %}
     <thead>

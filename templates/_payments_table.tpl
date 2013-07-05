@@ -1,4 +1,4 @@
-<h4>Платежи:</h4>
+<h4>{_ Payments _}:</h4>
 
 <table class="table table-striped">
     <thead>
