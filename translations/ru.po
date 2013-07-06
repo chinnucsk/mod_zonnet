@@ -1,6 +1,9 @@
 msgid "Expired"
 msgstr "Просрочен"
 
+msgid "Please note that password is case sensitive and check that your caps lock key is off."
+msgstr "Обратите внимание, что пароль чувствителен к регистру, и убедитесь, что режим caps lock выключен."
+
 msgid "Filtered from"
 msgstr "Отфильтровано из"
 

@@ -114,7 +114,7 @@ provide_content(ReqData, Context) ->
                         false -> Context3;
                         true -> check_verified(list_to_integer(ErrorUId), Context3)
                     end,
-    Template = z_context:get(template, ContextVerify, "logon.tpl"),
+    Template = z_context:get(template, ContextVerify, "zonnet_login.tpl"),
     Rendered = z_template:render(Template, Vars1, ContextVerify),
     {Output, OutputContext} = z_context:output(Rendered, ContextVerify),
     ?WM_REPLY(Output, OutputContext).
@@ -229,7 +229,7 @@ event(#submit{message=[]}, Context) ->
 logon_error(Reason, Context) ->
     Context1 = z_render:set_value("password", "", Context),
     Context2 = z_render:wire({add_class, [{target, "logon_box"}, {class, "logon_error"}]}, Context1),
-    z_render:update("logon_error", z_template:render("_logon_error.tpl", [{reason, Reason}], Context2), Context2).
+    z_render:update("logon_error", z_template:render("_zlogin_error.tpl", [{reason, Reason}], Context2), Context2).
 
 
 remove_logon_error(Context) ->
@@ -241,7 +241,7 @@ logon_stage(Stage, Context) ->
 
 logon_stage(Stage, Args, Context) ->
     Context1 = remove_logon_error(Context),
-    z_render:update("logon_form", z_template:render("_logon_stage.tpl", [{stage, Stage}|Args], Context1), Context1).
+    z_render:update("logon_form", z_template:render("_login_stage.tpl", [{stage, Stage}|Args], Context1), Context1).
     
 
 logon_user(UserId, Context) ->

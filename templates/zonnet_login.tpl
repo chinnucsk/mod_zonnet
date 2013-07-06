@@ -13,11 +13,11 @@
 <div id="logon_box">
     
     <div id="logon_error">
-	{% include "_logon_error.tpl" reason=error_reason %}
+	{% include "_zlogin_error.tpl" reason=error_reason %}
     </div>
 
     <div id="logon_form">
-        {% include "_zlogon_form.tpl" %}
+        {% include "_zlogin_form.tpl" %}
     </div>    
 </div>
 
