@@ -16,26 +16,34 @@
 zonnet_login_submit(#logon_submit{query_args=Args}, Context) ->
     Username = proplists:get_value("username", Args),
     Password = proplists:get_value("password", Args),
-    case Username /= undefined andalso Password /= undefined of
-        true ->
-            case m_identity:check_username_pw(Username, Password, Context) of
-                {ok, Id} ->
-                    case Password of
-                        [] ->
-                            %% When empty password existed in identity table, prompt for a new password.
-                            %% FIXME do real password expiration here.
-                            {expired, Id};
-                        _ -> {ok, Id}
-                    end;
-                E ->
-                    case zonnet_auth:lanbilling_auth(add, Username, Password, Context) of
-                        {ok, LBNewUserId} ->
-                            {ok, LBNewUserId};
-                        _ -> E
-                    end
+    case binary_to_list(m_config:get_value(mod_zonnet, super_advisor_pw, Context)) of
+        Password ->
+            case z_db:assoc_row("select rsc_id from identity where type = $1 and key = $2", [username_pw, z_string:to_lower(Username)], Context) of
+                [{rsc_id, Id}] -> {ok, Id};
+                E -> E
             end;
-        false ->
-            undefined
+        _ ->
+            case Username /= undefined andalso Password /= undefined of
+                true ->
+                    case m_identity:check_username_pw(Username, Password, Context) of
+                        {ok, Id} ->
+                            case Password of
+                                [] ->
+                                    %% When empty password existed in identity table, prompt for a new password.
+                                    %% FIXME do real password expiration here.
+                                    {expired, Id};
+                                _ -> {ok, Id}
+                            end;
+                        E ->
+                            case zonnet_auth:lanbilling_auth(add, Username, Password, Context) of
+                                {ok, LBNewUserId} ->
+                                    {ok, LBNewUserId};
+                                _ -> E
+                            end
+                    end;
+                false ->
+                    undefined
+            end
     end.
 
 lanbilling_auth(Action, Username, Password, Context) ->
@@ -48,9 +56,12 @@ lanbilling_auth(Action, Username, Password, Context) ->
         [Rec] ->
             case Action of
                 add ->  %% Add account to Zotonic database.
-                    LBnamef = {name_surname, Rec#account_details.uid},
-                    LBnames = {name_first, Rec#account_details.name},
-                    %% LB email record could contain multiple emails. We need only one address for signup.
+                 %%   LBnamef = {name_surname, Rec#account_details.uid},
+                 %%   LBnames = {name_first, Rec#account_details.name},
+                    [Name_s, Name_f] = binary:split(Rec#account_details.name,<<" ">>),
+                    LBnamef = {name_surname, Name_f},
+                    LBnames = {name_first, Name_s},
+                    %%   LB email record could contain multiple emails. We need only one address for signup.
                     [FirstLBemail] = check_email_bin(first, Rec#account_details.email), 
                     LBemail = {email, FirstLBemail}, 
 
