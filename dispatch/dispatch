@@ -6,5 +6,6 @@
   {zonnet_statistics, ["zonnet", "statistics"], controller_zonnet, [{template, "zonnet_statistics.tpl"}, {selected, "statistics"}]},
   {zonnet_documents, ["zonnet", "documents"], controller_zonnet, [{template, "zonnet_documents.tpl"}, {selected, "documents"}]},
   {zonnet_getlbdocs, ["getlbdocs","id",id], controller_getlbdocs, [{path, id},{use_cache, false},{content_disposition, attachment},{ssl, any}]},
+  {cdr_csv_download,  ["cdr", "csv", "download"],   controller_zonnet_cdr_csv, []},
   {favicon, ["favicon.ico"], controller_file_readonly, [{path,"images/favicon.ico"},{root,[lib]},{use_cache,false},{content_disposition,inline},{ssl,any}]}
 ]. 

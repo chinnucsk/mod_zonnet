@@ -19,21 +19,7 @@
 -include_lib("include/zonnet_menu.hrl").
 
 observe_search_query({search_query, {callslist, [{callsdirection,Direction},{callstype,CallsType},{from,StartDayInput},{limit,MaxCalls},{month,MonthInput},{till,EndDayInput}]}, _OffsetLimit}, Context) ->
-  if
-     MonthInput =/= undefined ->
-         [MonthM, YearM] = string:tokens(MonthInput,"/"),
-         zonnet_util:get_calls_list_by_period({from, list_to_integer(YearM), list_to_integer(MonthM), 1},{till, list_to_integer(YearM), list_to_integer(MonthM), calendar:last_day_of_the_month(list_to_integer(YearM), list_to_integer(MonthM))},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context);
-     EndDayInput =/= undefined ->
-         [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
-         [DayE, MonthE, YearE] = string:tokens(EndDayInput,"/"),
-         zonnet_util:get_calls_list_by_period({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearE), list_to_integer(MonthE), list_to_integer(DayE)},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context);
-     StartDayInput =/= undefined ->
-         [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
-         zonnet_util:get_calls_list_by_period({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context);
-     true ->
-      {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
-      zonnet_util:get_calls_list_by_period({from, Year, Month, Day},{till, Year, Month, Day},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context)
-  end;
+    zonnet_util:calls_list_query({callsdirection,Direction},{callstype,CallsType},{from,StartDayInput},{limit,MaxCalls},{month,MonthInput},{till,EndDayInput}, Context);
 
 observe_search_query({search_query, {callslist, _Args}, _OffsetLimit}, Context) ->
     {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
@@ -166,6 +152,15 @@ event({postback, calls_list, _TriggerId, _TargetId}, Context) ->
     CallsType = z_context:get_q("callstype",Context),
     CallsDirection = z_context:get_q("callsdirection",Context),
     z_render:update("calls_list_widget", z_template:render("zonnet_widget_calls_list.tpl", [{headline,?__("Phone calls statistics", Context)}, {idname, "calls_list_widget"}, {startDayInput, StartDayInput}, {endDayInput, EndDayInput}, {monthInput, MonthInput}, {operator, CallsType}, {direction, CallsDirection}], Context), Context);
+
+event({postback, cdr_csv_export, _TriggerId, _TargetId}, Context) ->
+    StartDayInput = z_context:get_q("startDayInput",Context),
+    EndDayInput = z_context:get_q("endDayInput",Context),
+    MonthInput = z_context:get_q("monthInput",Context),
+    CallsType = z_context:get_q("callstype",Context),
+    CallsDirection = z_context:get_q("callsdirection",Context),
+    Export_URL = io_lib:format("/cdr/csv/download?callstype=~s&callsdirection=~s&startDayInput=~s&endDayInput=~s&monthInput=~s",[CallsType, CallsDirection, StartDayInput, EndDayInput, MonthInput]),
+    z_render:wire({redirect, [{location, Export_URL}]}, Context);
 
 event({postback, refresh_invoices, _TriggerId, _TargetId}, Context) ->
     DocsMonthInput = z_context:get_q("docsmonthInput",Context),

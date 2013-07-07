@@ -44,6 +44,7 @@
         ,get_address_ids_by_type/2
         ,format_address/2
         ,get_address_element/4
+        ,calls_list_query/7
 ]).
 
 -include_lib("zotonic.hrl").
@@ -490,4 +491,45 @@ get_address_element(Field, ElementName, RecordId, Context) ->
         [] -> [];
         [QueryResult] -> QueryResult
     end.
+
+calls_list_query({callsdirection,Direction},{callstype,CallsType},{from,StartDayInput},{limit,MaxCalls},{month,MonthInput},{till,EndDayInput}, Context) ->
+
+    if
+        MonthInput =/= undefined, MonthInput =/= "undefined" ->
+            case re:run(MonthInput, "^\\d{2}\\/\\d{4}$", [{capture, none}]) of
+                match ->
+                    get_month_calls(MonthInput, Direction, CallsType, MaxCalls, Context);
+                _ -> badmonth
+            end;
+        EndDayInput =/= undefined, EndDayInput =/= "undefined" ->     
+            case re:run(EndDayInput, "^\\d{2}\\/\\d{2}\\/\\d{4}$", [{capture, none}]) of
+                match ->
+                    get_period_calls(StartDayInput, EndDayInput, Direction, CallsType, MaxCalls, Context);
+                _ -> badendday
+            end;
+        StartDayInput =/= undefined, StartDayInput =/= "undefined" ->
+file:write_file("/home/zotonic/iamteststartday",["|",StartDayInput, "|\n\n"], [append]),
+            case re:run(StartDayInput, "^\\d{2}\\/\\d{2}\\/\\d{4}$", [{capture, none}]) of
+                match ->
+                    get_day_calls(StartDayInput, Direction, CallsType, MaxCalls, Context);
+                _ -> badstartday
+            end;
+        true ->
+            {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
+            zonnet_util:get_calls_list_by_period({from, Year, Month, Day},{till, Year, Month, Day},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context)
+    end.
+
+get_month_calls(MonthInput, Direction, CallsType, MaxCalls, Context) ->
+    [MonthM, YearM] = string:tokens(MonthInput,"/"),
+    zonnet_util:get_calls_list_by_period({from, list_to_integer(YearM), list_to_integer(MonthM), 1},{till, list_to_integer(YearM), list_to_integer(MonthM), calendar:last_day_of_the_month(list_to_integer(YearM), list_to_integer(MonthM))},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context).
+
+get_period_calls(StartDayInput, EndDayInput, Direction, CallsType, MaxCalls, Context) ->
+                    [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
+                    [DayE, MonthE, YearE] = string:tokens(EndDayInput,"/"),
+                    zonnet_util:get_calls_list_by_period({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearE), list_to_integer(MonthE), list_to_integer(DayE)},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context).
+
+get_day_calls(StartDayInput, Direction, CallsType, MaxCalls, Context) ->
+    [DayS, MonthS, YearS] = string:tokens(StartDayInput,"/"),
+    zonnet_util:get_calls_list_by_period({from, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{till, list_to_integer(YearS), list_to_integer(MonthS), list_to_integer(DayS)},{callsdirection,Direction},{callstype,CallsType},{limit,MaxCalls},Context).
+
 

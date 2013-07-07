@@ -2,6 +2,7 @@
 
 {% block widget_headline %}
     {{ headline }}
+    {% button class="btn btn-mini pull-right" action={postback postback="cdr_csv_export" delegate="mod_zonnet" qarg="startDayInput" qarg="endDayInput" qarg="monthInput" qarg="callstype" qarg="callsdirection"} text=_"export in csv format"%}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}
