@@ -493,7 +493,6 @@ get_address_element(Field, ElementName, RecordId, Context) ->
     end.
 
 calls_list_query({callsdirection,Direction},{callstype,CallsType},{from,StartDayInput},{limit,MaxCalls},{month,MonthInput},{till,EndDayInput}, Context) ->
-
     if
         MonthInput =/= undefined, MonthInput =/= "undefined" ->
             case re:run(MonthInput, "^\\d{2}\\/\\d{4}$", [{capture, none}]) of
@@ -508,7 +507,6 @@ calls_list_query({callsdirection,Direction},{callstype,CallsType},{from,StartDay
                 _ -> badendday
             end;
         StartDayInput =/= undefined, StartDayInput =/= "undefined" ->
-file:write_file("/home/zotonic/iamteststartday",["|",StartDayInput, "|\n\n"], [append]),
             case re:run(StartDayInput, "^\\d{2}\\/\\d{2}\\/\\d{4}$", [{capture, none}]) of
                 match ->
                     get_day_calls(StartDayInput, Direction, CallsType, MaxCalls, Context);
