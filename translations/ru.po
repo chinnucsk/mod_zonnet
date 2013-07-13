@@ -1,6 +1,9 @@
 msgid "Expired"
 msgstr "Просрочен"
 
+msgid "Your account is currently blocked.  Please contact support."
+msgstr "Учетная запись закрыта и более недействительна. Пожалуйста обратитесь в службу поддержки."
+
 msgid "export in csv format"
 msgstr "экспортировать в формат csv"
 

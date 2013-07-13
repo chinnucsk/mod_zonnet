@@ -268,7 +268,7 @@ check_verified(UserId, Context) ->
 		V when V == true orelse V == undefined ->
 			% The account has been disabled after verification, or
 			% verification flag not set, account didn't need verification
-			logon_error("unknown", Context)
+			logon_error("disabled_after_verification", Context)
 	end.
 
 
