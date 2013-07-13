@@ -220,7 +220,7 @@ monthly_fees(Context) ->
     case m_identity:get_username(Context) of
         undefined -> [];
         Z_User ->
-            QueryResult = z_mydb:q("SELECT SUBSTRING(categories.descr,7), ROUND(categories.above,0), mul, above*mul from categories,usbox_services,vgroups where categories.tar_id = vgroups.tar_id and usbox_services.vg_id = vgroups.vg_id and categories.cat_idx = usbox_services.cat_idx and vgroups.uid = (select uid from accounts where login = ? limit 1) and categories.common = 3 and usbox_services.timeto > NOW()",[Z_User], Context),
+            QueryResult = z_mydb:q("SELECT SUBSTRING(categories.descr,7), ROUND(categories.above,0), mul, above*mul from categories,usbox_services,vgroups where categories.tar_id = vgroups.tar_id and usbox_services.vg_id = vgroups.vg_id and categories.cat_idx = usbox_services.cat_idx and vgroups.uid = (select uid from accounts where login = ? limit 1) and categories.common in (1,3) and usbox_services.timeto > NOW()",[Z_User], Context),
             QueryResult
     end.
 
