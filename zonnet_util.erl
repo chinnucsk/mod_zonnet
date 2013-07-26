@@ -285,7 +285,11 @@ is_valid_account(Context) ->
         Z_User ->
             case z_mydb:q("select 1 from vgroups where uid = (select uid from accounts where login = ? limit 1) and blocked < 10 limit 1",[Z_User], Context) of
                 [[1]] -> true;
-                _ -> false
+                _ -> 
+                       case z_mydb:q("SELECT 1 FROM agreements where uid = (select uid from accounts where login = ? limit 1) and oper_id = 1 and date between date_sub(now(), interval 1 month) and now()",[Z_User], Context) of
+                            [[1]] -> true;
+                            _ -> false
+                       end
             end
     end.
 %%
@@ -295,7 +299,11 @@ is_valid_account(UserId, Context) ->
         Z_User ->
             case z_mydb:q("select 1 from vgroups where uid = (select uid from accounts where login = ? limit 1) and blocked < 10 limit 1",[Z_User], Context) of
                 [[1]] -> true;
-                _ -> false
+                _ -> 
+                       case z_mydb:q("SELECT 1 FROM agreements where uid = (select uid from accounts where login = ? limit 1) and oper_id = 1 and date between date_sub(now(), interval 1 month) and now()",[Z_User], Context) of
+                            [[1]] -> true;
+                            _ -> false
+                       end
             end
     end.
 %%
