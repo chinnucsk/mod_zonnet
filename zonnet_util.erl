@@ -35,6 +35,7 @@
         ,amount_of_days_in_period/2
         ,next_day/1
         ,count_day/2
+        ,countdown_day/2
         ,day_to_string/1
         ,collect_calls/7
         ,collect_calls/8
@@ -381,6 +382,10 @@ next_day({Year,Month,Day}) ->
 %
 count_day({Year,Month,Day},N) ->
     calendar:gregorian_days_to_date(calendar:date_to_gregorian_days({Year, Month, Day}) + N).
+%
+%
+countdown_day({Year,Month,Day},N) ->
+    calendar:gregorian_days_to_date(calendar:date_to_gregorian_days({Year, Month, Day}) - N).
 %
 %
 day_to_string({Year,Month,Day}) ->
