@@ -28,5 +28,5 @@ var progress = setInterval(function() {
     }
     var curr_progress = $bar.width()*100/$progressdiv;
     $bar.text(curr_progress.toPrecision(2) + "%");
-}, 900);
+}, 2500);
 {% endjavascript %}

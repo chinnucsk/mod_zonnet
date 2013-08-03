@@ -7,7 +7,8 @@
 zonnet_round(Number, _Context) when is_integer(Number) ->
     Number;
 zonnet_round(Number, _Context) when is_float(Number) ->
-    round(Number);
+%    round(Number);
+     io_lib:format("~.2f",[Number]);
 zonnet_round(Number, _Context) ->
     Number.
 
