@@ -38,7 +38,7 @@
             <td><a href="/getlbdocs/id/{{order_id}}">{{ oper_name }}</a></td>
             <td><a href="/getlbdocs/id/{{order_id}}">{{ (tax_summ/18*100)|zonnet_round }}</a></td>
             <td><a href="/getlbdocs/id/{{order_id}}">{{ tax_summ }}</a></td>
-            <td><a href="/getlbdocs/id/{{order_id}}">{{ (tax_summ/18*100)|zonnet_round+tax_summ }}</a></td>
+            <td><a href="/getlbdocs/id/{{order_id}}">{{ (tax_summ/18*100+tax_summ)|zonnet_round }}</a></td>
         </tr>
       {% endfor %}
     {% else %}
