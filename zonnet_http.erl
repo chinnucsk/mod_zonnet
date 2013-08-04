@@ -6,6 +6,7 @@
      lb_login/1
     ,lb_logout/1
     ,create_invoice/2
+    ,create_callsreport/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -40,6 +41,30 @@ create_invoice(Amount, Context) ->
 %                    OrderId = zonnet_util:get_last_order_id("35", Context1),
  %                   Location = io_lib:format("http://iam.onnet.su:8000/getlbdocs/id/~s",[OrderId]),
                     z_render:update("make_invoice_table", z_template:render("zonnet_table_ready_invoice.tpl", [], Context), Context);
+                _ ->
+		    z_render:growl("Success not mutched", Context)
+            end;
+        _ ->
+            lb_logout(Context),
+	    z_render:growl("Bad httpc", Context)
+    end.
+
+
+create_callsreport(DocsMonthInput, Context) ->
+    Uid = zonnet_util:get_uid(Context),
+    Url = binary_to_list(m_config:get_value(mod_zonnet, lb_url, Context)),
+    EncType = "application/x-www-form-urlencoded",
+    [Month, Year] = string:tokens(DocsMonthInput,"/"),
+    Day = calendar:last_day_of_the_month(list_to_integer(Year), list_to_integer(Month)),
+    MakeInvoiceStr = io_lib:format("devision=108&doctype=0&a_year=~s&a_month=~s&a_day=~p&startnum=&b_year=~s&b_month=~s&asrent=1&docid=39&advSearchList=&usergroup=0&docfor=3&userid=~s&agrmid=0&operid=0&comment=&async_call=1&generate=1",[Year, Month, Day, Year, Month,  Uid]),
+    lb_login(Context),
+    case httpc:request(post, {Url, [], EncType, lists:flatten(MakeInvoiceStr)}, [], []) of
+        {ok, {{_, 200, _}, _, Body}} ->
+            lb_logout(Context),
+            case re:run(Body, "success: true", [{capture, none}]) of
+                match ->
+                    z_render:update("calls_reports_widget", z_template:render("zonnet_widget_calls_reports.tpl", [{headline,?__("Calls report", Context)}, {idname, "calls_reports_widget"}, {selectedmonth, DocsMonthInput}], Context), Context);
+     %%               z_render:update("calls_reports_table", z_template:render("zonnet_table_ready_calls_reports.tpl", [], Context), Context);
                 _ ->
 		    z_render:growl("Success not mutched", Context)
             end;

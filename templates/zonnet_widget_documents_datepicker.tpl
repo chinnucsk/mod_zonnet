@@ -2,7 +2,7 @@
 
 {% block widget_headline %}
     {{ headline }}
-    {% button class="btn btn-mini pull-right" action={postback postback="refresh_invoices" delegate="mod_zonnet" qarg="docsmonthInput"} action={postback postback="refresh_vatinvoices" delegate="mod_zonnet" qarg="docsmonthInput"} action={postback postback="refresh_acts" delegate="mod_zonnet" qarg="docsmonthInput"} text=_"refresh results"%}
+    {% button class="btn btn-mini pull-right" action={postback postback="refresh_invoices" delegate="mod_zonnet" qarg="docsmonthInput"} action={postback postback="refresh_vatinvoices" delegate="mod_zonnet" qarg="docsmonthInput"} action={postback postback="refresh_acts" delegate="mod_zonnet" qarg="docsmonthInput"} action={postback postback="refresh_calls_reports" delegate="mod_zonnet" qarg="docsmonthInput"} text=_"refresh results"%}
 {% endblock %}
 
 {% block widget_class %}{% if last %}last{% endif %}{% endblock %}

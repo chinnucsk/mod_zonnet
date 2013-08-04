@@ -108,6 +108,14 @@ event({postback, invoiceme, _TriggerId, _TargetId}, Context) ->
           z_render:growl_error(?__("Please input integer number.", Context), Context)
   end;
 
+event({postback, callsreportme_progress, _TriggerId, _TargetId}, Context) ->
+  z_convert:to_integer(z_context:get_q("callsreportme",Context)),
+  z_render:update("calls_reports_table", z_template:render("zonnet_table_progress_calls_reports.tpl",[],Context), Context);
+
+event({postback, callsreportme, _TriggerId, _TargetId}, Context) ->
+  DocsMonthInput = z_context:get_q("docsmonthInput",Context),
+  zonnet_http:create_callsreport(DocsMonthInput, Context); 
+
 event({submit, credit_form, _TriggerId, _TargetId}, Context) ->
   true = zonnet_util:credit_allowed(Context),
   Credit_amount = z_context:get_q("creditme",Context),
@@ -173,6 +181,10 @@ event({postback, refresh_vatinvoices, _TriggerId, _TargetId}, Context) ->
 event({postback, refresh_acts, _TriggerId, _TargetId}, Context) ->
     DocsMonthInput = z_context:get_q("docsmonthInput",Context),
     z_render:update("acts_widget", z_template:render("zonnet_widget_acts.tpl", [{headline,?__("Acts", Context)}, {idname, "acts_widget"}, {selectedmonth, DocsMonthInput}], Context), Context);
+
+event({postback, refresh_calls_reports, _TriggerId, _TargetId}, Context) ->
+    DocsMonthInput = z_context:get_q("docsmonthInput",Context),
+    z_render:update("calls_reports_widget", z_template:render("zonnet_widget_calls_reports.tpl", [{headline,?__("Calls report", Context)}, {idname, "calls_reports_widget"}, {selectedmonth, DocsMonthInput}], Context), Context);
 
 event(_A1, Context) ->
   z_render:growl_error(?__("Missed event happened.",Context), Context).

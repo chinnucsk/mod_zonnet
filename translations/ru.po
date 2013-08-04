@@ -1,6 +1,12 @@
 msgid "Expired"
 msgstr "Просрочен"
 
+msgid "generate"
+msgstr "генерировать"
+
+msgid "Calls report"
+msgstr "Детализация вызовов"
+
 msgid "Your account is currently blocked.  Please contact support."
 msgstr "Учетная запись закрыта и более недействительна. Пожалуйста обратитесь в службу поддержки."
 
