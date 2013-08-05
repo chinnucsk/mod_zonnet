@@ -20,7 +20,7 @@ process_get(_ReqData, Context) ->
             case z_mydb:q(QueryString, Context) of
                 [[1]] -> 
                     {{Year, Month, Day}, {_, _, _}} = erlang:localtime(),
-                    Reply = [{"callslist", z_convert:to_json(zonnet_analytics:get_call_attempts_by_retrodays(Phone_Number, {Year, Month, Day}, 30, Context))}],
+                    Reply = [{"callslist", z_convert:to_json(zonnet_analytics:get_call_attempts_by_retrodays(Phone_Number, {Year, Month, Day}, 21, Context))}],
                     {struct, Reply};
                 _ ->
                     {error,  access_denied, undefined}
