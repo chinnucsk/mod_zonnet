@@ -134,7 +134,7 @@ account_payments(Limit, Context) ->
         Z_User ->
             QueryResult = z_mydb:q(<<"SELECT amount, left(pay_date,10), if(comment like '%assist%','Система Ассист',
                 'Безналичный платеж') as comment FROM payments where agrm_id = (SELECT agrm_id from agreements
-                 where uid  = (select uid from accounts where login = ? limit 1) and oper_id = 1)
+                 where uid  = (select uid from accounts where login = ? limit 1) and oper_id = 1 limit 1)
                 ORDER BY LEFT( pay_date, 10 ) DESC limit ?">>,[Z_User,Limit], Context),
             QueryResult
     end.
@@ -211,7 +211,7 @@ is_service_provided(Type, Context) ->
         Z_User ->
             case z_mydb:q("SELECT type from tarifs where tar_id in (SELECT tar_id FROM vgroups where agrm_id = 
                                       (SELECT agrm_id FROM agreements where uid = (select uid from accounts where login = 
-                                                                ? limit 1) and oper_id = 1)) and type=?", [Z_User,Type], Context) of
+                                                                ? limit 1) and oper_id = 1 limit 1)) and type=?", [Z_User,Type], Context) of
                 [] -> 0;
                 _  -> 1
             end
